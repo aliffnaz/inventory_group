@@ -13,7 +13,6 @@ String password = "system";
 conn = DriverManager.getConnection(url, username, password);
 
 //delete supplier
-
 if (request.getParameter("DeleteId") != null) {
 	String DeleteId = request.getParameter("DeleteId");
 
