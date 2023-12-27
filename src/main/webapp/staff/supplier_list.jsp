@@ -52,7 +52,7 @@ if (request.getParameter("supplierID") != null) {
 	ResultSet checking = check.executeQuery();
 
 	if (checking.next()) {
-		out.println("the id already taken by someone else");
+		//out.println("the id already taken by someone else");
 	} else {
 		PreparedStatement addSupplier = conn.prepareStatement(
 		"insert into supplier(supplierid, suppliername,supplieraddress,supplierphone) values(?,?,?,?)");
@@ -101,7 +101,7 @@ ResultSet execute = ps.executeQuery();
 	<!-- Page Content -->
 	<div class="container mt-4">
 
-		<div class="card card-body">
+		<div class="card card-body my-5">
 			<!-- Register Supplier Button -->
 			<button type="button" class="btn btn-primary mb-3 col-2"
 				data-toggle="modal" data-target="#addSupplierModal">Add
