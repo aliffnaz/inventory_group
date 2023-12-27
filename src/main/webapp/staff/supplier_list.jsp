@@ -23,6 +23,23 @@ if (request.getParameter("DeleteId") != null) {
 	ResultSet delSupp = delete.executeQuery();
 }
 
+//update supplier
+if (request.getParameter("updateSupp") != null) {
+	String updatename = request.getParameter("updateName");
+	String updatephone = request.getParameter("updatePhone");
+	String updateaddress = request.getParameter("updateAddress");
+	String updateId = request.getParameter("updateId");
+
+	PreparedStatement update = conn.prepareStatement(
+	"update supplier set suppliername=?,supplierphone=?,supplieraddress=? where supplierid=?");
+	update.setString(1, updatename);
+	update.setString(2, updatephone);
+	update.setString(3, updateaddress);
+	update.setString(4, updateId);
+	ResultSet updating = update.executeQuery();
+
+}
+
 //add supplier
 if (request.getParameter("supplierID") != null) {
 
@@ -51,7 +68,7 @@ if (request.getParameter("supplierID") != null) {
 
 // call list item
 
-PreparedStatement ps = conn.prepareStatement("select * from supplier");
+PreparedStatement ps = conn.prepareStatement("select * from supplier order by supplierid asc");
 
 ResultSet execute = ps.executeQuery();
 %>
@@ -162,10 +179,11 @@ ResultSet execute = ps.executeQuery();
 						<td><%=execute.getString("suppliername")%></td>
 						<td><%=execute.getString("supplierphone")%></td>
 						<td>
-							<button type="button" class="btn btn-primary btn-sm view-btn"
-								data-toggle="modal"
-								data-target="#<%=execute.getString("SUPPLIERID")%>">View</button>
 							<form action="" method="get">
+								<button type="button" class="btn btn-primary btn-sm view-btn"
+									data-toggle="modal"
+									data-target="#<%=execute.getString("SUPPLIERID")%>">View</button>
+
 								<input type="submit" class="btn btn-danger btn-sm delete-btn"
 									name="deleteSupp" value="Delete"> <input type="hidden"
 									value="<%=execute.getString("SUPPLIERID")%>" name="DeleteId">
@@ -191,29 +209,37 @@ ResultSet execute = ps.executeQuery();
 								</div>
 								<div class="modal-body">
 
-									<form>
+									<form action="" method="post">
 										<div class="form-group">
 											<label for="supplierID">Supplier ID:</label> <input
-												type="text" class="form-control" value=""
-												placeholder="<%=execute.getString("SUPPLIERID")%>">
+												type="text" class="form-control"
+												value="<%=execute.getString("SUPPLIERID")%>"
+												placeholder="<%=execute.getString("SUPPLIERID")%>"
+												name="updateID" disabled readonly>
 										</div>
 
 										<div class="form-group">
 											<label for="supplierID">Supplier Name:</label> <input
-												type="text" class="form-control" value=""
-												placeholder="<%=execute.getString("SUPPLIERID")%>">
+												type="text" class="form-control"
+												value="<%=execute.getString("SUPPLIERNAME")%>"
+												placeholder="<%=execute.getString("SUPPLIERNAME")%>"
+												name="updateName">
 										</div>
 
 										<div class="form-group">
 											<label for="supplierID">Supplier Phone:</label> <input
-												type="text" class="form-control" value=""
-												placeholder="<%=execute.getString("SUPPLIERID")%>">
+												type="text" class="form-control"
+												value="<%=execute.getString("SUPPLIERPHONE")%>"
+												placeholder="<%=execute.getString("SUPPLIERPHONE")%>"
+												name="updatePhone">
 										</div>
 
 										<div class="form-group">
 											<label for="supplierID">Supplier Address :</label> <input
-												type="text" class="form-control" value=""
-												placeholder="<%=execute.getString("SUPPLIERID")%>">
+												type="text" class="form-control"
+												value="<%=execute.getString("SUPPLIERADDRESS")%>"
+												placeholder="<%=execute.getString("SUPPLIERADDRESS")%>"
+												name="updateAddress">
 										</div>
 
 
@@ -223,8 +249,10 @@ ResultSet execute = ps.executeQuery();
 								<div class="modal-footer">
 
 									<!-- Update button -->
-									<button type="button" class="btn btn-success"
-										data-toggle="modal" data-target="">Update</button>
+									<input type="submit" class="btn btn-success"
+										data-toggle="modal" data-target="" value="Update"
+										name="updateSupp"> <input type="hidden"
+										value="<%=execute.getString("supplierid")%>" name="updateId">
 									<button type="button" class="btn btn-danger"
 										data-dismiss="modal">Cancel</button>
 
