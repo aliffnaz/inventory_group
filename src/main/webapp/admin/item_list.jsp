@@ -40,7 +40,6 @@ if (id != null) {
 	}
 }
 %>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -83,7 +82,6 @@ if (id != null) {
 </head>
 
 <body>
-
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
