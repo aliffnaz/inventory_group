@@ -13,7 +13,7 @@ String phone = request.getParameter("staffPhone");
 String role = request.getParameter("staffRole");
 String age = request.getParameter("staffAge");
 
-out.println(id);
+//out.println(id);
 if (id != null) {
 	String url = "jdbc:oracle:thin:@localhost:1521:xe";
 	String username = "INVENTORY_502";
