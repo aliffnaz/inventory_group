@@ -8,7 +8,7 @@
 Connection conn = null;
 Class.forName("oracle.jdbc.driver.OracleDriver");
 String url = "jdbc:oracle:thin:@localhost:1521:xe";
-String username = "INVENTORY_502"; 
+String username = "INVENTORY_502";
 String password = "system";
 conn = DriverManager.getConnection(url, username, password);
 
@@ -45,9 +45,10 @@ if (request.getParameter("UpdateStaff") != null) {
 	String UpdStaffRole = request.getParameter("Ustaffrole");
 	String UpdStaffAge = request.getParameter("Ustaffage");
 	String UpdStaffId = request.getParameter("Ustaffid");
+	System.out.println(UpdStaffId);
 
 	PreparedStatement upd = conn.prepareStatement(
-	"update staff set staffname=?, staffphone=?, staffrole=?,staffage=?,staffic=? where staffid=?");
+	"update staff set staffname=?, staffphone=?, staffrole=?, staffage=?, staffic=? where staffid=?");
 	upd.setString(1, UpdStaffName);
 	upd.setString(2, UpdStaffPhone);
 	upd.setString(3, UpdStaffRole);
@@ -224,7 +225,7 @@ ResultSet execute = list.executeQuery();
 													<label>Staff ID</label> <input type="text"
 														class="form-control" name="Ustaffid"
 														value="<%=execute.getString("staffid")%>"
-														placeholder="<%=execute.getString("staffid")%>" disabled
+														placeholder="<%=execute.getString("staffid")%>"
 														readonly>
 												</div>
 
@@ -264,8 +265,9 @@ ResultSet execute = list.executeQuery();
 												</div>
 
 												<!-- Other editable fields -->
-												<input type="hidden" name="UpdateStaff" value="update"> <input
-													type="submit" class="btn btn-primary" name="updatebtn" value="Update">
+												<input type="hidden" name="UpdateStaff" value="update">
+												<input type="submit" class="btn btn-primary"
+													name="updatebtn" value="Update">
 
 											</form>
 
