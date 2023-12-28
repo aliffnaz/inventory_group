@@ -102,14 +102,14 @@ ResultSet execute = ps.executeQuery();
 	<div class="container mt-4">
 
 		<div class="card card-body my-5">
+
 			<!-- Register Supplier Button -->
-			<button type="button" class="btn btn-primary mb-3 col-2"
-				data-toggle="modal" data-target="#addSupplierModal">Add
-				Supplier</button>
+			<button type="button" class="btn btn-primary mb-3 col-1"
+				data-toggle="modal" data-target="#addSupplierModal">Add</button>
 
 			<!-- Register Supplier Modal -->
-			<div class="modal fade" id="addSupplierModal" tabindex="-1"
-				role="dialog" aria-labelledby="addSupplierModalLabel"
+			<div class="modal fade .bd-example-modal-lg" id="addSupplierModal"
+				tabindex="-1" role="dialog" aria-labelledby="addSupplierModalLabel"
 				aria-hidden="true">
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
@@ -178,91 +178,141 @@ ResultSet execute = ps.executeQuery();
 						<td><%=execute.getString("suppliername")%></td>
 						<td><%=execute.getString("supplierphone")%></td>
 						<td>
-							<form action="" method="get">
-								<button type="button" class="btn btn-primary btn-sm view-btn"
-									data-toggle="modal"
-									data-target="#<%=execute.getString("SUPPLIERID")%>">View</button>
 
-								<input type="submit" class="btn btn-danger btn-sm delete-btn"
-									name="deleteSupp" value="Delete"> <input type="hidden"
-									value="<%=execute.getString("SUPPLIERID")%>" name="DeleteId">
-							</form>
+							<button type="button" class="btn btn-primary btn-sm view-btn"
+								data-toggle="modal"
+								data-target="#view<%=execute.getString("SUPPLIERID")%>">View</button>
+
+							<!-- View Supplier Modal -->
+							<div class="modal fade" id="view<%=execute.getString("SUPPLIERID")%>"
+								tabindex="-1" role="dialog" aria-labelledby="viewItemModalLabel"
+								aria-hidden="true">
+								<!-- Modal content goes here -->
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="viewItemModalLabel">Supplier
+												Information</h5>
+											<button type="button" class="close" data-dismiss="modal"
+												aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+
+											<form action="" method="post">
+												<div class="form-group">
+													<label for="supplierID">Supplier ID:</label> <input
+														type="text" class="form-control"
+														value="<%=execute.getString("SUPPLIERID")%>"
+														placeholder="<%=execute.getString("SUPPLIERID")%>"
+														name="updateID" disabled readonly>
+												</div>
+
+												<div class="form-group">
+													<label for="supplierID">Supplier Name:</label> <input
+														type="text" class="form-control"
+														value="<%=execute.getString("SUPPLIERNAME")%>"
+														placeholder="<%=execute.getString("SUPPLIERNAME")%>"
+														name="updateName">
+												</div>
+
+												<div class="form-group">
+													<label for="supplierID">Supplier Phone:</label> <input
+														type="text" class="form-control"
+														value="<%=execute.getString("SUPPLIERPHONE")%>"
+														placeholder="<%=execute.getString("SUPPLIERPHONE")%>"
+														name="updatePhone">
+												</div>
+
+												<div class="form-group">
+													<label for="supplierID">Supplier Address :</label> <input
+														type="text" class="form-control"
+														value="<%=execute.getString("SUPPLIERADDRESS")%>"
+														placeholder="<%=execute.getString("SUPPLIERADDRESS")%>"
+														name="updateAddress">
+												</div>
+
+
+
+												<!-- End of Item Information Display -->
+										</div>
+										<div class="modal-footer">
+
+											<!-- Update button -->
+											<input type="submit" class="btn btn-success"
+												data-toggle="modal" data-target="" value="Update"
+												name="updateSupp"> <input type="hidden"
+												value="<%=execute.getString("supplierid")%>" name="updateId">
+											<button type="button" class="btn btn-danger"
+												data-dismiss="modal">Cancel</button>
+
+
+											</form>
+										</div>
+
+
+									</div>
+								</div>
+							</div> <!-- DELETE CONFIRMATION MODAL  -->
+
+							<button type="button" class="btn btn-danger btn-sm"
+								data-toggle="modal"
+								data-target="#deleteModal<%=execute.getString("SUPPLIERID")%>">Delete</button>
+
+							<div class="modal fade"
+								id="deleteModal<%=execute.getString("SUPPLIERID")%>"
+								tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+								aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="deleteModalLabel">Confirm
+												Deletion</h5>
+											<button type="button" class="close" data-dismiss="modal"
+												aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">Are you sure you want to delete
+											this item?</div>
+										<div class="modal-footer">
+											<form action="" method="get">
+
+												<button type="button" class="btn btn-secondary"
+													data-dismiss="modal">Cancel</button>
+
+												<input type="hidden"
+													value="<%=execute.getString("SUPPLIERID")%>"
+													name="DeleteId"> <input type="submit"
+													class="btn btn-danger delete-btn" name="deleteSupp"
+													value="Delete">
+
+
+											</form>
+										</div>
+									</div>
+								</div>
+							</div> <script>
+								function deleteItem() {
+									// Perform deletion logic here
+									// This is where you would delete the item using JavaScript, AJAX, or any backend logic
+									// For demonstration purposes, an alert is shown
+									alert("Item deleted!");
+
+									// Close the modal after deletion
+									$(
+											'#deleteModal')
+											.modal('hide');
+								}
+							</script>
+
+
 
 						</td>
 					</tr>
 
-					<!-- View Supplier Modal -->
-					<div class="modal fade" id="<%=execute.getString("SUPPLIERID")%>"
-						tabindex="-1" role="dialog" aria-labelledby="viewItemModalLabel"
-						aria-hidden="true">
-						<!-- Modal content goes here -->
-						<div class="modal-dialog" role="document">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="viewItemModalLabel">Item
-										Information</h5>
-									<button type="button" class="close" data-dismiss="modal"
-										aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-								<div class="modal-body">
 
-									<form action="" method="post">
-										<div class="form-group">
-											<label for="supplierID">Supplier ID:</label> <input
-												type="text" class="form-control"
-												value="<%=execute.getString("SUPPLIERID")%>"
-												placeholder="<%=execute.getString("SUPPLIERID")%>"
-												name="updateID" disabled readonly>
-										</div>
-
-										<div class="form-group">
-											<label for="supplierID">Supplier Name:</label> <input
-												type="text" class="form-control"
-												value="<%=execute.getString("SUPPLIERNAME")%>"
-												placeholder="<%=execute.getString("SUPPLIERNAME")%>"
-												name="updateName">
-										</div>
-
-										<div class="form-group">
-											<label for="supplierID">Supplier Phone:</label> <input
-												type="text" class="form-control"
-												value="<%=execute.getString("SUPPLIERPHONE")%>"
-												placeholder="<%=execute.getString("SUPPLIERPHONE")%>"
-												name="updatePhone">
-										</div>
-
-										<div class="form-group">
-											<label for="supplierID">Supplier Address :</label> <input
-												type="text" class="form-control"
-												value="<%=execute.getString("SUPPLIERADDRESS")%>"
-												placeholder="<%=execute.getString("SUPPLIERADDRESS")%>"
-												name="updateAddress">
-										</div>
-
-
-
-										<!-- End of Item Information Display -->
-								</div>
-								<div class="modal-footer">
-
-									<!-- Update button -->
-									<input type="submit" class="btn btn-success"
-										data-toggle="modal" data-target="" value="Update"
-										name="updateSupp"> <input type="hidden"
-										value="<%=execute.getString("supplierid")%>" name="updateId">
-									<button type="button" class="btn btn-danger"
-										data-dismiss="modal">Cancel</button>
-
-
-									</form>
-								</div>
-
-
-							</div>
-						</div>
-					</div>
 					<%
 					}
 					%>

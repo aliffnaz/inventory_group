@@ -6,287 +6,356 @@
 
 <%
 Connection conn = null;
+Class.forName("oracle.jdbc.driver.OracleDriver");
+String url = "jdbc:oracle:thin:@localhost:1521:xe";
+String username = "INVENTORY_502"; 
+String password = "system";
+conn = DriverManager.getConnection(url, username, password);
 
-String id = request.getParameter("staffID");
-String ic = request.getParameter("staffIC");
-String phone = request.getParameter("staffPhone");
-String role = request.getParameter("staffRole");
-String age = request.getParameter("staffAge");
+//ADD STAFF
+if (request.getParameter("staffID") != null) {
+	String id = request.getParameter("staffID");
+	String name = request.getParameter("staffName");
+	String ic = request.getParameter("staffIC");
+	String phone = request.getParameter("staffPhone");
+	String role = request.getParameter("staffRole");
+	String age = request.getParameter("staffAge");
 
-if (id != null) {
-	//Class.forName("oracle.jdbc.driver.OracleDriver");
-	String url = "jdbc:oracle:thin:@localhost:1521:xe";
-	String username = "INVENTORY_502";
-	String password = "system";
-	 conn = DriverManager.getConnection(url, username, password);
-	//Statement stmt = Conn.createStatement();
-	//String query = "insert into staff values(id,name,ic,phone,role,age,'password')";
-	//ResultSet s = stmt.executeQuery(query);
+	PreparedStatement staffAdd = conn.prepareStatement(
+	"insert into staff(staffID,staffIC,staffPhone,staffRole,staffAge,staffname) values(?,?,?,?,?,?)");
+	staffAdd.setString(1, id);
+	staffAdd.setString(2, ic);
+	staffAdd.setString(3, phone);
+	staffAdd.setString(4, role);
+	staffAdd.setString(5, age);
+	staffAdd.setString(6, name);
+	ResultSet addStaff = staffAdd.executeQuery();
 
-	PreparedStatement ps = conn.prepareStatement(
-	"insert into staff(staffID,staffIC,staffPhone,staffRole,staffAge,password) values(?,?,?,?,?,?)");
-	ps.setString(1, id);
-	ps.setString(2, ic);
-	ps.setString(3, phone);
-	ps.setString(4, role);
-	ps.setString(5, age);
-	ps.setString(6, "password");
-	ResultSet execute = ps.executeQuery();
-	
-	if (execute == null) {
+	if (addStaff == null) {
 		out.println("not working man");
 	}
 }
+
+//UPDATE STAFF
+if (request.getParameter("UpdateStaff") != null) {
+	System.out.println("masuk");
+	String UpdStaffName = request.getParameter("Ustaffname");
+	String UpdStaffIC = request.getParameter("Ustaffic");
+	String UpdStaffPhone = request.getParameter("Ustaffphone");
+	String UpdStaffRole = request.getParameter("Ustaffrole");
+	String UpdStaffAge = request.getParameter("Ustaffage");
+	String UpdStaffId = request.getParameter("Ustaffid");
+
+	PreparedStatement upd = conn.prepareStatement(
+	"update staff set staffname=?, staffphone=?, staffrole=?,staffage=?,staffic=? where staffid=?");
+	upd.setString(1, UpdStaffName);
+	upd.setString(2, UpdStaffPhone);
+	upd.setString(3, UpdStaffRole);
+	upd.setString(4, UpdStaffAge);
+	upd.setString(5, UpdStaffIC);
+	upd.setString(6, UpdStaffId);
+	ResultSet UpdStaff = upd.executeQuery();
+}
+
+//DELETE STAFF
+if (request.getParameter("DeleteId") != null) {
+	String deleteId = request.getParameter("DeleteId");
+	PreparedStatement deleteQuery = conn.prepareStatement("delete from staff where staffid=?");
+	deleteQuery.setString(1, deleteId);
+	ResultSet deleteStaff = deleteQuery.executeQuery();
+
+}
+
+//LIST STAFF
+String query = "select * from staff";
+PreparedStatement list = conn.prepareStatement(query);
+ResultSet execute = list.executeQuery();
 %>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inventory Management</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css" rel="stylesheet">
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    /* Custom CSS */
-    /* Add your custom styles here */
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventory Management</title>
+<!-- Bootstrap CSS -->
+<link
+	href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css"
+	rel="stylesheet">
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	rel="stylesheet">
+
 </head>
 
 <body>
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-      <a class="navbar-brand" href="#">Inventory Management</a>
-    </div>
-  </nav>
+	<!-- Navbar -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="container">
+			<a class="navbar-brand" href="#">Inventory Management</a>
+		</div>
+	</nav>
 
-  <!-- Page Content -->
-  <div class="container mt-4">
-  
-    <!-- Register Staff Button -->
-<button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#addStaffModal">
-  Register Staff
-</button>
+	<!-- Page Content -->
+	<div class="container mt-4">
 
-<!-- Register Staff Modal -->
-<div class="modal fade" id="addStaffModal" tabindex="-1" role="dialog" aria-labelledby="addStaffModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content" >
-    	
-    
-      <div class="modal-header" class="container mt-4">
-        <h5 class="modal-title" id="addStaffModalLabel">Register New Staff</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
+		<div class="card card-body">
 
-      <div class="modal-body" >
+			<!-- Register Staff Button -->
+			<button type="button" class="btn btn-primary mb-3 col-1"
+				data-toggle="modal" data-target="#addStaffModal">Register</button>
 
-        <form>
-      <div class="form-group">
-        <label>Staff ID</label>
-        <input type="text" class="form-control" id="staffID">
-      </div>
+			<!-- Register Staff Modal -->
+			<div class="modal fade" id="addStaffModal" tabindex="-1"
+				role="dialog" aria-labelledby="addStaffModalLabel"
+				aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
 
-      <div class="form-group">
-        <label>Staff Name</label>  
-        <input type="text" class="form-control" id="staffName">
-      </div>
 
-      <div class="form-group">
-        <label>Staff IC</label>
-        <input type="text" class="form-control" id="staffIC">
-      </div>
-      
-      <div class="form-group">
-        <label>Staff Phone</label>
-        <input type="text" class="form-control" id="staffPhone">
-      </div>
-      
-      <div class="form-group">
-        <label>Staff Role</label>
-        <input type="text" class="form-control" id="staffRole">
-      </div>
-      
-      <div class="form-group">
-        <label>Staff Age</label>
-        <input type="text" class="form-control" id="staffAge">
-      </div>
+						<div class="modal-header" class="container mt-4">
+							<h5 class="modal-title" id="addStaffModalLabel">Register New
+								Staff</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
 
-          <!-- Other input fields -->
+						<div class="modal-body p-3">
 
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+							<form action="" method="post">
+								<div class="form-group">
+									<label>Staff ID</label> <input type="text" class="form-control"
+										name="staffID">
+								</div>
 
-      </div>
+								<div class="form-group">
+									<label>Staff Name</label> <input type="text"
+										class="form-control" name="staffName">
+								</div>
 
-    </div>
-  </div>
-</div>
+								<div class="form-group">
+									<label>Staff IC</label> <input type="text" class="form-control"
+										name="staffIC">
+								</div>
 
-    <!-- Data Table -->
-    <table id="inventoryTable" class="table table-striped table-bordered" style="width:100%">
-      <thead class="thead-dark">
-        <tr>
-          <th>#</th>
-          <th>Staff ID</th>
-          <th>Staff Name</th>
-          <th>Staff IC</th>
-          <th>Staff Phone</th>
-          <th>Staff Role</th>
-          <th>Staff Age</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Sample Table Data (Replace this with dynamic data) -->
-        <tr>
-          <td>1</td>
-          <td>S001</td>
-          <td>Sarah</td>
-          <td>930504101247</td>
-          <td>0102345678</td>
-          <td>Manager</td>
-          <td>30</td>
-          <td>
-            <button type="button" class="btn btn-primary btn-sm view-btn" data-toggle="modal"
-              data-target="#viewItemModal">View</button>
-            <button type="button" class="btn btn-danger btn-sm delete-btn">Delete</button>
-          </td>
-        </tr>
-        <tr>
-       	  <td>2</td>
-          <td>S002</td>
-          <td>Bashir</td>
-          <td>021209081976</td>
-          <td>0112345678</td>
-          <td>Part Timer</td>
-          <td>21</td>
-          <td>
-            <button type="button" class="btn btn-primary btn-sm view-btn" data-toggle="modal"
-              data-target="#viewItemModal">View</button>
-            <button type="button" class="btn btn-danger btn-sm delete-btn">Delete</button>
-          </td>
-        </tr>
-        <!-- End of Sample Table Data -->
-      </tbody>
-    </table>
+								<div class="form-group">
+									<label>Staff Phone</label> <input type="text"
+										class="form-control" name="staffPhone">
+								</div>
 
-    <!-- Add Item Modal -->
-    <div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="addItemModalLabel"
-      aria-hidden="true">
-      <!-- Modal content goes here -->
-    </div>
+								<div class="form-group">
+									<label>Staff Role</label> <input type="text"
+										class="form-control" name="staffRole">
+								</div>
 
-    <!-- View Item Modal -->
-    <div class="modal fade" id="viewItemModal" tabindex="-1" role="dialog" aria-labelledby="viewItemModalLabel"
-      aria-hidden="true">
-      <!-- Modal content goes here -->
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="viewItemModalLabel">Item Information</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <!-- Item Information Display (Replace this with your actual item information) -->
-            <p>Staff ID: <span id="staffID"></span></p>
-            <p>Staff Name: <span id="staffName"></span></p>
-            <p>Staff IC: <span id="staffIC"></span></p>
-            <p>Staff Phone: <span id="staffPhone"></span></p>
-            <p>Staff Role: <span id="staffRole"></span></p>
-            <p>Staff Age: <span id="staffAge"></span></p>
-            <!-- End of Item Information Display -->
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Back</button>
-            <!-- Update button -->
-			<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateStaffModal">
-  				Update
-			</button>
+								<div class="form-group">
+									<label>Staff Age</label> <input type="text"
+										class="form-control" name="staffAge">
+								</div>
 
-<!-- Update Staff Modal -->
-<div class="modal fade" id="updateStaffModal" tabindex="-1" role="dialog" aria-labelledby="updateStaffModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-    
-      <div class="modal-header">
-        <h5 class="modal-title" id="updateStaffModalLabel">Update Staff Details</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
+								<!-- Other input fields -->
 
-      <div class="modal-body">
+								<button type="submit" class="btn btn-primary">Submit</button>
+							</form>
 
-        <form>
-          
-          <div class="form-group">
-        <label>Staff ID</label>
-        <input type="text" class="form-control" id="staffID">
-      </div>
+						</div>
 
-      <div class="form-group">
-        <label>Staff Name</label>  
-        <input type="text" class="form-control" id="staffName">
-      </div>
+					</div>
+				</div>
+			</div>
 
-      <div class="form-group">
-        <label>Staff IC</label>
-        <input type="text" class="form-control" id="staffIC">
-      </div>
-      
-      <div class="form-group">
-        <label>Staff Phone</label>
-        <input type="text" class="form-control" id="staffPhone">
-      </div>
-      
-      <div class="form-group">
-        <label>Staff Role</label>
-        <input type="text" class="form-control" id="staffRole">
-      </div>
-      
-      <div class="form-group">
-        <label>Staff Age</label>
-        <input type="text" class="form-control" id="staffAge">
-      </div>
+			<!-- Data Table -->
+			<table id="inventoryTable" class="table table-striped table-bordered"
+				style="width: 100%">
+				<thead class="thead-dark">
+					<tr>
+						<th>Staff ID</th>
+						<th>Staff Name</th>
+						<th>Staff IC</th>
+						<th>Staff Phone</th>
+						<th>Staff Role</th>
+						<th>Staff Age</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!-- Sample Table Data (Replace this with dynamic data) -->
+					<%
+					while (execute.next()) {
+					%>
+					<tr>
+						<td><%=execute.getString("staffid")%></td>
+						<td><%=execute.getString("staffname")%></td>
+						<td><%=execute.getString("staffic")%></td>
+						<td><%=execute.getString("staffphone")%></td>
+						<td><%=execute.getString("staffrole")%></td>
+						<td><%=execute.getString("staffage")%></td>
+						<td>
+							<!-- VIEW SECTION -->
+							<button type="button" class="btn btn-primary btn-sm"
+								data-toggle="modal"
+								data-target="#updateStaffModal<%=execute.getString("staffid")%>">
+								View</button> <!-- Update Staff Modal -->
 
-          <!-- Other editable fields -->
+							<div class="modal fade"
+								id="updateStaffModal<%=execute.getString("staffid")%>"
+								tabindex="-1" role="dialog"
+								aria-labelledby="updateStaffModalLabel" aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
 
-          <button type="submit" class="btn btn-primary">Update Staff</button>
+										<div class="modal-header">
+											<h5 class="modal-title" id="updateStaffModalLabel">Update
+												Staff Details</h5>
+											<button type="button" class="close" data-dismiss="modal"
+												aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
 
-        </form>
+										<div class="modal-body">
 
-      </div>
+											<form action="" method="post">
 
-    </div>
-  </div>
-</div>
-          </div>
-        </div>
-      </div>
-    </div>
+												<div class="form-group">
+													<label>Staff ID</label> <input type="text"
+														class="form-control" name="Ustaffid"
+														value="<%=execute.getString("staffid")%>"
+														placeholder="<%=execute.getString("staffid")%>" disabled
+														readonly>
+												</div>
 
-    <!-- Bootstrap JS and jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+												<div class="form-group">
+													<label>Staff Name</label> <input type="text"
+														class="form-control" name="Ustaffname"
+														value="<%=execute.getString("staffname")%>"
+														placeholder="<%=execute.getString("staffname")%>">
+												</div>
 
-    <!-- DataTables Initialization Script -->
-    <script>
-      $(document).ready(function () {
-        $('#inventoryTable').DataTable();
-      });
-    </script>
-  </div>
+												<div class="form-group">
+													<label>Staff IC</label> <input type="text"
+														class="form-control" name="Ustaffic"
+														value="<%=execute.getString("staffic")%>"
+														placeholder="<%=execute.getString("staffic")%>">
+												</div>
 
+												<div class="form-group">
+													<label>Staff Phone</label> <input type="text"
+														class="form-control" name="Ustaffphone"
+														value="<%=execute.getString("staffphone")%>"
+														placeholder="<%=execute.getString("staffphone")%>">
+												</div>
+
+												<div class="form-group">
+													<label>Staff Role</label> <input type="text"
+														class="form-control" name="Ustaffrole"
+														value="<%=execute.getString("staffrole")%>"
+														placeholder="<%=execute.getString("staffrole")%>">
+												</div>
+
+												<div class="form-group">
+													<label>Staff Age</label> <input type="text"
+														class="form-control" name="Ustaffage"
+														value="<%=execute.getString("staffage")%>"
+														placeholder="<%=execute.getString("staffage")%>">
+												</div>
+
+												<!-- Other editable fields -->
+												<input type="hidden" name="UpdateStaff" value="update"> <input
+													type="submit" class="btn btn-primary" name="updatebtn" value="Update">
+
+											</form>
+
+										</div>
+
+									</div>
+								</div>
+							</div> <!-- END VIEW SECTION --> <!-- DELETE SECTION -->
+							<button type="button" class="btn btn-danger btn-sm"
+								data-toggle="modal"
+								data-target="#deleteModal<%=execute.getString("staffid")%>">Delete</button>
+
+							<div class="modal fade"
+								id="deleteModal<%=execute.getString("staffid")%>" tabindex="-1"
+								role="dialog" aria-labelledby="deleteModalLabel"
+								aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="deleteModalLabel">Confirm
+												Deletion</h5>
+											<button type="button" class="close" data-dismiss="modal"
+												aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">Are you sure you want to delete
+											this Staff?</div>
+										<div class="modal-footer">
+											<form action="" method="get">
+
+												<input type="hidden"
+													value="<%=execute.getString("staffid")%>" name="DeleteId">
+												<input type="submit" class="btn btn-danger delete-btn"
+													name="deleteSupp" value="Delete">
+
+												<button type="button" class="btn btn-secondary"
+													data-dismiss="modal">Cancel</button>
+
+
+
+
+											</form>
+										</div>
+									</div>
+								</div>
+							</div> <script>
+								function deleteItem() {
+									// Perform deletion logic here
+									// This is where you would delete the item using JavaScript, AJAX, or any backend logic
+									// For demonstration purposes, an alert is shown
+									alert("Item deleted!");
+
+									// Close the modal after deletion
+									$('#deleteModal').modal('hide');
+								}
+							</script> <!-- END DELETE SECTION -->
+						</td>
+					</tr>
+					<%
+					}
+					%>
+
+					<!-- End of Sample Table Data -->
+				</tbody>
+			</table>
+
+
+
+		</div>
+	</div>
+
+	<!-- Bootstrap JS and jQuery -->
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+	<!-- DataTables Initialization Script -->
+	<script>
+		$(document).ready(function() {
+			$('#inventoryTable').DataTable();
+		});
+	</script>
+	</div>
+	</div>
 </body>
 
 </html>
