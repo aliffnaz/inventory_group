@@ -6,38 +6,72 @@
 
 <%
 Connection conn = null;
+Class.forName("oracle.jdbc.driver.OracleDriver");
+String url = "jdbc:oracle:thin:@localhost:1521:xe";
+String username = "INVENTORY_502";
+String password = "system";
+conn = DriverManager.getConnection(url, username, password);
 
-String id = request.getParameter("staffID");
-String ic = request.getParameter("staffIC");
-String phone = request.getParameter("staffPhone");
-String role = request.getParameter("staffRole");
-String age = request.getParameter("staffAge");
+//delete supplier
+if (request.getParameter("DeleteId") != null) {
+	String DeleteId = request.getParameter("DeleteId");
 
-if (id != null) {
-	//Class.forName("oracle.jdbc.driver.OracleDriver");
-	String url = "jdbc:oracle:thin:@localhost:1521:xe";
-	String username = "INVENTORY_502";
-	String password = "system";
-	 conn = DriverManager.getConnection(url, username, password);
-	//Statement stmt = Conn.createStatement();
-	//String query = "insert into staff values(id,name,ic,phone,role,age,'password')";
-	//ResultSet s = stmt.executeQuery(query);
+	PreparedStatement delete = conn.prepareStatement("delete from supplier where supplierid=?");
+	delete.setString(1, DeleteId);
 
-	PreparedStatement ps = conn.prepareStatement(
-	"insert into staff(staffID,staffIC,staffPhone,staffRole,staffAge,password) values(?,?,?,?,?,?)");
-	ps.setString(1, id);
-	ps.setString(2, ic);
-	ps.setString(3, phone);
-	ps.setString(4, role);
-	ps.setString(5, age);
-	ps.setString(6, "password");
-	ResultSet execute = ps.executeQuery();
-	
-	if (execute == null) {
-		out.println("not working man");
-	}
+	ResultSet delSupp = delete.executeQuery();
 }
+
+//update supplier
+if (request.getParameter("updateSupp") != null) {
+	String updatename = request.getParameter("updateName");
+	String updatephone = request.getParameter("updatePhone");
+	String updateaddress = request.getParameter("updateAddress");
+	String updateId = request.getParameter("updateId");
+
+	PreparedStatement update = conn.prepareStatement(
+	"update supplier set suppliername=?,supplierphone=?,supplieraddress=? where supplierid=?");
+	update.setString(1, updatename);
+	update.setString(2, updatephone);
+	update.setString(3, updateaddress);
+	update.setString(4, updateId);
+	ResultSet updating = update.executeQuery();
+
+}
+
+//add supplier
+if (request.getParameter("supplierID") != null) {
+
+	String id = request.getParameter("supplierID");
+	String name = request.getParameter("supplierName");
+	String phone = request.getParameter("supplierPhone");
+	String address = request.getParameter("supplierAddress");
+
+	PreparedStatement check = conn.prepareStatement("select supplierid from supplier where supplierid=?");
+	check.setString(1, id);
+	ResultSet checking = check.executeQuery();
+
+	if (checking.next()) {
+		//out.println("the id already taken by someone else");
+	} else {
+		PreparedStatement addSupplier = conn.prepareStatement(
+		"insert into supplier(supplierid, suppliername,supplieraddress,supplierphone) values(?,?,?,?)");
+		addSupplier.setString(1, id);
+		addSupplier.setString(2, name);
+		addSupplier.setString(3, address);
+		addSupplier.setString(4, phone);
+		ResultSet addSupp = addSupplier.executeQuery();
+	}
+
+}
+
+// call list item
+
+PreparedStatement ps = conn.prepareStatement("select * from supplier order by supplierid asc");
+
+ResultSet execute = ps.executeQuery();
 %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -52,10 +86,7 @@ if (id != null) {
 <link
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 	rel="stylesheet">
-<style>
-/* Custom CSS */
-/* Add your custom styles here */
-</style>
+
 </head>
 
 <body>
@@ -70,15 +101,15 @@ if (id != null) {
 	<!-- Page Content -->
 	<div class="container mt-4">
 
-		<div class="card card-body">
+		<div class="card card-body my-5">
+
 			<!-- Register Supplier Button -->
-			<button type="button" class="btn btn-primary mb-3 col-2"
-				data-toggle="modal" data-target="#addSupplierModal">
-				Add Supplier</button>
+			<button type="button" class="btn btn-primary mb-3 col-1"
+				data-toggle="modal" data-target="#addSupplierModal">Add</button>
 
 			<!-- Register Supplier Modal -->
-			<div class="modal fade" id="addSupplierModal" tabindex="-1"
-				role="dialog" aria-labelledby="addSupplierModalLabel"
+			<div class="modal fade .bd-example-modal-lg" id="addSupplierModal"
+				tabindex="-1" role="dialog" aria-labelledby="addSupplierModalLabel"
 				aria-hidden="true">
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
@@ -94,20 +125,26 @@ if (id != null) {
 
 						<div class="modal-body">
 
-							<form>
+							<form action="" method="post">
 								<div class="form-group">
 									<label for="supplierID">Supplier ID</label> <input type="text"
-										class="form-control" id="supplierID" required>
+										class="form-control" name="supplierID" required>
 								</div>
 
 								<div class="form-group">
 									<label for="supplierName">Supplier Name</label> <input
-										type="text" class="form-control" id="supplierName" required>
+										type="text" class="form-control" name="supplierName" required>
 								</div>
 
 								<div class="form-group">
 									<label for="supplierPhone">Supplier Phone</label> <input
-										type="text" class="form-control" id="supplierPhone" required>
+										type="text" class="form-control" name="supplierPhone" required>
+								</div>
+
+								<div class="form-group">
+									<label for="supplierAddress">Supplier Address</label> <input
+										type="text" class="form-control" name="supplierAddress"
+										required>
 								</div>
 
 								<button type="submit" class="btn btn-primary">Submit</button>
@@ -124,7 +161,6 @@ if (id != null) {
 				style="width: 100%">
 				<thead class="thead-dark">
 					<tr>
-						<th>#</th>
 						<th>Supplier ID</th>
 						<th>Supplier Name</th>
 						<th>Supplier Phone</th>
@@ -133,126 +169,161 @@ if (id != null) {
 				</thead>
 				<tbody>
 					<!-- Sample Table Data (Replace this with dynamic data) -->
+
+					<%
+					while (execute.next()) {
+					%>
 					<tr>
-						<td>1</td>
-						<td>SP01</td>
-						<td>Man</td>
-						<td>0102345678</td>
+						<td><%=execute.getString("SUPPLIERID")%></td>
+						<td><%=execute.getString("suppliername")%></td>
+						<td><%=execute.getString("supplierphone")%></td>
 						<td>
+
 							<button type="button" class="btn btn-primary btn-sm view-btn"
-								data-toggle="modal" data-target="#viewItemModal">View</button>
-							<button type="button" class="btn btn-danger btn-sm delete-btn">Delete</button>
-						</td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td>SP02</td>
-						<td>Jamal</td>
-						<td>0112345678</td>
-						<td>
-							<button type="button" class="btn btn-primary btn-sm view-btn"
-								data-toggle="modal" data-target="#viewItemModal">View</button>
-							<button type="button" class="btn btn-danger btn-sm delete-btn">Delete</button>
-						</td>
-					</tr>
-					<!-- End of Sample Table Data -->
-				</tbody>
-			</table>
+								data-toggle="modal"
+								data-target="#view<%=execute.getString("SUPPLIERID")%>">View</button>
 
-			<!-- Add Item Modal -->
-			<div class="modal fade" id="addItemModal" tabindex="-1" role="dialog"
-				aria-labelledby="addItemModalLabel" aria-hidden="true">
-				<!-- Modal content goes here -->
-			</div>
-
-			<!-- View Item Modal -->
-			<div class="modal fade" id="viewItemModal" tabindex="-1"
-				role="dialog" aria-labelledby="viewItemModalLabel"
-				aria-hidden="true">
-				<!-- Modal content goes here -->
-				<div class="modal-dialog" role="document">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="viewItemModalLabel">Item
-								Information</h5>
-							<button type="button" class="close" data-dismiss="modal"
-								aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-						<div class="modal-body">
-							<!-- Item Information Display (Replace this with your actual item information) -->
-							<p>
-								Supplier ID: <span id="supplierID"></span>
-							</p>
-							<p>
-								Supplier Name: <span id="supplierName"></span>
-							</p>
-							<p>
-								Supplier Phone: <span id="supplierPhone"></span>
-							</p>
-							<!-- End of Item Information Display -->
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary"
-								data-dismiss="modal">Back</button>
-							<!-- Update button -->
-							<button type="button" class="btn btn-primary btn-sm"
-								data-toggle="modal" data-target="#updateSupplierModal">
-								Update</button>
-
-							<!-- Update Supplier Modal -->
-							<div class="modal fade" id="updateSupplierModal" tabindex="-1"
-								role="dialog" aria-labelledby="updateSupplierModalLabel"
+							<!-- View Supplier Modal -->
+							<div class="modal fade" id="view<%=execute.getString("SUPPLIERID")%>"
+								tabindex="-1" role="dialog" aria-labelledby="viewItemModalLabel"
 								aria-hidden="true">
+								<!-- Modal content goes here -->
 								<div class="modal-dialog" role="document">
 									<div class="modal-content">
-
 										<div class="modal-header">
-											<h5 class="modal-title" id="updateSupplierModalLabel">Update
-												Supplier Details</h5>
+											<h5 class="modal-title" id="viewItemModalLabel">Supplier
+												Information</h5>
 											<button type="button" class="close" data-dismiss="modal"
 												aria-label="Close">
 												<span aria-hidden="true">&times;</span>
 											</button>
 										</div>
-
 										<div class="modal-body">
 
-											<form>
-
+											<form action="" method="post">
 												<div class="form-group">
-													<label for="supplierID">Supplier ID</label> <input
-														type="text" class="form-control" id="supplierID"
-														value="SP01" disabled>
+													<label for="supplierID">Supplier ID:</label> <input
+														type="text" class="form-control"
+														value="<%=execute.getString("SUPPLIERID")%>"
+														placeholder="<%=execute.getString("SUPPLIERID")%>"
+														name="updateID" disabled readonly>
 												</div>
 
 												<div class="form-group">
-													<label for="supplierName">Supplier Name</label> <input
-														type="text" class="form-control" id="supplierName"
-														value="Man">
+													<label for="supplierID">Supplier Name:</label> <input
+														type="text" class="form-control"
+														value="<%=execute.getString("SUPPLIERNAME")%>"
+														placeholder="<%=execute.getString("SUPPLIERNAME")%>"
+														name="updateName">
 												</div>
 
 												<div class="form-group">
-													<label for="supplierPhone">Supplier Phone</label> <input
-														type="text" class="form-control" id="supplierPhone"
-														value="0102345678">
+													<label for="supplierID">Supplier Phone:</label> <input
+														type="text" class="form-control"
+														value="<%=execute.getString("SUPPLIERPHONE")%>"
+														placeholder="<%=execute.getString("SUPPLIERPHONE")%>"
+														name="updatePhone">
 												</div>
 
-												<button type="submit" class="btn btn-primary">Update
-													Supplier</button>
+												<div class="form-group">
+													<label for="supplierID">Supplier Address :</label> <input
+														type="text" class="form-control"
+														value="<%=execute.getString("SUPPLIERADDRESS")%>"
+														placeholder="<%=execute.getString("SUPPLIERADDRESS")%>"
+														name="updateAddress">
+												</div>
+
+
+
+												<!-- End of Item Information Display -->
+										</div>
+										<div class="modal-footer">
+
+											<!-- Update button -->
+											<input type="submit" class="btn btn-success"
+												data-toggle="modal" data-target="" value="Update"
+												name="updateSupp"> <input type="hidden"
+												value="<%=execute.getString("supplierid")%>" name="updateId">
+											<button type="button" class="btn btn-danger"
+												data-dismiss="modal">Cancel</button>
+
 
 											</form>
-
 										</div>
+
 
 									</div>
 								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+							</div> <!-- DELETE CONFIRMATION MODAL  -->
+
+							<button type="button" class="btn btn-danger btn-sm"
+								data-toggle="modal"
+								data-target="#deleteModal<%=execute.getString("SUPPLIERID")%>">Delete</button>
+
+							<div class="modal fade"
+								id="deleteModal<%=execute.getString("SUPPLIERID")%>"
+								tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+								aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="deleteModalLabel">Confirm
+												Deletion</h5>
+											<button type="button" class="close" data-dismiss="modal"
+												aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">Are you sure you want to delete
+											this item?</div>
+										<div class="modal-footer">
+											<form action="" method="get">
+
+												<button type="button" class="btn btn-secondary"
+													data-dismiss="modal">Cancel</button>
+
+												<input type="hidden"
+													value="<%=execute.getString("SUPPLIERID")%>"
+													name="DeleteId"> <input type="submit"
+													class="btn btn-danger delete-btn" name="deleteSupp"
+													value="Delete">
+
+
+											</form>
+										</div>
+									</div>
+								</div>
+							</div> <script>
+								function deleteItem() {
+									// Perform deletion logic here
+									// This is where you would delete the item using JavaScript, AJAX, or any backend logic
+									// For demonstration purposes, an alert is shown
+									alert("Item deleted!");
+
+									// Close the modal after deletion
+									$(
+											'#deleteModal')
+											.modal('hide');
+								}
+							</script>
+
+
+
+						</td>
+					</tr>
+
+
+					<%
+					}
+					%>
+
+					<!-- End of Sample Table Data -->
+				</tbody>
+			</table>
+
+
+
+
 
 			<!-- Bootstrap JS and jQuery -->
 			<script

@@ -32,11 +32,10 @@ if (request.getParameter("invId") != null) {
 	ResultSet addInventory = inventoryAdd.executeQuery();
 
 	if (invcat != null && invcat.equalsIgnoreCase("F")) {
- 
+
 		String foodcat = request.getParameter("foodCat");
 		String store = request.getParameter("foodStore");
 		String expdate = request.getParameter("foodExp");
-
 
 		PreparedStatement tableAdd = conn
 		.prepareStatement("insert into food(inventoryid, category, storecondition, expdate) values(?,?,?,?)");
@@ -50,9 +49,10 @@ if (request.getParameter("invId") != null) {
 	} else if (invcat != null && invcat.equalsIgnoreCase("S")) {
 		String statcat = request.getParameter("stationeryCat");
 		String type = request.getParameter("stationeryType");
-		PreparedStatement tableAdd = conn.prepareStatement("insert into stationery(inventoryid, category, stationerytype) values(?,?,?)");
+		PreparedStatement tableAdd = conn
+		.prepareStatement("insert into stationery(inventoryid, category, stationerytype) values(?,?,?)");
 		tableAdd.setString(1, id);
-tableAdd.setString(2, statcat);
+		tableAdd.setString(2, statcat);
 		tableAdd.setString(3, type);
 		ResultSet addTableInventoryCategory = tableAdd.executeQuery();
 		System.out.println("success id = " + id);
@@ -62,43 +62,84 @@ tableAdd.setString(2, statcat);
 		String liquid = request.getParameter("personalLiquid");
 		String expdate = request.getParameter("personalExp");
 
-		PreparedStatement tableAdd = conn.prepareStatement("insert into personalcare(inventoryid,category,liquid,expdate) values(?,?,?,?)");
+		PreparedStatement tableAdd = conn
+		.prepareStatement("insert into personalcare(inventoryid,category,liquid,expdate) values(?,?,?,?)");
 		tableAdd.setString(1, id);
 		tableAdd.setString(2, personalcat);
 		tableAdd.setString(3, liquid);
 		tableAdd.setString(4, expdate);
 		ResultSet addTableInventoryCategory = tableAdd.executeQuery();
-			System.out.println("success id = " + id);
-  }
+		System.out.println("success id = " + id);
+	}
 
 }
- 
-//UPDATE STAFF
-if (request.getParameter("UpdateStaff") != null) {
-	String UpdStaffName = request.getParameter("Ustaffname");
-	String UpdStaffIC = request.getParameter("Ustaffic");
-	String UpdStaffPhone = request.getParameter("Ustaffphone");
-	String UpdStaffRole = request.getParameter("Ustaffrole");
-	String UpdStaffAge = request.getParameter("Ustaffage");
-	String UpdStaffId = request.getParameter("Ustaffid");
-	System.out.println(UpdStaffId);
+
+//UPDATE INVENTORY
+if (request.getParameter("updId") != null) {
+	String updName = request.getParameter("updName");
+	String updPrice = request.getParameter("updPrice");
+	String updBrand = request.getParameter("updBrand");
+	String updBalance = request.getParameter("updBalance");
+	String updId = request.getParameter("updId");
+	// String UpdStaffId = request.getParameter("Ustaffid");
+	System.out.println(updId);
 
 	PreparedStatement upd = conn.prepareStatement(
-	"update staff set staffname=?, staffphone=?, staffrole=?, staffage=?, staffic=? where staffid=?");
-	upd.setString(1, UpdStaffName);
-	upd.setString(2, UpdStaffPhone);
-	upd.setString(3, UpdStaffRole);
-	upd.setString(4, UpdStaffAge);
-	upd.setString(5, UpdStaffIC);
-	upd.setString(6, UpdStaffId);
-	ResultSet UpdStaff = upd.executeQuery();
+	"update inventory set inventoryname=?, inventoryprice=?, inventorybrand=?, inventorybalance=? where inventoryid=?");
+	upd.setString(1, updName);
+	upd.setString(2, updPrice);
+	upd.setString(3, updBrand);
+	upd.setString(4, updBalance);
+	upd.setString(5, updId);
+	ResultSet updInv = upd.executeQuery();
+
+	if (request.getParameter("updType") != null && request.getParameter("updType").equalsIgnoreCase("f")) {
+
+		String updCat = request.getParameter("updfoodcategory");
+		String updCondition = request.getParameter("updcondition");
+		String updExp = request.getParameter("updexpdate");
+
+		PreparedStatement updFood = conn.prepareStatement(
+		"update food set category=?, storecondition=?, expdate=? where inventoryid=?");
+		updFood.setString(1, updCat);
+		updFood.setString(2, updCondition);
+		updFood.setString(3, updExp);
+		updFood.setString(4, updId);
+		ResultSet updInvFood = updFood.executeQuery();
+
+	} else if (request.getParameter("updType") != null && request.getParameter("updType").equalsIgnoreCase("p")) {
+
+		String updCat = request.getParameter("updPersonalcat");
+		String updLiquid = request.getParameter("updLiquid");
+		String updExp = request.getParameter("updexpdate");
+
+		PreparedStatement updPersonalCare = conn
+		.prepareStatement("update personalcare set category=?, liquid=?, expdate=? where inventoryid=?");
+		updPersonalCare.setString(1, updCat);
+		updPersonalCare.setString(2, updLiquid);
+		updPersonalCare.setString(3, updExp);
+		updPersonalCare.setString(4, updId);
+		ResultSet updInvPersonalCare = updPersonalCare.executeQuery();
+
+	} else if (request.getParameter("updType") != null && request.getParameter("updType").equalsIgnoreCase("s")) {
+
+		String updCat = request.getParameter("updstationeryCat");
+		String updType = request.getParameter("updStationeryType");
+
+		PreparedStatement updStationery = conn
+		.prepareStatement("update food set category=?, stationerytype=? where inventoryid=?");
+		updStationery.setString(1, updCat);
+		updStationery.setString(2, updType);
+		updStationery.setString(3, updId);
+		ResultSet updInvStationery = updStationery.executeQuery();
+	}
+
 }
 
 //DELETE INEVNTORY
 if (request.getParameter("deleteInv") != null) {
 
 	String deleteId = request.getParameter("DeleteId");
-
 
 	PreparedStatement deleteQuery2 = conn.prepareStatement("delete from food where inventoryid=?");
 	deleteQuery2.setString(1, deleteId);
@@ -112,14 +153,13 @@ if (request.getParameter("deleteInv") != null) {
 	deleteQuery4.setString(1, deleteId);
 	ResultSet deleteInv4 = deleteQuery4.executeQuery();
 
-
 	PreparedStatement deleteQuery1 = conn.prepareStatement("delete from inventory where inventoryid=?");
 	deleteQuery1.setString(1, deleteId);
-	ResultSet deleteInv1 = deleteQuery1.executeQuery(); 
+	ResultSet deleteInv1 = deleteQuery1.executeQuery();
 }
 
-//LIST STAFF
-String query = "select * from inventory";
+//LIST INVENTORY
+String query = "select * from inventory order by inventorytype";
 PreparedStatement list = conn.prepareStatement(query);
 ResultSet execute = list.executeQuery();
 %>
@@ -211,7 +251,7 @@ ResultSet execute = list.executeQuery();
 					%>
 					<tr>
 						<td>
-						<%
+							<%
 							out.println(i);
 							%>
 						</td>
@@ -271,7 +311,7 @@ ResultSet execute = list.executeQuery();
 													<div class="form-group">
 														<label>Inventory Type</label> <input type="text"
 															class="form-control" name="updType"
-															value="<%=execute.getString("inventorytype")%>">
+															value="<%=execute.getString("inventorytype")%>" readonly>
 													</div>
 
 													<div class="form-group">
@@ -286,17 +326,19 @@ ResultSet execute = list.executeQuery();
 															value="<%=execute.getString("inventorybalance")%>">
 													</div>
 
+
+
+
 													<%
 													String idcat = execute.getString("inventoryid");
 													String cat = execute.getString("inventorytype");
-
 
 													if (cat.equalsIgnoreCase("f")) {
 
 														PreparedStatement food = conn.prepareStatement("select * from food where inventoryid=?");
 														food.setString(1, idcat);
 														ResultSet foodSelect = food.executeQuery();
-                                  while(foodSelect.next()){
+														while (foodSelect.next()) {
 													%>
 													<div class="form-group">
 														<label>Food Category </label> <input type="text"
@@ -316,7 +358,8 @@ ResultSet execute = list.executeQuery();
 															value="<%=foodSelect.getString("expdate")%>">
 													</div>
 													<%
-													}}
+													}
+													}
 													%>
 													<%
 													if (cat.equalsIgnoreCase("p")) {
@@ -324,7 +367,7 @@ ResultSet execute = list.executeQuery();
 														PreparedStatement personal = conn.prepareStatement("select * from personalcare where inventoryid=?");
 														personal.setString(1, idcat);
 														ResultSet personalSelect = personal.executeQuery();
-                                 while(personalSelect.next()){
+														while (personalSelect.next()) {
 													%>
 													<div class="form-group">
 														<label>Personal Care Category</label> <input type="text"
@@ -344,7 +387,8 @@ ResultSet execute = list.executeQuery();
 															value="<%=personalSelect.getString("expdate")%>">
 													</div>
 													<%
-													}}
+													}
+													}
 													%>
 													<%
 													if (cat.equalsIgnoreCase("s")) {
@@ -352,7 +396,7 @@ ResultSet execute = list.executeQuery();
 														PreparedStatement stationery = conn.prepareStatement("select * from stationery where inventoryid=?");
 														stationery.setString(1, idcat);
 														ResultSet stationerySelect = stationery.executeQuery();
-                            while(stationerySelect.next()){
+														while (stationerySelect.next()) {
 													%>
 													<div class="form-group">
 														<label>Stationery Category </label> <input type="text"
@@ -366,19 +410,22 @@ ResultSet execute = list.executeQuery();
 															value="<%=stationerySelect.getString("stationerytype")%>">
 													</div>
 													<%
-													}}
+													}
+													}
 													%>
 												
 											</div>
 											<!-- End of Item Information Display -->
 										</div>
 										<div class="modal-footer">
-											<button type="button" class="btn btn-secondary"
-												data-dismiss="modal">Back</button>
 											<!-- Update button -->
-											<button type="submit" class="btn btn-primary">
+											<button type="submit" class="btn btn-warning">
 												Update</button>
 											<!-- Update Staff Modal -->
+
+
+											<button type="button" class="btn btn-danger"
+												data-dismiss="modal">Back</button>
 											</form>
 										</div>
 									</div>
