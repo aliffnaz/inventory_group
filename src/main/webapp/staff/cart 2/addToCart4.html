@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <!-- CDN Links -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<style>
+
+  /* Sidebar Cart Styles */
+
+  #cart {
+    position: fixed; 
+    width: 500px;
+    right: -100%;
+    top: 72px; 
+    height: 100%;
+    background: #fff; 
+    transition: 0.3s;
+  }
+
+  #cart.active {
+    right: 0; 
+  }
+
+  #cart-close {
+    float: right;
+    cursor: pointer; 
+  }
+
+</style>
+
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="#">Inventory Management</a>
+  </div>  
+</nav>
+
+<div class="container mt-4">
+
+<!-- Products Table -->
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Price</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td>Product 1</td>
+      <td>$100</td>
+      <td>
+        <button class="btn btn-sm btn-success addToCart">Add to Cart</button>  
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+
+<!-- Shopping Cart Sidebar -->
+
+<aside id="cart">
+  <div id="cart-close">x</div>
+  <h2>Cart</h2>
+
+  <!-- Cart content populated here -->
+
+</aside>
+
+<!-- Script -->
+<script src="script.js"></script>
+
+</body>
+</html>
