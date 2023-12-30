@@ -12,98 +12,111 @@ String username = "INVENTORY_502";
 String password = "system";
 conn = DriverManager.getConnection(url, username, password);
 
-//ADD STAFF
+//ADD INVENTORY
 if (request.getParameter("invId") != null) {
 	String id = request.getParameter("invId");
 	String name = request.getParameter("invName");
-	String price = request.getParameter("invPrice");
+	float price = Float.parseFloat(request.getParameter("invPrice"));
 	String brand = request.getParameter("invBrand");
-	String balance = request.getParameter("invBalance");
+	int balance = Integer.parseInt(request.getParameter("invBalance"));
 	String invcat = request.getParameter("invCat");
 
 	PreparedStatement inventoryAdd = conn.prepareStatement(
 	"insert into inventory(inventoryid,inventoryname,inventoryprice,inventorybrand,inventorybalance, inventorytype) values(?,?,?,?,?,?)");
 	inventoryAdd.setString(1, id);
 	inventoryAdd.setString(2, name);
-	inventoryAdd.setString(3, price);
+	inventoryAdd.setFloat(3, price);
 	inventoryAdd.setString(4, brand);
-	inventoryAdd.setString(5, balance);
+	inventoryAdd.setInt(5, balance);
 	inventoryAdd.setString(6, invcat);
 	ResultSet addInventory = inventoryAdd.executeQuery();
 
-	if (request.getParameter("invCat") == "F") {
-
+	if (invcat != null && invcat.equalsIgnoreCase("F")) {
+ 
 		String foodcat = request.getParameter("foodCat");
 		String store = request.getParameter("foodStore");
 		String expdate = request.getParameter("foodExp");
-		String table = "food";
-		String values = "(?,?,?)";
-		String attribute = "(category,storecondition,expdate)";
-		PreparedStatement tableAdd = conn.prepareStatement("insert into" + table + attribute + " values" + values);
 
-		tableAdd.setString(1, foodcat);
-		tableAdd.setString(2, store);
-		tableAdd.setString(3, expdate);
+
+		PreparedStatement tableAdd = conn
+		.prepareStatement("insert into food(inventoryid, category, storecondition, expdate) values(?,?,?,?)");
+		tableAdd.setString(1, id);
+		tableAdd.setString(2, foodcat);
+		tableAdd.setString(3, store);
+		tableAdd.setString(4, expdate);
 		ResultSet addTableInventoryCategory = tableAdd.executeQuery();
+		System.out.println("success id = " + id);
 
-	} else if (request.getParameter("invCat") == "S") {
+	} else if (invcat != null && invcat.equalsIgnoreCase("S")) {
 		String statcat = request.getParameter("stationeryCat");
 		String type = request.getParameter("stationeryType");
-		String table = "stationery";
-		String values = "(?,?)";
-		String attribute = "(category,stationerytype)";
-		PreparedStatement tableAdd = conn.prepareStatement("insert into" + table + attribute + " values" + values);
-		tableAdd.setString(1, statcat);
-		tableAdd.setString(2, type);
+		PreparedStatement tableAdd = conn.prepareStatement("insert into stationery(inventoryid, category, stationerytype) values(?,?,?)");
+		tableAdd.setString(1, id);
+tableAdd.setString(2, statcat);
+		tableAdd.setString(3, type);
 		ResultSet addTableInventoryCategory = tableAdd.executeQuery();
+		System.out.println("success id = " + id);
 
-	} else if (request.getParameter("invCat") == "P") {
+	} else if (invcat != null && invcat.equalsIgnoreCase("P")) {
 		String personalcat = request.getParameter("personalCat");
-		String liquid = request.getParameter("personaLiquid");
+		String liquid = request.getParameter("personalLiquid");
 		String expdate = request.getParameter("personalExp");
-		String table = "personalcare";
-		String values = "(?,?,?)";
-		String attribute = "(category,liquid,expdate)";
-		PreparedStatement tableAdd = conn.prepareStatement("insert into" + table + attribute + " values" + values);
 
-		tableAdd.setString(1, personalcat);
-		tableAdd.setString(2, liquid);
-		tableAdd.setString(3, expdate);
+		PreparedStatement tableAdd = conn.prepareStatement("insert into personalcare(inventoryid,category,liquid,expdate) values(?,?,?,?)");
+		tableAdd.setString(1, id);
+		tableAdd.setString(2, personalcat);
+		tableAdd.setString(3, liquid);
+		tableAdd.setString(4, expdate);
 		ResultSet addTableInventoryCategory = tableAdd.executeQuery();
-	}
+			System.out.println("success id = " + id);
+  }
 
 }
-
+ 
 //UPDATE STAFF
-// if (request.getParameter("UpdateStaff") != null) {
-// 	System.out.println("masuk");
-// 	String UpdStaffName = request.getParameter("Ustaffname");
-// 	String UpdStaffIC = request.getParameter("Ustaffic");
-// 	String UpdStaffPhone = request.getParameter("Ustaffphone");
-// 	String UpdStaffRole = request.getParameter("Ustaffrole");
-// 	String UpdStaffAge = request.getParameter("Ustaffage");
-// 	String UpdStaffId = request.getParameter("Ustaffid");
-// 	System.out.println(UpdStaffId);
+if (request.getParameter("UpdateStaff") != null) {
+	String UpdStaffName = request.getParameter("Ustaffname");
+	String UpdStaffIC = request.getParameter("Ustaffic");
+	String UpdStaffPhone = request.getParameter("Ustaffphone");
+	String UpdStaffRole = request.getParameter("Ustaffrole");
+	String UpdStaffAge = request.getParameter("Ustaffage");
+	String UpdStaffId = request.getParameter("Ustaffid");
+	System.out.println(UpdStaffId);
 
-// 	PreparedStatement upd = conn.prepareStatement(
-// 	"update staff set staffname=?, staffphone=?, staffrole=?, staffage=?, staffic=? where staffid=?");
-// 	upd.setString(1, UpdStaffName);
-// 	upd.setString(2, UpdStaffPhone);
-// 	upd.setString(3, UpdStaffRole);
-// 	upd.setString(4, UpdStaffAge);
-// 	upd.setString(5, UpdStaffIC);
-// 	upd.setString(6, UpdStaffId);
-// 	ResultSet UpdStaff = upd.executeQuery();
-// }
+	PreparedStatement upd = conn.prepareStatement(
+	"update staff set staffname=?, staffphone=?, staffrole=?, staffage=?, staffic=? where staffid=?");
+	upd.setString(1, UpdStaffName);
+	upd.setString(2, UpdStaffPhone);
+	upd.setString(3, UpdStaffRole);
+	upd.setString(4, UpdStaffAge);
+	upd.setString(5, UpdStaffIC);
+	upd.setString(6, UpdStaffId);
+	ResultSet UpdStaff = upd.executeQuery();
+}
 
-//DELETE STAFF
-// if (request.getParameter("DeleteId") != null) {
-// 	String deleteId = request.getParameter("DeleteId");
-// 	PreparedStatement deleteQuery = conn.prepareStatement("delete from staff where staffid=?");
-// 	deleteQuery.setString(1, deleteId);
-// 	ResultSet deleteStaff = deleteQuery.executeQuery();
+//DELETE INEVNTORY
+if (request.getParameter("deleteInv") != null) {
 
-// }
+	String deleteId = request.getParameter("DeleteId");
+
+
+	PreparedStatement deleteQuery2 = conn.prepareStatement("delete from food where inventoryid=?");
+	deleteQuery2.setString(1, deleteId);
+	ResultSet deleteInv2 = deleteQuery2.executeQuery();
+
+	PreparedStatement deleteQuery3 = conn.prepareStatement("delete from personalcare where inventoryid=?");
+	deleteQuery3.setString(1, deleteId);
+	ResultSet deleteInv3 = deleteQuery3.executeQuery();
+
+	PreparedStatement deleteQuery4 = conn.prepareStatement("delete from stationery where inventoryid=?");
+	deleteQuery4.setString(1, deleteId);
+	ResultSet deleteInv4 = deleteQuery4.executeQuery();
+
+
+	PreparedStatement deleteQuery1 = conn.prepareStatement("delete from inventory where inventoryid=?");
+	deleteQuery1.setString(1, deleteId);
+	ResultSet deleteInv1 = deleteQuery1.executeQuery(); 
+}
 
 //LIST STAFF
 String query = "select * from inventory";
@@ -170,11 +183,7 @@ ResultSet execute = list.executeQuery();
 
 			<!-- Add Item Button -->
 			<button type="button" class="btn btn-primary mb-3 col-2"
-				data-toggle="modal" data-target="#addItemModal">Add Item</button>
-
-
-
-
+				data-toggle="modal" data-target="#addItemModal">Add</button>
 
 			<!-- Data Table -->
 			<table id="inventoryTable" class="table table-striped table-bordered"
@@ -202,7 +211,7 @@ ResultSet execute = list.executeQuery();
 					%>
 					<tr>
 						<td>
-							<%
+						<%
 							out.println(i);
 							%>
 						</td>
@@ -218,97 +227,219 @@ ResultSet execute = list.executeQuery();
 							<button type="button" class="btn btn-primary btn-sm view-btn"
 								data-toggle="modal"
 								data-target="#viewItemModal<%=execute.getString("inventoryid")%>">View</button>
-							<button type="button" class="btn btn-danger btn-sm delete-btn">Delete</button>
+
+							<!-- View Item Modal -->
+							<div class="modal fade"
+								id="viewItemModal<%=execute.getString("inventoryid")%>"
+								tabindex="-1" role="dialog" aria-labelledby="viewItemModalLabel"
+								aria-hidden="true">
+								<!-- Modal content goes here -->
+								<div class="modal-dialog modal-lg" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="viewItemModalLabel">Inventory
+												Information</h5>
+											<button type="button" class="close" data-dismiss="modal"
+												aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+											<!-- Item Information Display (Replace this with your actual item information) -->
+											<div class="modal-body">
+
+												<form action="" method="post">
+
+													<div class="form-group">
+														<label>Inventory ID</label> <input type="text"
+															class="form-control" name="updId"
+															value="<%=execute.getString("inventoryid")%>" readonly>
+													</div>
+
+													<div class="form-group">
+														<label>Inventory Name</label> <input type="text"
+															class="form-control" name="updName"
+															value="<%=execute.getString("inventoryname")%>">
+													</div>
+
+													<div class="form-group">
+														<label>Inventory Price</label> <input type="text"
+															class="form-control" name="updPrice"
+															value="<%=execute.getString("inventoryprice")%>">
+													</div>
+
+													<div class="form-group">
+														<label>Inventory Type</label> <input type="text"
+															class="form-control" name="updType"
+															value="<%=execute.getString("inventorytype")%>">
+													</div>
+
+													<div class="form-group">
+														<label>Inventory Brand</label> <input type="text"
+															class="form-control" name="updBrand"
+															value="<%=execute.getString("inventorybrand")%>">
+													</div>
+
+													<div class="form-group">
+														<label>Inventory Balance</label> <input type="text"
+															class="form-control" name="updBalance"
+															value="<%=execute.getString("inventorybalance")%>">
+													</div>
+
+													<%
+													String idcat = execute.getString("inventoryid");
+													String cat = execute.getString("inventorytype");
+
+
+													if (cat.equalsIgnoreCase("f")) {
+
+														PreparedStatement food = conn.prepareStatement("select * from food where inventoryid=?");
+														food.setString(1, idcat);
+														ResultSet foodSelect = food.executeQuery();
+                                  while(foodSelect.next()){
+													%>
+													<div class="form-group">
+														<label>Food Category </label> <input type="text"
+															class="form-control" name="updfoodcategory"
+															value="<%=foodSelect.getString("category")%>">
+													</div>
+
+													<div class="form-group">
+														<label>Store Condition</label> <input type="text"
+															class="form-control" name="updcondition"
+															value="<%=foodSelect.getString("storecondition")%>">
+													</div>
+
+													<div class="form-group">
+														<label>Expired Date</label> <input type="text"
+															class="form-control" name="updexpdate"
+															value="<%=foodSelect.getString("expdate")%>">
+													</div>
+													<%
+													}}
+													%>
+													<%
+													if (cat.equalsIgnoreCase("p")) {
+
+														PreparedStatement personal = conn.prepareStatement("select * from personalcare where inventoryid=?");
+														personal.setString(1, idcat);
+														ResultSet personalSelect = personal.executeQuery();
+                                 while(personalSelect.next()){
+													%>
+													<div class="form-group">
+														<label>Personal Care Category</label> <input type="text"
+															class="form-control" name="updPersonalcat"
+															value="<%=personalSelect.getString("category")%>">
+													</div>
+
+													<div class="form-group">
+														<label>Liquid</label> <input type="text"
+															class="form-control" name="updLiquid"
+															value="<%=personalSelect.getString("liquid")%>">
+													</div>
+
+													<div class="form-group">
+														<label>Expired Date</label> <input type="text"
+															class="form-control" name="updexpdate"
+															value="<%=personalSelect.getString("expdate")%>">
+													</div>
+													<%
+													}}
+													%>
+													<%
+													if (cat.equalsIgnoreCase("s")) {
+
+														PreparedStatement stationery = conn.prepareStatement("select * from stationery where inventoryid=?");
+														stationery.setString(1, idcat);
+														ResultSet stationerySelect = stationery.executeQuery();
+                            while(stationerySelect.next()){
+													%>
+													<div class="form-group">
+														<label>Stationery Category </label> <input type="text"
+															class="form-control" name="updstationeryCat"
+															value="<%=stationerySelect.getString("category")%>">
+													</div>
+
+													<div class="form-group">
+														<label>Stationery Type</label> <input type="text"
+															class="form-control" name="updStationeryType"
+															value="<%=stationerySelect.getString("stationerytype")%>">
+													</div>
+													<%
+													}}
+													%>
+												
+											</div>
+											<!-- End of Item Information Display -->
+										</div>
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary"
+												data-dismiss="modal">Back</button>
+											<!-- Update button -->
+											<button type="submit" class="btn btn-primary">
+												Update</button>
+											<!-- Update Staff Modal -->
+											</form>
+										</div>
+									</div>
+								</div>
+
+
+
+							</div> <!-- DELETE SECTION -->
+							<button type="button" class="btn btn-danger btn-sm"
+								data-toggle="modal"
+								data-target="#deleteModal<%=execute.getString("inventoryid")%>">Delete</button>
+
+							<div class="modal fade"
+								id="deleteModal<%=execute.getString("inventoryid")%>"
+								tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+								aria-hidden="true">
+								<div class="modal-dialog" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="deleteModalLabel">Confirm
+												Deletion</h5>
+											<button type="button" class="close" data-dismiss="modal"
+												aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">Are you sure you want to delete
+											this inventory?</div>
+										<div class="modal-footer">
+											<form action="" method="get">
+
+												<input type="hidden"
+													value="<%=execute.getString("inventoryid")%>"
+													name="DeleteId"> <input type="submit"
+													class="btn btn-danger delete-btn" name="deleteInv"
+													value="Delete">
+
+												<button type="button" class="btn btn-secondary"
+													data-dismiss="modal">Cancel</button>
+
+											</form>
+										</div>
+									</div>
+								</div>
+							</div> <script>
+								function deleteItem() {
+									// Perform deletion logic here
+									// This is where you would delete the item using JavaScript, AJAX, or any backend logic
+									// For demonstration purposes, an alert is shown
+									alert("Item deleted!");
+
+									// Close the modal after deletion
+									$('#deleteModal').modal('hide');
+								}
+							</script> <!-- END DELETE SECTION -->
 						</td>
 					</tr>
-
-					<!-- View Item Modal -->
-					<div class="modal fade"
-						id="viewItemModal<%=execute.getString("inventoryid")%>"
-						tabindex="-1" role="dialog" aria-labelledby="viewItemModalLabel"
-						aria-hidden="true">
-						<!-- Modal content goes here -->
-						<div class="modal-dialog" role="document">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="viewItemModalLabel">Inventory
-										Information</h5>
-									<button type="button" class="close" data-dismiss="modal"
-										aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-								<div class="modal-body">
-									<!-- Item Information Display (Replace this with your actual item information) -->
-									<div class="modal-body">
-
-										<form>
-
-											<div class="form-group">
-												<label>Inventory ID</label> <input type="text"
-													class="form-control" id=""
-													value="<%=execute.getString("inventoryid")%>" readonly>
-											</div>
-
-											<div class="form-group">
-												<label>Inventory Name</label> <input type="text"
-													class="form-control" id=""
-													value="<%=execute.getString("inventoryname")%>">
-											</div>
-
-											<div class="form-group">
-												<label>Inventory Price</label> <input type="text"
-													class="form-control" id=""
-													value="<%=execute.getString("inventoryprice")%>">
-											</div>
-
-											<div class="form-group">
-												<label>Inventory Type</label> <input type="text"
-													class="form-control" id=""
-													value="<%=execute.getString("inventorytype")%>">
-											</div>
-
-											<div class="form-group">
-												<label>Inventory Brand</label> <input type="text"
-													class="form-control" id=""
-													value="<%=execute.getString("inventorybrand")%>">
-											</div>
-
-											<div class="form-group">
-												<label>Inventory Balance</label> <input type="text"
-													class="form-control" id=""
-													value="<%=execute.getString("inventorybalance")%>">
-											</div>
-
-											<!-- Other editable fields -->
-
-											<button type="submit" class="btn btn-primary">Update
-												Item</button>
-
-										</form>
-
-									</div>
-									<!-- End of Item Information Display -->
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary"
-										data-dismiss="modal">Back</button>
-									<!-- Update button -->
-									<button type="button" class="btn btn-primary btn-sm"
-										data-toggle="modal" data-target="#updateItemModal">
-										Update</button>
-									<!-- Update Staff Modal -->
-
-
-
-
-								</div>
-							</div>
-						</div>
-					</div>
-
 					<%
-					i++;
+					i = i + 1;
+					%>
+					<%
 					}
 					%>
 					<!-- End of Sample Table Data -->
@@ -327,7 +458,8 @@ ResultSet execute = list.executeQuery();
 
 
 				<div class="modal-header" class="container mt-4">
-					<h5 class="modal-title" id="addItemModalLabel">Add New Item</h5>
+					<h5 class="modal-title" id="addItemModalLabel">Add New
+						Inventory</h5>
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
