@@ -8,6 +8,7 @@
 Connection conn = null;
 
 String id = request.getParameter("staffID");
+String name = request.getParameter("staffName");
 String ic = request.getParameter("staffIC");
 String phone = request.getParameter("staffPhone");
 String role = request.getParameter("staffRole");

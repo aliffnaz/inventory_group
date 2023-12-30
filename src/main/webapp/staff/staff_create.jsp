@@ -1,22 +1,20 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ page
-	import="java.util.*, java.io.*, java.sql.DriverManager, java.sql.Connection, java.sql.ResultSet, java.sql.SQLException, java.sql.Statement, java.sql.PreparedStatement"%>
+	import="java.util.*, java.io.*,java.sql.PreparedStatement, java.sql.DriverManager, java.sql.ResultSet, java.sql.Connection, java.sql.SQLException, java.sql.Statement"%>
 
 <%
 Connection conn = null;
 
 String id = request.getParameter("staffID");
+String name = request.getParameter("staffName");
 String ic = request.getParameter("staffIC");
 String phone = request.getParameter("staffPhone");
 String role = request.getParameter("staffRole");
 String age = request.getParameter("staffAge");
 
+//out.println(id);
 if (id != null) {
-	//commit testing 
-	//commit 2
-	//Class.forName("oracle.jdbc.driver.OracleDriver");
 	String url = "jdbc:oracle:thin:@localhost:1521:xe";
 	String username = "INVENTORY_502";
 	String password = "system";
@@ -40,81 +38,87 @@ if (id != null) {
 	}
 }
 %>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register Staff</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register Staff</title>
 
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css" rel="stylesheet">
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  
-  <style>
-    /* Custom CSS */
-  </style>
+<!-- Bootstrap CSS -->
+<link
+	href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css"
+	rel="stylesheet">
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	rel="stylesheet">
+
 
 </head>
 
 <body>
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-      <a class="navbar-brand" href="#">Inventory Management</a>
-    </div>
-  </nav>
+	<!-- Navbar -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="container">
+			<a class="navbar-brand" href="#">Inventory Management</a>
+		</div>
+	</nav>
 
-  <!-- Page Content -->
-  <div class="container mt-4">
+	<!-- Page Content -->
+	<div class="container mt-4">
 
-    <h2>Register New Staff</h2>
-    
-    <!-- Register Form -->
-    <form action="" method="post">
-      <div class="form-group">
-        <label>Staff ID</label>
-        <input type="text" class="form-control" name="staffID">
-      </div>
+		<h2>Register New Staff</h2>
 
-      <div class="form-group">
-        <label>Staff Name</label>  
-        <input type="text" class="form-control" name="staffName">
-      </div>
+		<!-- Register Form -->
+		<form action="" method="post">
+			<div class="form-group">
+				<label>Staff ID</label> <input type="text" class="form-control"
+					name="staffID">
+			</div>
 
-      <div class="form-group">
-        <label>Staff IC</label>
-        <input type="text" class="form-control" name="staffIC">
-      </div>
-      
-      <div class="form-group">
-        <label>Staff Phone</label>
-        <input type="text" class="form-control" name="staffPhone">
-      </div>
-      
-      <div class="form-group">
-        <label>Staff Role</label>
-        <input type="text" class="form-control" name="staffRole">
-      </div>
-      
-      <div class="form-group">
-        <label>Staff Age</label>
-        <input type="text" class="form-control" name="staffAge">
-      </div>
+			<div class="form-group">
+				<label>Staff Name</label> <input type="text" class="form-control"
+					name="staffName">
+			</div>
 
-      <!-- Other input fields -->
+			<div class="form-group">
+				<label>Staff IC</label> <input type="text" class="form-control"
+					name="staffIC">
+			</div>
 
-      <button type="submit" class="btn btn-primary">Register</button>
-    </form>
+			<div class="form-group">
+				<label>Staff Phone</label> <input type="text" class="form-control"
+					name="staffPhone">
+			</div>
 
-  </div>
+			<div class="form-group">
+				<label>Staff Role</label> <input type="text" class="form-control"
+					name="staffRole">
+			</div>
 
-  <!-- Bootstrap JS and jQuery -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+			<div class="form-group">
+				<label>Staff Age</label> <input type="text" class="form-control"
+					name="staffAge">
+			</div>
+
+			<!-- Other input fields -->
+
+			<button type="submit" class="btn btn-primary">Register</button>
+		</form>
+
+	</div>
+
+	<!-- Bootstrap JS and jQuery -->
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
 </body>
 
