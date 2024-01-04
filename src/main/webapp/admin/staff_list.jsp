@@ -14,6 +14,7 @@ conn = DriverManager.getConnection(url, username, password);
 
 //ADD STAFF
 if (request.getParameter("staffID") != null) {
+
 	String id = request.getParameter("staffID");
 	String name = request.getParameter("staffName");
 	String ic = request.getParameter("staffIC");
@@ -21,18 +22,27 @@ if (request.getParameter("staffID") != null) {
 	String role = request.getParameter("staffRole");
 	String age = request.getParameter("staffAge");
 
-	PreparedStatement staffAdd = conn.prepareStatement(
-	"insert into staff(staffID,staffIC,staffPhone,staffRole,staffAge,staffname) values(?,?,?,?,?,?)");
-	staffAdd.setString(1, id);
-	staffAdd.setString(2, ic);
-	staffAdd.setString(3, phone);
-	staffAdd.setString(4, role);
-	staffAdd.setString(5, age);
-	staffAdd.setString(6, name);
-	ResultSet addStaff = staffAdd.executeQuery();
+	PreparedStatement checking = conn.prepareStatement("select * from staff where inventoryid=?");
+	checking.setString(1, id);
+	ResultSet check = checking.executeQuery();
+	if (check.next()) {
+		out.println("the staff id is already in the list !");
 
-	if (addStaff == null) {
-		out.println("not working man");
+	} else {
+
+		PreparedStatement staffAdd = conn.prepareStatement(
+		"insert into staff(staffID,staffIC,staffPhone,staffRole,staffAge,staffname) values(?,?,?,?,?,?)");
+		staffAdd.setString(1, id);
+		staffAdd.setString(2, ic);
+		staffAdd.setString(3, phone);
+		staffAdd.setString(4, role);
+		staffAdd.setString(5, age);
+		staffAdd.setString(6, name);
+		ResultSet addStaff = staffAdd.executeQuery();
+
+		if (addStaff == null) {
+	out.println("not working man");
+		}
 	}
 }
 
@@ -225,8 +235,7 @@ ResultSet execute = list.executeQuery();
 													<label>Staff ID</label> <input type="text"
 														class="form-control" name="Ustaffid"
 														value="<%=execute.getString("staffid")%>"
-														placeholder="<%=execute.getString("staffid")%>"
-														readonly>
+														placeholder="<%=execute.getString("staffid")%>" readonly>
 												</div>
 
 												<div class="form-group">

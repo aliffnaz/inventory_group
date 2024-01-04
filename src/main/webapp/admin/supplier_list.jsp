@@ -62,7 +62,6 @@ if (request.getParameter("supplierID") != null) {
 		addSupplier.setString(4, phone);
 		ResultSet addSupp = addSupplier.executeQuery();
 	}
-
 }
 
 // call list item
@@ -184,8 +183,9 @@ ResultSet execute = ps.executeQuery();
 								data-target="#view<%=execute.getString("SUPPLIERID")%>">View</button>
 
 							<!-- View Supplier Modal -->
-							<div class="modal fade" id="view<%=execute.getString("SUPPLIERID")%>"
-								tabindex="-1" role="dialog" aria-labelledby="viewItemModalLabel"
+							<div class="modal fade"
+								id="view<%=execute.getString("SUPPLIERID")%>" tabindex="-1"
+								role="dialog" aria-labelledby="viewItemModalLabel"
 								aria-hidden="true">
 								<!-- Modal content goes here -->
 								<div class="modal-dialog" role="document">
@@ -301,9 +301,7 @@ ResultSet execute = ps.executeQuery();
 									alert("Item deleted!");
 
 									// Close the modal after deletion
-									$(
-											'#deleteModal')
-											.modal('hide');
+									$('#deleteModal').modal('hide');
 								}
 							</script>
 

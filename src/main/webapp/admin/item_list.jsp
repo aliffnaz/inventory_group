@@ -21,6 +21,15 @@ if (request.getParameter("invId") != null) {
 	int balance = Integer.parseInt(request.getParameter("invBalance"));
 	String invcat = request.getParameter("invCat");
 
+
+PreparedStatement checking = conn.prepareStatement("select * from inventory where inventoryid=?");
+checking.setString(1,id);
+ResultSet check = checking.executeQuery();
+if(!check.next()){
+out.println("the inventory id is already in the list !");
+
+}else{
+
 	PreparedStatement inventoryAdd = conn.prepareStatement(
 	"insert into inventory(inventoryid,inventoryname,inventoryprice,inventorybrand,inventorybalance, inventorytype) values(?,?,?,?,?,?)");
 	inventoryAdd.setString(1, id);
@@ -72,6 +81,7 @@ if (request.getParameter("invId") != null) {
 		System.out.println("success id = " + id);
 	}
 
+}
 }
 
 //UPDATE INVENTORY
