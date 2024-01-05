@@ -4,7 +4,7 @@
 <%@ page
 	import="java.util.*, java.io.*, java.sql.DriverManager, java.sql.Connection, java.sql.ResultSet, java.sql.SQLException, java.sql.Statement, java.sql.PreparedStatement"%>
 
-<%
+<% %>
 <!DOCTYPE html>
 <html lang="en">
 <head>

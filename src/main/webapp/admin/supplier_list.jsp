@@ -12,6 +12,19 @@ String username = "INVENTORY_502";
 String password = "system";
 conn = DriverManager.getConnection(url, username, password);
 
+String UserID = (String) session.getAttribute("sessionID");
+
+if (UserID == null) {
+	response.sendRedirect("../login.jsp");
+} else {
+
+	PreparedStatement CurrentUser = conn.prepareStatement("select * from staff where staffid=?");
+	CurrentUser.setString(1, UserID);
+	ResultSet UserSession = CurrentUser.executeQuery();
+	UserSession.next();
+	out.println("welcome sir, " + UserSession.getString("staffname"));
+}
+
 //delete supplier
 if (request.getParameter("DeleteId") != null) {
 	String DeleteId = request.getParameter("DeleteId");

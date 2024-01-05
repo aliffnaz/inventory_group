@@ -12,6 +12,20 @@ String username = "INVENTORY_502";
 String password = "system";
 conn = DriverManager.getConnection(url, username, password);
 
+
+String UserID = (String) session.getAttribute("sessionID");
+
+if (UserID == null) {
+	response.sendRedirect("../login.jsp");
+} else {
+
+	PreparedStatement CurrentUser = conn.prepareStatement("select * from staff where staffid=?");
+	CurrentUser.setString(1, UserID);
+	ResultSet UserSession = CurrentUser.executeQuery();
+	UserSession.next();
+	out.println("welcome sir, " + UserSession.getString("staffname"));
+}
+
 //ADD INVENTORY
 if (request.getParameter("invId") != null) {
 	String id = request.getParameter("invId");
@@ -21,67 +35,66 @@ if (request.getParameter("invId") != null) {
 	int balance = Integer.parseInt(request.getParameter("invBalance"));
 	String invcat = request.getParameter("invCat");
 
+	PreparedStatement checking = conn.prepareStatement("select * from inventory where inventoryid=?");
+	checking.setString(1, id);
+	ResultSet check = checking.executeQuery();
+	if (!check.next()) {
+		out.println("the inventory id is already in the list !");
 
-PreparedStatement checking = conn.prepareStatement("select * from inventory where inventoryid=?");
-checking.setString(1,id);
-ResultSet check = checking.executeQuery();
-if(!check.next()){
-out.println("the inventory id is already in the list !");
+	} else {
 
-}else{
+		PreparedStatement inventoryAdd = conn.prepareStatement(
+		"insert into inventory(inventoryid,inventoryname,inventoryprice,inventorybrand,inventorybalance, inventorytype) values(?,?,?,?,?,?)");
+		inventoryAdd.setString(1, id);
+		inventoryAdd.setString(2, name);
+		inventoryAdd.setFloat(3, price);
+		inventoryAdd.setString(4, brand);
+		inventoryAdd.setInt(5, balance);
+		inventoryAdd.setString(6, invcat);
+		ResultSet addInventory = inventoryAdd.executeQuery();
 
-	PreparedStatement inventoryAdd = conn.prepareStatement(
-	"insert into inventory(inventoryid,inventoryname,inventoryprice,inventorybrand,inventorybalance, inventorytype) values(?,?,?,?,?,?)");
-	inventoryAdd.setString(1, id);
-	inventoryAdd.setString(2, name);
-	inventoryAdd.setFloat(3, price);
-	inventoryAdd.setString(4, brand);
-	inventoryAdd.setInt(5, balance);
-	inventoryAdd.setString(6, invcat);
-	ResultSet addInventory = inventoryAdd.executeQuery();
+		if (invcat != null && invcat.equalsIgnoreCase("F")) {
 
-	if (invcat != null && invcat.equalsIgnoreCase("F")) {
+	String foodcat = request.getParameter("foodCat");
+	String store = request.getParameter("foodStore");
+	String expdate = request.getParameter("foodExp");
 
-		String foodcat = request.getParameter("foodCat");
-		String store = request.getParameter("foodStore");
-		String expdate = request.getParameter("foodExp");
+	PreparedStatement tableAdd = conn.prepareStatement(
+			"insert into food(inventoryid, category, storecondition, expdate) values(?,?,?,?)");
+	tableAdd.setString(1, id);
+	tableAdd.setString(2, foodcat);
+	tableAdd.setString(3, store);
+	tableAdd.setString(4, expdate);
+	ResultSet addTableInventoryCategory = tableAdd.executeQuery();
+	System.out.println("success id = " + id);
 
-		PreparedStatement tableAdd = conn
-		.prepareStatement("insert into food(inventoryid, category, storecondition, expdate) values(?,?,?,?)");
-		tableAdd.setString(1, id);
-		tableAdd.setString(2, foodcat);
-		tableAdd.setString(3, store);
-		tableAdd.setString(4, expdate);
-		ResultSet addTableInventoryCategory = tableAdd.executeQuery();
-		System.out.println("success id = " + id);
+		} else if (invcat != null && invcat.equalsIgnoreCase("S")) {
+	String statcat = request.getParameter("stationeryCat");
+	String type = request.getParameter("stationeryType");
+	PreparedStatement tableAdd = conn
+			.prepareStatement("insert into stationery(inventoryid, category, stationerytype) values(?,?,?)");
+	tableAdd.setString(1, id);
+	tableAdd.setString(2, statcat);
+	tableAdd.setString(3, type);
+	ResultSet addTableInventoryCategory = tableAdd.executeQuery();
+	System.out.println("success id = " + id);
 
-	} else if (invcat != null && invcat.equalsIgnoreCase("S")) {
-		String statcat = request.getParameter("stationeryCat");
-		String type = request.getParameter("stationeryType");
-		PreparedStatement tableAdd = conn
-		.prepareStatement("insert into stationery(inventoryid, category, stationerytype) values(?,?,?)");
-		tableAdd.setString(1, id);
-		tableAdd.setString(2, statcat);
-		tableAdd.setString(3, type);
-		ResultSet addTableInventoryCategory = tableAdd.executeQuery();
-		System.out.println("success id = " + id);
+		} else if (invcat != null && invcat.equalsIgnoreCase("P")) {
+	String personalcat = request.getParameter("personalCat");
+	String liquid = request.getParameter("personalLiquid");
+	String expdate = request.getParameter("personalExp");
 
-	} else if (invcat != null && invcat.equalsIgnoreCase("P")) {
-		String personalcat = request.getParameter("personalCat");
-		String liquid = request.getParameter("personalLiquid");
-		String expdate = request.getParameter("personalExp");
+	PreparedStatement tableAdd = conn
+			.prepareStatement("insert into personalcare(inventoryid,category,liquid,expdate) values(?,?,?,?)");
+	tableAdd.setString(1, id);
+	tableAdd.setString(2, personalcat);
+	tableAdd.setString(3, liquid);
+	tableAdd.setString(4, expdate);
+	ResultSet addTableInventoryCategory = tableAdd.executeQuery();
+	System.out.println("success id = " + id);
+		}
 
-		PreparedStatement tableAdd = conn
-		.prepareStatement("insert into personalcare(inventoryid,category,liquid,expdate) values(?,?,?,?)");
-		tableAdd.setString(1, id);
-		tableAdd.setString(2, personalcat);
-		tableAdd.setString(3, liquid);
-		tableAdd.setString(4, expdate);
-		ResultSet addTableInventoryCategory = tableAdd.executeQuery();
-		System.out.println("success id = " + id);
 	}
-
-}
 }
 
 //UPDATE INVENTORY
@@ -109,8 +122,8 @@ if (request.getParameter("updId") != null) {
 		String updCondition = request.getParameter("updcondition");
 		String updExp = request.getParameter("updexpdate");
 
-		PreparedStatement updFood = conn.prepareStatement(
-		"update food set category=?, storecondition=?, expdate=? where inventoryid=?");
+		PreparedStatement updFood = conn
+		.prepareStatement("update food set category=?, storecondition=?, expdate=? where inventoryid=?");
 		updFood.setString(1, updCat);
 		updFood.setString(2, updCondition);
 		updFood.setString(3, updExp);
