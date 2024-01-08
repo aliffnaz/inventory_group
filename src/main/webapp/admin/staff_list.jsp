@@ -11,6 +11,7 @@ String url = "jdbc:oracle:thin:@localhost:1521:xe";
 String username = "INVENTORY_502";
 String password = "system";
 conn = DriverManager.getConnection(url, username, password);
+boolean deleteSuccess = false;
 
 String UserID = (String) session.getAttribute("sessionID");
 
@@ -22,7 +23,7 @@ if (UserID == null) {
 	CurrentUser.setString(1, UserID);
 	ResultSet UserSession = CurrentUser.executeQuery();
 	UserSession.next();
-	out.println("welcome sir, " + UserSession.getString("staffname"));
+	//out.println("welcome sir, " + UserSession.getString("staffname"));
 }
 
 //ADD STAFF
@@ -88,6 +89,8 @@ if (request.getParameter("DeleteId") != null) {
 	deleteQuery.setString(1, deleteId);
 	ResultSet deleteStaff = deleteQuery.executeQuery();
 
+	deleteSuccess = true;
+
 }
 
 //LIST STAFF
@@ -114,12 +117,31 @@ ResultSet execute = list.executeQuery();
 
 <body>
 
+
+
 	<!-- Navbar -->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="container">
 			<a class="navbar-brand" href="#">Inventory Management</a>
 		</div>
 	</nav>
+
+	<%
+	if (deleteSuccess) {
+		// if color red : alert-success tukar jadi alert-danger
+	%>
+	<div class="alert alert-success alert-dismissible fade show"
+		role="alert">
+		<strong>Staff Deleted !</strong> The staff list below was updated
+		<button type="button" class="close" data-dismiss="alert"
+			aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<%
+	} 
+	%>
+	
 
 	<!-- Page Content -->
 	<div class="container mt-4">
