@@ -11,7 +11,9 @@ String url = "jdbc:oracle:thin:@localhost:1521:xe";
 String username = "INVENTORY_502";
 String password = "system";
 conn = DriverManager.getConnection(url, username, password);
-
+boolean addSuccess = false;
+boolean updateSuccess = false;
+boolean deleteSuccess = false;
 
 String UserID = (String) session.getAttribute("sessionID");
 
@@ -95,6 +97,7 @@ if (request.getParameter("invId") != null) {
 		}
 
 	}
+	addSuccess = true;
 }
 
 //UPDATE INVENTORY
@@ -156,7 +159,7 @@ if (request.getParameter("updId") != null) {
 		updStationery.setString(3, updId);
 		ResultSet updInvStationery = updStationery.executeQuery();
 	}
-
+	updateSuccess = true;
 }
 
 //DELETE INEVNTORY
@@ -179,6 +182,8 @@ if (request.getParameter("deleteInv") != null) {
 	PreparedStatement deleteQuery1 = conn.prepareStatement("delete from inventory where inventoryid=?");
 	deleteQuery1.setString(1, deleteId);
 	ResultSet deleteInv1 = deleteQuery1.executeQuery();
+
+	deleteSuccess = true;
 }
 
 //LIST INVENTORY
@@ -238,6 +243,54 @@ ResultSet execute = list.executeQuery();
 			<a class="navbar-brand" href="#">Inventory Management</a>
 		</div>
 	</nav>
+
+	<%
+	if (addSuccess) {
+		// if color red : alert-success tukar jadi alert-danger
+	%>
+	<div class="alert alert-success alert-dismissible fade show"
+		role="alert">
+		<strong>Item Added !</strong> The item added into list
+		<button type="button" class="close" data-dismiss="alert"
+			aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<%
+	} 
+	%>
+
+	<%
+	if (updateSuccess) {
+		// if color red : alert-success tukar jadi alert-danger
+	%>
+	<div class="alert alert-success alert-dismissible fade show"
+		role="alert">
+		<strong>Item Updated !</strong> The item list below was updated
+		<button type="button" class="close" data-dismiss="alert"
+			aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<%
+	} 
+	%>
+
+	<%
+	if (deleteSuccess) {
+		// if color red : alert-success tukar jadi alert-danger
+	%>
+	<div class="alert alert-success alert-dismissible fade show"
+		role="alert">
+		<strong>Item Deleted !</strong> The item list below was deleted
+		<button type="button" class="close" data-dismiss="alert"
+			aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<%
+	} 
+	%>
 
 	<!-- Page Content -->
 	<div class="container mt-4">
