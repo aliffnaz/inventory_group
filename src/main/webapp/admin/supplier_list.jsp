@@ -11,6 +11,8 @@ String url = "jdbc:oracle:thin:@localhost:1521:xe";
 String username = "INVENTORY_502";
 String password = "system";
 conn = DriverManager.getConnection(url, username, password);
+boolean addSuccess = false;
+boolean updateSuccess = false;
 boolean deleteSuccess = false;
 
 String UserID = (String) session.getAttribute("sessionID");
