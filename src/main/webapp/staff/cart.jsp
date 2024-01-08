@@ -72,6 +72,15 @@
       </tfoot>
     </table>
 
+    <div class="row">
+				<div class="col"></div>
+				<div class="col text-center">
+					<a href="../managerMenu.jsp" class="btn btn-warning m-4">Back</a>
+
+				</div>
+				<div class="col"></div>
+			</div>
+
     <!-- View Item Modal -->
     <div class="modal fade" id="viewItemModal" tabindex="-1" role="dialog" aria-labelledby="viewItemModalLabel"
       aria-hidden="true">
