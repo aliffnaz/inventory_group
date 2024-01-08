@@ -124,7 +124,7 @@ ResultSet execute = ps.executeQuery();
 	%>
 	<div class="alert alert-success alert-dismissible fade show"
 		role="alert">
-		<strong>Staff Added !</strong> The supplier added into list
+		<strong>Supplier Added !</strong> The supplier added into list
 		<button type="button" class="close" data-dismiss="alert"
 			aria-label="Close">
 			<span aria-hidden="true">&times;</span>
@@ -140,7 +140,7 @@ ResultSet execute = ps.executeQuery();
 	%>
 	<div class="alert alert-success alert-dismissible fade show"
 		role="alert">
-		<strong>Staff Deleted !</strong> The supplier list below was updated
+		<strong>Supplier Updated !</strong> The supplier list below was updated
 		<button type="button" class="close" data-dismiss="alert"
 			aria-label="Close">
 			<span aria-hidden="true">&times;</span>
@@ -156,7 +156,7 @@ ResultSet execute = ps.executeQuery();
 	%>
 	<div class="alert alert-success alert-dismissible fade show"
 		role="alert">
-		<strong>Staff Deleted !</strong> The supplier list below was updated
+		<strong>Supplier Deleted !</strong> The supplier list below was deleted
 		<button type="button" class="close" data-dismiss="alert"
 			aria-label="Close">
 			<span aria-hidden="true">&times;</span>
