@@ -11,6 +11,7 @@ String url = "jdbc:oracle:thin:@localhost:1521:xe";
 String username = "INVENTORY_502";
 String password = "system";
 conn = DriverManager.getConnection(url, username, password);
+boolean deleteSuccess = false;
 
 String UserID = (String) session.getAttribute("sessionID");
 
@@ -33,6 +34,8 @@ if (request.getParameter("DeleteId") != null) {
 	delete.setString(1, DeleteId);
 
 	ResultSet delSupp = delete.executeQuery();
+
+	deleteSuccess = true;
 }
 
 //update supplier
@@ -109,6 +112,22 @@ ResultSet execute = ps.executeQuery();
 			<a class="navbar-brand" href="#">Inventory Management</a>
 		</div>
 	</nav>
+
+	<%
+	if (deleteSuccess) {
+		// if color red : alert-success tukar jadi alert-danger
+	%>
+	<div class="alert alert-success alert-dismissible fade show"
+		role="alert">
+		<strong>Staff Deleted !</strong> The staff list below was updated
+		<button type="button" class="close" data-dismiss="alert"
+			aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<%
+	} 
+	%>
 
 	<!-- Page Content -->
 	<div class="container mt-4">
