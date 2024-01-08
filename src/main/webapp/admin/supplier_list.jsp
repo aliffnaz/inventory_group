@@ -11,6 +11,9 @@ String url = "jdbc:oracle:thin:@localhost:1521:xe";
 String username = "INVENTORY_502";
 String password = "system";
 conn = DriverManager.getConnection(url, username, password);
+boolean addSuccess = false;
+boolean updateSuccess = false;
+boolean deleteSuccess = false;
 
 String UserID = (String) session.getAttribute("sessionID");
 
@@ -33,6 +36,8 @@ if (request.getParameter("DeleteId") != null) {
 	delete.setString(1, DeleteId);
 
 	ResultSet delSupp = delete.executeQuery();
+
+	deleteSuccess = true;
 }
 
 //update supplier
@@ -49,6 +54,8 @@ if (request.getParameter("updateSupp") != null) {
 	update.setString(3, updateaddress);
 	update.setString(4, updateId);
 	ResultSet updating = update.executeQuery();
+
+	updateSuccess = true;
 
 }
 
@@ -75,6 +82,7 @@ if (request.getParameter("supplierID") != null) {
 		addSupplier.setString(4, phone);
 		ResultSet addSupp = addSupplier.executeQuery();
 	}
+	addSuccess = true;
 }
 
 // call list item
@@ -109,6 +117,54 @@ ResultSet execute = ps.executeQuery();
 			<a class="navbar-brand" href="#">Inventory Management</a>
 		</div>
 	</nav>
+
+	<%
+	if (addSuccess) {
+		// if color red : alert-success tukar jadi alert-danger
+	%>
+	<div class="alert alert-success alert-dismissible fade show"
+		role="alert">
+		<strong>Supplier Added !</strong> The supplier added into list
+		<button type="button" class="close" data-dismiss="alert"
+			aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<%
+	} 
+	%>
+
+	<%
+	if (updateSuccess) {
+		// if color red : alert-success tukar jadi alert-danger
+	%>
+	<div class="alert alert-success alert-dismissible fade show"
+		role="alert">
+		<strong>Supplier Updated !</strong> The supplier list below was updated
+		<button type="button" class="close" data-dismiss="alert"
+			aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<%
+	} 
+	%>
+
+	<%
+	if (deleteSuccess) {
+		// if color red : alert-success tukar jadi alert-danger
+	%>
+	<div class="alert alert-success alert-dismissible fade show"
+		role="alert">
+		<strong>Supplier Deleted !</strong> The supplier list below was deleted
+		<button type="button" class="close" data-dismiss="alert"
+			aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<%
+	} 
+	%>
 
 	<!-- Page Content -->
 	<div class="container mt-4">

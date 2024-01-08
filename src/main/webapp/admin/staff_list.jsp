@@ -11,6 +11,8 @@ String url = "jdbc:oracle:thin:@localhost:1521:xe";
 String username = "INVENTORY_502";
 String password = "system";
 conn = DriverManager.getConnection(url, username, password);
+boolean addSuccess = false;
+boolean updateSuccess = false;
 boolean deleteSuccess = false;
 
 String UserID = (String) session.getAttribute("sessionID");
@@ -58,6 +60,7 @@ if (request.getParameter("staffID") != null) {
 	out.println("not working man");
 		}
 	}
+	addSuccess = true;
 }
 
 //UPDATE STAFF
@@ -80,6 +83,8 @@ if (request.getParameter("UpdateStaff") != null) {
 	upd.setString(5, UpdStaffIC);
 	upd.setString(6, UpdStaffId);
 	ResultSet UpdStaff = upd.executeQuery();
+
+	updateSuccess = true;
 }
 
 //DELETE STAFF
@@ -127,12 +132,45 @@ ResultSet execute = list.executeQuery();
 	</nav>
 
 	<%
+	if (addSuccess) {
+		// if color red : alert-success tukar jadi alert-danger
+	%>
+	<div class="alert alert-success alert-dismissible fade show"
+		role="alert">
+		<strong>Supplier Added !</strong> The supplier added into list
+		<button type="button" class="close" data-dismiss="alert"
+			aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<%
+	} 
+	%>
+
+	<%
+	if (updateSuccess) {
+		// if color red : alert-success tukar jadi alert-danger
+	%>
+	<div class="alert alert-success alert-dismissible fade show"
+		role="alert">
+		<strong>Supplier Updated !</strong> The supplier list below was updated
+		<button type="button" class="close" data-dismiss="alert"
+			aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+
+	<%
+	} 
+	%>
+
+	<%
 	if (deleteSuccess) {
 		// if color red : alert-success tukar jadi alert-danger
 	%>
 	<div class="alert alert-success alert-dismissible fade show"
 		role="alert">
-		<strong>Staff Deleted !</strong> The staff list below was updated
+		<strong>Supplier Deleted !</strong> The supplier list below was deleted
 		<button type="button" class="close" data-dismiss="alert"
 			aria-label="Close">
 			<span aria-hidden="true">&times;</span>
