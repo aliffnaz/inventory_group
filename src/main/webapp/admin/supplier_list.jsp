@@ -55,6 +55,8 @@ if (request.getParameter("updateSupp") != null) {
 	update.setString(4, updateId);
 	ResultSet updating = update.executeQuery();
 
+	updateSuccess = true;
+
 }
 
 //add supplier
@@ -80,6 +82,7 @@ if (request.getParameter("supplierID") != null) {
 		addSupplier.setString(4, phone);
 		ResultSet addSupp = addSupplier.executeQuery();
 	}
+	addSuccess = true;
 }
 
 // call list item
@@ -116,12 +119,44 @@ ResultSet execute = ps.executeQuery();
 	</nav>
 
 	<%
+	if (addSuccess) {
+		// if color red : alert-success tukar jadi alert-danger
+	%>
+	<div class="alert alert-success alert-dismissible fade show"
+		role="alert">
+		<strong>Staff Added !</strong> The supplier added into list
+		<button type="button" class="close" data-dismiss="alert"
+			aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<%
+	} 
+	%>
+
+	<%
+	if (updateSuccess) {
+		// if color red : alert-success tukar jadi alert-danger
+	%>
+	<div class="alert alert-success alert-dismissible fade show"
+		role="alert">
+		<strong>Staff Deleted !</strong> The supplier list below was updated
+		<button type="button" class="close" data-dismiss="alert"
+			aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<%
+	} 
+	%>
+
+	<%
 	if (deleteSuccess) {
 		// if color red : alert-success tukar jadi alert-danger
 	%>
 	<div class="alert alert-success alert-dismissible fade show"
 		role="alert">
-		<strong>Staff Deleted !</strong> The staff list below was updated
+		<strong>Staff Deleted !</strong> The supplier list below was updated
 		<button type="button" class="close" data-dismiss="alert"
 			aria-label="Close">
 			<span aria-hidden="true">&times;</span>
