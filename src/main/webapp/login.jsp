@@ -12,7 +12,7 @@ String username = "INVENTORY_502";
 String password = "system";
 conn = DriverManager.getConnection(url, username, password);
 
-session.invalidate();
+
 
 
 if (request.getParameter("staffid") != null) {
@@ -30,6 +30,8 @@ if (request.getParameter("staffid") != null) {
 	} else {
 		out.println("The id is invalid, please try again");
 	}
+}else{
+	session.invalidate();
 }
 %>
 <!DOCTYPE html>

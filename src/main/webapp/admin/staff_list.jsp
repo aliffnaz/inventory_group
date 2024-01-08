@@ -139,9 +139,9 @@ ResultSet execute = list.executeQuery();
 		</button>
 	</div>
 	<%
-	} 
+	}
 	%>
-	
+
 
 	<!-- Page Content -->
 	<div class="container mt-4">
@@ -379,9 +379,17 @@ ResultSet execute = list.executeQuery();
 				</tbody>
 			</table>
 
+			<div class="row">
+				<div class="col"></div>
+				<div class="col text-center">
+					<a href="../managerMenu.jsp" class="btn btn-warning m-4">Back</a>
 
+				</div>
+				<div class="col"></div>
+			</div>
 
 		</div>
+
 	</div>
 
 	<!-- Bootstrap JS and jQuery -->
@@ -400,6 +408,7 @@ ResultSet execute = list.executeQuery();
 			$('#inventoryTable').DataTable();
 		});
 	</script>
+
 	</div>
 	</div>
 </body>

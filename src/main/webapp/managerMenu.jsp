@@ -12,6 +12,15 @@ String username = "INVENTORY_502";
 String password = "system";
 conn = DriverManager.getConnection(url, username, password);
 
+// String UserID = (String) session.getAttribute("sessionID");
+
+// 	PreparedStatement CurrentUser = conn.prepareStatement("select * from staff where staffid=?");
+// 	CurrentUser.setString(1, UserID);
+// 	ResultSet UserSession = CurrentUser.executeQuery();
+// 	UserSession.next();
+// 	out.println("welcome sir, " + UserSession.getString("staffname"));
+// }
+
 if (request.getParameter("id") != null) {
 	String id = request.getParameter("id");
 
@@ -19,6 +28,10 @@ if (request.getParameter("id") != null) {
 
 	String temp = (String) session.getAttribute("sessionID");
 	System.out.println(temp);
+
+	if (temp == null) {
+		response.sendRedirect("login.jsp");
+	}
 
 	PreparedStatement manager = conn.prepareStatement("select * from staff where staffid=?");
 	manager.setString(1, id);
@@ -131,7 +144,7 @@ button {
 			<p>
 				<i class="menu-icon fas fa-chart-bar"></i>
 			</p>
-			<a href="">
+			<a href="admin/report_admin">
 				<button>Monthly Report</button>
 			</a>
 		</div>

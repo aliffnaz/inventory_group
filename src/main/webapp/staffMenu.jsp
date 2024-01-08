@@ -75,7 +75,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
                 <a class="navbar-brand" href="#">Inventory Management</a>
-                <a href="staffMenu.html">
+                <a href="staffMenu.jsp">
                     <button-scroll>Staff</button-scroll>
                 </a>
             </div>
@@ -84,23 +84,15 @@
     <div class="menu-container">
         <div class="menu-item">
             <p><i class="menu-icon fas fa-list"></i></p>
-            <a href="item_list.html">
+            <a href="listItemStaff.jsp">
                 <button>Item List</button>
             </a>
         </div>
 
 
         <div class="menu-item">
-            <p><i class="menu-icon fas fa-boxes"></i></p>
-            <a href="">
-                <button>Inventory</button>
-            </a>
-        </div>
-
-
-        <div class="menu-item">
             <p><i class="menu-icon fas fa-shopping-cart"></i></p>
-                <a href="">
+                <a href="cart.jsp">
                     <button>Orders</button>
                 </a>
         </div>
@@ -108,7 +100,7 @@
 
         <div class="menu-item">
             <p><i class="menu-icon fas fa-truck"></i></p>
-                    <a href="">
+                    <a href="supplierView.jsp">
                         <button>View Supplier</button>
                     </a>
         </div>
@@ -124,7 +116,7 @@
 
         <div class="menu-item">
             <p><i class="menu-icon fas fa-sign-out-alt"></i></p>
-                    <a href="login.html">
+                    <a href="login.jsp?logout=1">
                         <button>Logout</button>
                     </a>
         </div>

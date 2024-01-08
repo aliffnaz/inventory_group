@@ -352,6 +352,15 @@ ResultSet execute = ps.executeQuery();
 					$('#inventoryTable').DataTable();
 				});
 			</script>
+
+			<div class="row">
+				<div class="col"></div>
+				<div class="col text-center">
+					<a href="../managerMenu.jsp" class="btn btn-warning m-4">Back</a>
+
+				</div>
+				<div class="col"></div>
+			</div>
 		</div>
 	</div>
 </body>
