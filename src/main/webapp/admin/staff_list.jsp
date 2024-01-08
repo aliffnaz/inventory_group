@@ -35,7 +35,7 @@ if (request.getParameter("staffID") != null) {
 	String role = request.getParameter("staffRole");
 	String age = request.getParameter("staffAge");
 
-	PreparedStatement checking = conn.prepareStatement("select * from staff where inventoryid=?");
+	PreparedStatement checking = conn.prepareStatement("select * from staff where staffid=?");
 	checking.setString(1, id);
 	ResultSet check = checking.executeQuery();
 	if (check.next()) {
