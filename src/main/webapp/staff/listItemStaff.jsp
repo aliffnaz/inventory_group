@@ -27,6 +27,54 @@ if (UserID == null) {
 	out.println("welcome sir, " + UserSession.getString("staffname"));
 }
 
+//add to purchase table
+
+if (request.getParameter("id") != null) {
+	String id = request.getParameter("id");
+
+	int quantity = 1;
+
+	//insert into purchase
+	PreparedStatement add = conn.prepareStatement(
+	"insert into purchase(purchasedate, purchasetime) values(TRUNC(SYSDATE), TO_CHAR(SYSTIMESTAMP, 'HH24:MI:SS'))");
+	ResultSet adds = add.executeQuery();
+
+	//select max id in purchase to insert it into bridge
+
+	PreparedStatement getMaxPurchaseID = conn.prepareStatement("select max(purchaseid) from purchase");
+	ResultSet maxPurchaseID = getMaxPurchaseID.executeQuery();
+	maxPurchaseID.next();
+
+	//insert into purchase_item
+	// 	PreparedStatement add = conn.prepareStatement("insert into purchase_item(purchasedate, purchasetime) values(to_char(to_date(sysdate,'dd-mm-yyyy')))");
+	// 	ResultSet adds = add.executeQuery();
+
+	// 		PreparedStatement check = conn.prepareStatement("select max(purchaseitemid) from purchase_item where complete is null");
+	// 	ResultSet checking = check.executeQuery();
+	// checking.next();
+
+	//check ada tak item yang sama dalam bridge
+
+	PreparedStatement checkInsertedItem = conn.prepareStatement("select * from purchase p join purchase_item pi on p.purchaseid=pi.purchaseid where pi.inventoryid=?");
+	checkInsertedItem.setString(id);
+	ResultSet InsertedItem = checkInsertedItem.executeQuery();
+
+if()
+{
+
+}else{
+	//insert into bridge
+	PreparedStatement addPurchaseItem = conn
+	.prepareStatement("insert into purchase_item(purchaseID, inventoryid, quantity, staffid) values(?,?,?,?)");
+
+	addPurchaseItem.setString(1, maxPurchaseID.getString("max(purchaseid)"));
+	addPurchaseItem.setString(2, id);
+	addPurchaseItem.setInt(3, quantity);
+	addPurchaseItem.setString(4, UserID);
+	ResultSet addPurchaseItems = addPurchaseItem.executeQuery();
+}
+}
+
 //LIST INVENTORY
 String query = "select * from inventory order by inventorytype";
 PreparedStatement list = conn.prepareStatement(query);
@@ -135,7 +183,9 @@ ResultSet execute = list.executeQuery();
 								data-toggle="modal"
 								data-target="#viewItemModal<%=execute.getString("inventoryid")%>">View</button>
 
-							<!-- View Item Modal -->
+							<a
+							href="listItemStaff.jsp?id=<%=execute.getString("inventoryid")%>"
+							class="btn btn-success btn-sm">Add</a> <!-- View Item Modal -->
 							<div class="modal fade"
 								id="viewItemModal<%=execute.getString("inventoryid")%>"
 								tabindex="-1" role="dialog" aria-labelledby="viewItemModalLabel"

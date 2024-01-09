@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<%
+if(request.getParameter("id")){
+	String id = request.getParameter("id");
+
+	PreparedStatement check = conn.prepareStatement("select * from purchase_item where complete is null");
+	ResultSet checking = check.executeQuery();
+
+}
+
+%>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
