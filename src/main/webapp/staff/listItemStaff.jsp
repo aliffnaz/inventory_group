@@ -12,8 +12,9 @@ String username = "INVENTORY_502";
 String password = "system";
 conn = DriverManager.getConnection(url, username, password);
 
-
 String UserID = (String) session.getAttribute("sessionID");
+
+out.println(UserID);
 
 if (UserID == null) {
 	response.sendRedirect("../login.jsp");
@@ -25,7 +26,6 @@ if (UserID == null) {
 	UserSession.next();
 	out.println("welcome sir, " + UserSession.getString("staffname"));
 }
-
 
 //LIST INVENTORY
 String query = "select * from inventory order by inventorytype";
@@ -90,7 +90,7 @@ ResultSet execute = list.executeQuery();
 
 		<div class="card card-body">
 
-			
+
 
 			<!-- Data Table -->
 			<table id="inventoryTable" class="table table-striped table-bordered"
@@ -284,18 +284,15 @@ ResultSet execute = list.executeQuery();
 											</div>
 											<!-- End of Item Information Display -->
 										</div>
-										
-											</form>
-										</div>
+
+										</form>
 									</div>
 								</div>
+							</div>
 
 
 
-							</div> <!-- DELETE SECTION -->
-							
-										
-							 <script>
+							</div> <!-- DELETE SECTION --> <script>
 								function deleteItem() {
 									// Perform deletion logic here
 									// This is where you would delete the item using JavaScript, AJAX, or any backend logic
@@ -320,7 +317,7 @@ ResultSet execute = list.executeQuery();
 			<div class="row">
 				<div class="col"></div>
 				<div class="col text-center">
-					<a href="../managerMenu.jsp" class="btn btn-warning m-4">Back</a>
+					<a href="../staffMenu.jsp" class="btn btn-warning m-4">Back</a>
 
 				</div>
 				<div class="col"></div>

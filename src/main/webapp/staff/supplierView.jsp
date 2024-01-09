@@ -25,7 +25,6 @@ if (UserID == null) {
 	out.println("welcome sir, " + UserSession.getString("staffname"));
 }
 
-
 // call list item
 
 PreparedStatement ps = conn.prepareStatement("select * from supplier order by supplierid asc");
@@ -59,7 +58,9 @@ ResultSet execute = ps.executeQuery();
 		</div>
 	</nav>
 
-	
+
+	<div class="container mt-4">
+		<div class="card card-body">
 
 			<!-- Data Table -->
 			<table id="inventoryTable" class="table table-striped table-bordered"
@@ -138,21 +139,21 @@ ResultSet execute = ps.executeQuery();
 														placeholder="<%=execute.getString("SUPPLIERADDRESS")%>"
 														name="updateAddress">
 												</div>
-												
-												
+
+
 
 
 
 												<!-- End of Item Information Display -->
 										</div>
-										
-											</form>
-										</div>
 
-
+										</form>
 									</div>
+
+
 								</div>
-				
+							</div>
+
 
 
 
@@ -171,33 +172,37 @@ ResultSet execute = ps.executeQuery();
 			<div class="row">
 				<div class="col"></div>
 				<div class="col text-center">
-					<a href="../managerMenu.jsp" class="btn btn-warning m-4">Back</a>
+					<a href="../staffMenu.jsp" class="btn btn-warning m-4">Back</a>
 
 				</div>
 				<div class="col"></div>
 			</div>
 
 
+		</div>
+	</div>
 
 
 
-			<!-- Bootstrap JS and jQuery -->
-			<script
-				src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-			<script
-				src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-			<script
-				src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
-			<script
-				src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-			<!-- DataTables Initialization Script -->
-			<script>
-				$(document).ready(function() {
-					$('#inventoryTable').DataTable();
-				});
-			</script>
-		
+
+	<!-- Bootstrap JS and jQuery -->
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+	<!-- DataTables Initialization Script -->
+	<script>
+		$(document).ready(function() {
+			$('#inventoryTable').DataTable();
+		});
+	</script>
+
 </body>
 
 </html>

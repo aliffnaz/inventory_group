@@ -40,7 +40,7 @@ if (request.getParameter("invId") != null) {
 	PreparedStatement checking = conn.prepareStatement("select * from inventory where inventoryid=?");
 	checking.setString(1, id);
 	ResultSet check = checking.executeQuery();
-	if (!check.next()) {
+	if (check.next()) {
 		out.println("the inventory id is already in the list !");
 
 	} else {
@@ -95,9 +95,9 @@ if (request.getParameter("invId") != null) {
 	ResultSet addTableInventoryCategory = tableAdd.executeQuery();
 	System.out.println("success id = " + id);
 		}
-
+addSuccess = true;
 	}
-	addSuccess = true;
+	
 }
 
 //UPDATE INVENTORY

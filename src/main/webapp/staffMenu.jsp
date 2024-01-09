@@ -4,7 +4,35 @@
 <%@ page
 	import="java.util.*, java.io.*, java.sql.DriverManager, java.sql.Connection, java.sql.ResultSet, java.sql.SQLException, java.sql.Statement, java.sql.PreparedStatement"%>
 
-<% %>
+<% 
+Connection conn = null;
+Class.forName("oracle.jdbc.driver.OracleDriver");
+String url = "jdbc:oracle:thin:@localhost:1521:xe";
+String username = "INVENTORY_502";
+String password = "system";
+conn = DriverManager.getConnection(url, username, password);
+
+
+if (request.getParameter("id") != null) {
+	String id = request.getParameter("id");
+
+	session.setAttribute("sessionID", id);
+
+	String temp = (String) session.getAttribute("sessionID");
+	System.out.println(temp);
+
+	if (temp == null) {
+		response.sendRedirect("login.jsp");
+	}
+
+	PreparedStatement manager = conn.prepareStatement("select * from staff where staffid=?");
+	manager.setString(1, id);
+	ResultSet managerLog = manager.executeQuery();
+	managerLog.next();
+	out.println("hello staff, " + managerLog.getString("staffname"));
+}
+
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -84,7 +112,7 @@
     <div class="menu-container">
         <div class="menu-item">
             <p><i class="menu-icon fas fa-list"></i></p>
-            <a href="listItemStaff.jsp">
+            <a href="staff/listItemStaff.jsp">
                 <button>Item List</button>
             </a>
         </div>
@@ -92,7 +120,7 @@
 
         <div class="menu-item">
             <p><i class="menu-icon fas fa-shopping-cart"></i></p>
-                <a href="cart.jsp">
+                <a href="staff/cart.jsp">
                     <button>Orders</button>
                 </a>
         </div>
@@ -100,7 +128,7 @@
 
         <div class="menu-item">
             <p><i class="menu-icon fas fa-truck"></i></p>
-                    <a href="supplierView.jsp">
+                    <a href="staff/supplierView.jsp">
                         <button>View Supplier</button>
                     </a>
         </div>

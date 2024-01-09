@@ -11,7 +11,7 @@ String url = "jdbc:oracle:thin:@localhost:1521:xe";
 String username = "INVENTORY_502";
 String password = "system";
 conn = DriverManager.getConnection(url, username, password);
-boolean addSuccess = false;
+boolean addSuccess = false, addFailed = false;
 boolean updateSuccess = false;
 boolean deleteSuccess = false;
 
@@ -72,7 +72,7 @@ if (request.getParameter("supplierID") != null) {
 	ResultSet checking = check.executeQuery();
 
 	if (checking.next()) {
-		//out.println("the id already taken by someone else");
+		addFailed = true;
 	} else {
 		PreparedStatement addSupplier = conn.prepareStatement(
 		"insert into supplier(supplierid, suppliername,supplieraddress,supplierphone) values(?,?,?,?)");
@@ -81,8 +81,9 @@ if (request.getParameter("supplierID") != null) {
 		addSupplier.setString(3, address);
 		addSupplier.setString(4, phone);
 		ResultSet addSupp = addSupplier.executeQuery();
+		addSuccess = true;
 	}
-	addSuccess = true;
+	
 }
 
 // call list item
@@ -125,6 +126,22 @@ ResultSet execute = ps.executeQuery();
 	<div class="alert alert-success alert-dismissible fade show"
 		role="alert">
 		<strong>Supplier Added !</strong> The supplier added into list
+		<button type="button" class="close" data-dismiss="alert"
+			aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<%
+	} 
+	%>
+
+	<%
+	if (addFailed) {
+		// if color red : alert-success tukar jadi alert-danger
+	%>
+	<div class="alert alert-danger alert-dismissible fade show"
+		role="alert">
+		<strong>Supplier was not added !</strong> The supplier was already in the system
 		<button type="button" class="close" data-dismiss="alert"
 			aria-label="Close">
 			<span aria-hidden="true">&times;</span>
