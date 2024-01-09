@@ -32,47 +32,53 @@ if (UserID == null) {
 if (request.getParameter("id") != null) {
 	String id = request.getParameter("id");
 
-	int quantity = 1;
+	int quantity;
 
-	//insert into purchase
-	PreparedStatement add = conn.prepareStatement(
-	"insert into purchase(purchasedate, purchasetime) values(TRUNC(SYSDATE), TO_CHAR(SYSTIMESTAMP, 'HH24:MI:SS'))");
-	ResultSet adds = add.executeQuery();
+	PreparedStatement completecheck = conn
+	.prepareStatement("select purchaseitemid, purchaseid, complete, quantity from purchase_item where complete is null");
+	ResultSet complete = completecheck.executeQuery();
+  
+	if (complete.next()) {
+		int currentid = complete.getInt("purchaseid");
 
-	//select max id in purchase to insert it into bridge
+		quantity = complete.getInt("quantity");
+		quantity = quantity + 1;
+		PreparedStatement updateQuantity = conn
+		.prepareStatement("update purchase_item set quantity=? where purchaseid=? and inventoryid=?");
+		updateQuantity.setInt(1, quantity);
+		updateQuantity.setInt(2, currentid);
+		updateQuantity.setString(3, id);
+		ResultSet updateQ = updateQuantity.executeQuery();
+		System.out.println("masuk update");
 
-	PreparedStatement getMaxPurchaseID = conn.prepareStatement("select max(purchaseid) from purchase");
-	ResultSet maxPurchaseID = getMaxPurchaseID.executeQuery();
-	maxPurchaseID.next();
+	} else {
 
-	//insert into purchase_item
-	// 	PreparedStatement add = conn.prepareStatement("insert into purchase_item(purchasedate, purchasetime) values(to_char(to_date(sysdate,'dd-mm-yyyy')))");
-	// 	ResultSet adds = add.executeQuery();
+		//insert into purchase
+		PreparedStatement add = conn.prepareStatement(
+		"insert into purchase(purchasedate, purchasetime) values(TRUNC(SYSDATE), TO_CHAR(SYSTIMESTAMP, 'HH24:MI:SS'))");
+		ResultSet adds = add.executeQuery();
 
-	// 		PreparedStatement check = conn.prepareStatement("select max(purchaseitemid) from purchase_item where complete is null");
-	// 	ResultSet checking = check.executeQuery();
-	// checking.next();
+		//select max id in purchase to insert it into bridge
 
-	//check ada tak item yang sama dalam bridge
+		PreparedStatement getMaxPurchaseID = conn.prepareStatement("select max(purchaseid) from purchase");
+		ResultSet maxPurchaseID = getMaxPurchaseID.executeQuery();
+		maxPurchaseID.next();
 
-	PreparedStatement checkInsertedItem = conn.prepareStatement("select * from purchase p join purchase_item pi on p.purchaseid=pi.purchaseid where pi.inventoryid=?");
-	checkInsertedItem.setString(id);
-	ResultSet InsertedItem = checkInsertedItem.executeQuery();
+		int currentid = maxPurchaseID.getInt("max(purchaseid)");
 
-if()
-{
+		//insert into bridge
+		PreparedStatement addPurchaseItem = conn.prepareStatement(
+		"insert into purchase_item(purchaseID, inventoryid, quantity, staffid) values(?,?,?,?)");
 
-}else{
-	//insert into bridge
-	PreparedStatement addPurchaseItem = conn
-	.prepareStatement("insert into purchase_item(purchaseID, inventoryid, quantity, staffid) values(?,?,?,?)");
+		addPurchaseItem.setString(1, maxPurchaseID.getString("max(purchaseid)"));
+		addPurchaseItem.setString(2, id);
+		addPurchaseItem.setInt(3, 1);
+		addPurchaseItem.setString(4, UserID);
+		ResultSet addPurchaseItems = addPurchaseItem.executeQuery();
+		System.out.println("masuk add");
+	}
 
-	addPurchaseItem.setString(1, maxPurchaseID.getString("max(purchaseid)"));
-	addPurchaseItem.setString(2, id);
-	addPurchaseItem.setInt(3, quantity);
-	addPurchaseItem.setString(4, UserID);
-	ResultSet addPurchaseItems = addPurchaseItem.executeQuery();
-}
+
 }
 
 //LIST INVENTORY
