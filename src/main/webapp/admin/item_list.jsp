@@ -627,45 +627,45 @@ ResultSet execute = list.executeQuery();
 								class="form-control" id="" name="invBalance">
 						</div>
 						<div class="form-group">
-							<label>Category</label> <select id="dropdown"
-								class="form-control" onchange="showInput(this.value)"
-								name="invCat">
-								<option value="">Select an option</option>
-								<option value="F">Food</option>
-								<option value="P">Personal Care</option>
-								<option value="S">Stationery</option>
-							</select> <br>
-						</div>
-
-						<div class="form-group">
-							<div id="inputF" style="display: none;">
-								<%-- Inventory ID<input type="text" class="form-control" name=""> --%>
-								<br> Category<input type="text" class="form-control"
-									name="foodCat"> <br> Store Condition<input
-									type="text" class="form-control" name="foodStore"> <br>
-								Expired Date<input type="date" class="form-control"
-									name="foodExp"> <br>
-							</div>
-
-
-							<div class="form-group">
 								<div id="inputP" style="display: none;">
-									<%-- Inventory ID <input type="text" class="form-control" name=""> --%>
-									<br> Category <input type="text" class="form-control"
-										name="personalCat"> <br> Liquid <input
-										type="text" class="form-control" name="personalLiquid">
-									<br> Expired Date <input type="date" class="form-control"
+									
+										<label>Personal Care Category</label> 
+										<select name="personalCat" class="form-control">
+										<option value="">select personal care category</option>
+										<option value="Toiletries">Toiletries</option>
+										<option value="Fragrance">Fragrance</option>
+										</select> <br>
+										
+									    <label>Liquid Type</label> 
+										<select name="personalLiquid" class="form-control">
+										<option value="">select liquid type</option>
+										<option value="Yes">Yes</option>
+										<option value="No">No</option>
+										</select> <br>
+										
+									    Expired Date <input type="date" class="form-control"
 										name="personalExp"> <br>
 								</div>
 
 
 								<div class="form-group">
 									<div id="inputS" style="display: none;">
-										<%-- Inventory ID<input type="text" class="form-control" name=""> --%>
-										<br> Category<input type="text" class="form-control"
-											name="stationeryCat"> <br> Stationery Type<input
-											type="text" class="form-control" name="stationeryType">
-										<br>
+										
+										<label>Stationery Category</label> 
+										<select name="stationeryCat" class="form-control">
+										<option value="">select stationery category</option>
+										<option value="Writing Instruments">Writing Instruments</option>
+										<option value="Paper Products">Paper Products</option>
+										</select> <br> 
+										
+										<label>Stationery Material</label> 
+										<select name="stationeryMat" class="form-control">
+										<option value="">select stationery material</option>
+										<option value="Wood">Wood</option>
+										<option value="Plastic">Plastic</option>
+										<option value="Metal">Metal</option>
+										</select> <br> 
+										
 									</div>
 
 
