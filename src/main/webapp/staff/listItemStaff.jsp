@@ -13,6 +13,7 @@ String password = "system";
 conn = DriverManager.getConnection(url, username, password);
 
 String UserID = (String) session.getAttribute("sessionID");
+boolean itemUpdateSuccess = false, itemAddSuccess = false;;
 
 out.println(UserID);
 
@@ -34,10 +35,11 @@ if (request.getParameter("id") != null) {
 
 	int quantity;
 
-	PreparedStatement completecheck = conn
-	.prepareStatement("select purchaseitemid, purchaseid, complete, quantity from purchase_item where complete is null");
+	PreparedStatement completecheck = conn.prepareStatement(
+	"select purchaseitemid, purchaseid, complete, quantity from purchase_item where inventoryid=? and complete is null");
+	completecheck.setString(1, id);
 	ResultSet complete = completecheck.executeQuery();
-  
+
 	if (complete.next()) {
 		int currentid = complete.getInt("purchaseid");
 
@@ -50,6 +52,7 @@ if (request.getParameter("id") != null) {
 		updateQuantity.setString(3, id);
 		ResultSet updateQ = updateQuantity.executeQuery();
 		System.out.println("masuk update");
+		itemUpdateSuccess = true;
 
 	} else {
 
@@ -76,8 +79,8 @@ if (request.getParameter("id") != null) {
 		addPurchaseItem.setString(4, UserID);
 		ResultSet addPurchaseItems = addPurchaseItem.executeQuery();
 		System.out.println("masuk add");
+		itemAddSuccess = true;
 	}
-
 
 }
 
@@ -138,6 +141,41 @@ ResultSet execute = list.executeQuery();
 			<a class="navbar-brand" href="#">Inventory Management</a>
 		</div>
 	</nav>
+
+	<%
+	if (itemAddSuccess) {
+		// if color red : alert-success tukar jadi alert-danger
+	%>
+	<div class="alert alert-success alert-dismissible fade show"
+		role="alert">
+		<strong>Item added to cart!</strong> The item was added to cart
+		<button type="button" class="close" data-dismiss="alert"
+			aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<%
+	}
+	%>
+
+	<%
+	if (itemUpdateSuccess) {
+		// if color red : alert-success tukar jadi alert-danger
+	%>
+	<div class="alert alert-success alert-dismissible fade show"
+		role="alert">
+		<strong>Item updated in cart!</strong> The item quantity was updated
+		in cart
+		<button type="button" class="close" data-dismiss="alert"
+			aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<%
+	}
+	%>
+
+
 
 	<!-- Page Content -->
 	<div class="container mt-4">
