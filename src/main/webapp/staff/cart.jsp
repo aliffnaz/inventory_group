@@ -28,7 +28,6 @@ if (UserID == null) {
 	CurrentUser.setString(1, UserID);
 	ResultSet UserSession = CurrentUser.executeQuery();
 	UserSession.next();
-	//out.println("welcome sir, " + UserSession.getString("staffname"));
 }
 
 // update quantity in the cart
@@ -47,21 +46,39 @@ if (request.getParameter("updateQuantity") != null) {
 //complete transaction
 
 if (request.getParameter("completeID") != null) {
+	String staffid = UserID;
+	int purchaseIDLatest = Integer.parseInt(request.getParameter("completeID"));
+
 	// String purchaseid = request.getParameter("completeID");
 	int purchaseid = Integer.parseInt(request.getParameter("completeID"));
 	String complete = "complete";
 
 	PreparedStatement completeTransaction = conn.prepareStatement(
-	"update purchase_item set complete=? where  staffid=? and complete is null");
+	"update purchase_item set complete=? where purchaseid=? and  staffid=? and complete is null");
 	completeTransaction.setString(1, complete);
-	// completeTransaction.setInt(2, purchaseid);
-	completeTransaction.setString(2, UserID);
+	completeTransaction.setInt(2, purchaseIDLatest);
+	completeTransaction.setString(3, UserID);
 	ResultSet completeResult = completeTransaction.executeQuery();
 	completeFlag = true;
+
 }
 
 if (completeFlag) {
-	response.sendRedirect("../staffMenu.jsp");
+	if (request.getParameter("totalPrice") != null) {
+		String totals = request.getParameter("totalString");
+		double total = Double.parseDouble(request.getParameter("totalPrice"));
+		System.out.println(totals);
+		int purchaseIDLatest = Integer.parseInt(request.getParameter("completeID"));
+
+		PreparedStatement updateordertotal = conn
+		.prepareStatement("update purchase set ordertotal=? where purchaseid=?");
+		updateordertotal.setDouble(1, total);
+		updateordertotal.setInt(2, purchaseIDLatest);
+		ResultSet updateOrderTotal = updateordertotal.executeQuery();
+
+		// response.sendRedirect("../staffMenu.jsp?transaction=success");
+	}
+
 }
 
 //delete item
@@ -195,6 +212,9 @@ ResultSet itemList = list.executeQuery();
 									data-toggle="modal" data-target="#viewItemModal<%=piID%>">View</button>
 								<button type="button" class="btn btn-danger btn-sm delete-btn"
 									data-toggle="modal" data-target="#deleteItemModal<%=piID%>">Remove</button>
+								<%
+
+								%>
 							</td>
 						</tr>
 
@@ -278,6 +298,9 @@ ResultSet itemList = list.executeQuery();
 						<tr>
 							<td colspan="4">Price</td>
 							<td><b>RM<%
+							double updateTotal = totalPrice;
+							String totalString = String.format("%.2f", totalPrice);
+
 							String ttpd;
 							out.println(ttpd = String.format("%.2f", totalPrice));
 							%></b></td>
@@ -298,6 +321,9 @@ ResultSet itemList = list.executeQuery();
 					<div class="col text-center">
 						<button type="button" class="btn btn-primary" data-toggle="modal"
 							data-target="#exampleModalCenter">Checkout</button>
+
+
+
 						<!-- Modal -->
 						<div class="modal fade" id="exampleModalCenter" tabindex="-1"
 							role="dialog" aria-labelledby="exampleModalCenterTitle"
@@ -316,14 +342,20 @@ ResultSet itemList = list.executeQuery();
 										<div class="modal-footer">
 
 											<%
-											PreparedStatement getPurchaseId = conn
-													.prepareStatement("select max(purchaseid) from purchase_item where staffid=? and complete is null");
-											getPurchaseId.setString(1, UserID);
-											ResultSet getPID = getPurchaseId.executeQuery();
-											getPID.next();
-											int purchid = getPID.getInt("max(purchaseid)");
+											PreparedStatement getLatestPurchase = conn.prepareStatement(
+													"select * from PURCHASE where PURCHASEID  = (select max(PURCHASEID) from PURCHASE_item WHERE complete IS null)");
+											ResultSet getPurchaseid = getLatestPurchase.executeQuery();
+											if (getPurchaseid.next()) {
+												int LatestPurchaseid = getPurchaseid.getInt("purchaseid");
 											%>
-											<input type="hidden" value="<%=purchid%>" name="completeID" />
+											<input type="hidden" value="<%=LatestPurchaseid%>"
+												name="completeID" />
+											<%
+											}
+											%>
+											<input type="hidden" value="<%=updateTotal%>"
+												name="totalPrice" /> <input type="hidden"
+												value="<%=totalString%>" name="totalPriceString" />
 											<button type="submit" class="btn btn-success">
 												Checkout</button>
 											<button type="button" class="btn btn-secondary"
@@ -333,13 +365,14 @@ ResultSet itemList = list.executeQuery();
 									</form>
 								</div>
 							</div>
-
 						</div>
 						<div class="col"></div>
 					</div>
 					<div class="col"></div>
 				</div>
 			</div>
+
+
 
 
 			<!-- Bootstrap JS and jQuery -->
@@ -355,32 +388,12 @@ ResultSet itemList = list.executeQuery();
 			<!-- DataTables Initialization Script -->
 			<script>
 				$(document).ready(function() {
-					$('#cartTable').DataTable({
-						"searching" : false, // Disable search bar
-						"paging" : false, // Disable pagination
-						"info" : false
-					// Disable information
-					});
-
-					// Handle view button click to show view item modal
-					$('.view-btn').on('click', function() {
-						var row = $(this).closest('tr');
-						var itemName = row.find('td:eq(1)').text();
-						var itemQuantity = row.find('td:eq(2)').text();
-
-						$('#productName').val(itemName);
-						$('#productQuantity').val(itemQuantity);
-
-						$('#viewItemModal').modal('show');
-					});
-
-					// Handle delete button click to show delete confirmation modal
-					$('.delete-btn').on('click', function() {
-						$('#deleteItemModal').modal('show');
-					});
+					$('#inventoryTable').DataTable();
 				});
 			</script>
+
 		</div>
 </body>
 
 </html>
+

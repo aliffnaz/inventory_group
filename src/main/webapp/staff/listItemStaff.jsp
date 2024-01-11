@@ -28,58 +28,96 @@ if (UserID == null) {
 	out.println("welcome sir, " + UserSession.getString("staffname"));
 }
 
-//add to purchase table
+// select * from purchase where PURCHASEID  = (select max(PURCHASEID) from PURCHASE);
 
 if (request.getParameter("id") != null) {
-	String id = request.getParameter("id");
-
+	String staffid = UserID;
 	int quantity;
+	String inventoryid = request.getParameter("id");
 
-	PreparedStatement completecheck = conn.prepareStatement(
-	"select purchaseitemid, purchaseid, complete, quantity from purchase_item where inventoryid=? and complete is null");
-	completecheck.setString(1, id);
-	ResultSet complete = completecheck.executeQuery();
+	PreparedStatement checkTransaction = conn
+	.prepareStatement("select * from purchase_item where complete is null and staffid=?");
+	checkTransaction.setString(1, staffid);
+	ResultSet RunCheckTransaction = checkTransaction.executeQuery();
 
-	if (complete.next()) {
-		int currentid = complete.getInt("purchaseid");
+	if (RunCheckTransaction.next()) {
+		//kalau ada uncomplete transaction masuk dalam ni
 
-		quantity = complete.getInt("quantity");
-		quantity = quantity + 1;
-		PreparedStatement updateQuantity = conn
-		.prepareStatement("update purchase_item set quantity=? where purchaseid=? and inventoryid=?");
-		updateQuantity.setInt(1, quantity);
-		updateQuantity.setInt(2, currentid);
-		updateQuantity.setString(3, id);
-		ResultSet updateQ = updateQuantity.executeQuery();
-		System.out.println("masuk update");
-		itemUpdateSuccess = true;
+		//get latest purchase id
+		PreparedStatement getLatestPurchase = conn
+		.prepareStatement("select * from purchase where PURCHASEID  = (select max(PURCHASEID) from PURCHASE)");
+		ResultSet getPurchaseid = getLatestPurchase.executeQuery();
+		getPurchaseid.next();
+		int LatestPurchaseid = getPurchaseid.getInt("purchaseid");
+
+		//get purchase row
+		PreparedStatement getCurrentRow = conn
+		.prepareStatement("select * from purchase_item where purchaseid=? and inventoryid=? and staffid=?");
+		getCurrentRow.setInt(1, LatestPurchaseid);
+		getCurrentRow.setString(2, inventoryid);
+		getCurrentRow.setString(3, staffid);
+		ResultSet RunGetCurrentRow = getCurrentRow.executeQuery();
+
+		if (RunGetCurrentRow.next()) {
+	quantity = RunGetCurrentRow.getInt("quantity");
+	quantity = quantity + 1;
+	//kalau inventory dah ada dalam row, just update quantity
+	//update query untuk tambah 1
+	PreparedStatement updateQuantity = conn.prepareStatement(
+			"update purchase_item set quantity=? where purchaseid=? and inventoryid=? and complete is null and staffid=?");
+	updateQuantity.setInt(1, quantity);
+	updateQuantity.setInt(2, LatestPurchaseid);
+	updateQuantity.setString(3, inventoryid);
+	updateQuantity.setString(4, staffid);
+	ResultSet updateQ = updateQuantity.executeQuery();
+	System.out.println("masuk dah update tambah satu ni sebab dah memang ada dalam table");
+	itemUpdateSuccess = true;
+
+		} else {
+	//kalau item takde lagi dalam cart tu
+
+	//insert into bridge (masukkan item tu dulu dalam bridge)
+
+	PreparedStatement addPurchaseItem = conn.prepareStatement(
+			"insert into purchase_item(purchaseID, inventoryid, quantity, staffid) values(?,?,?,?)");
+
+	addPurchaseItem.setInt(1, LatestPurchaseid);
+	addPurchaseItem.setString(2, inventoryid);
+	addPurchaseItem.setInt(3, 1);
+	addPurchaseItem.setString(4, staffid);
+	ResultSet addPurchaseItems = addPurchaseItem.executeQuery();
+	System.out.println("masuk add bridge sebab item tak penah masuk lagi dalam table");
+	itemAddSuccess = true;
+		}
 
 	} else {
+		// buat purchase baru sebab semua transaction dah complete
+		//insert into purchase (create new purchase transaction)
 
-		//insert into purchase
 		PreparedStatement add = conn.prepareStatement(
 		"insert into purchase(purchasedate, purchasetime) values(TRUNC(SYSDATE), TO_CHAR(SYSTIMESTAMP, 'HH24:MI:SS'))");
-		ResultSet adds = add.executeQuery();
+		ResultSet addPurchase = add.executeQuery();
 
-		//select max id in purchase to insert it into bridge
-
-		PreparedStatement getMaxPurchaseID = conn.prepareStatement("select max(purchaseid) from purchase");
-		ResultSet maxPurchaseID = getMaxPurchaseID.executeQuery();
-		maxPurchaseID.next();
-
-		int currentid = maxPurchaseID.getInt("max(purchaseid)");
+		//get latest purchase id
+		PreparedStatement recentlyInsert = conn
+		.prepareStatement("select * from purchase where PURCHASEID  = (select max(PURCHASEID) from PURCHASE)");
+		ResultSet RunRecentlyInsert = recentlyInsert.executeQuery();
+		RunRecentlyInsert.next();
+		int RecentlyInsertID = RunRecentlyInsert.getInt("purchaseid");
 
 		//insert into bridge
 		PreparedStatement addPurchaseItem = conn.prepareStatement(
 		"insert into purchase_item(purchaseID, inventoryid, quantity, staffid) values(?,?,?,?)");
 
-		addPurchaseItem.setString(1, maxPurchaseID.getString("max(purchaseid)"));
-		addPurchaseItem.setString(2, id);
+		addPurchaseItem.setInt(1, RecentlyInsertID);
+		addPurchaseItem.setString(2, inventoryid);
 		addPurchaseItem.setInt(3, 1);
-		addPurchaseItem.setString(4, UserID);
+		addPurchaseItem.setString(4, staffid);
 		ResultSet addPurchaseItems = addPurchaseItem.executeQuery();
-		System.out.println("masuk add");
+		System.out.println(
+		"masuk dah add new purchase and new bridge untuk buat transaction baru since semua transaction dah complete");
 		itemAddSuccess = true;
+
 	}
 
 }
@@ -182,7 +220,7 @@ ResultSet execute = list.executeQuery();
 
 		<div class="card card-body">
 
-
+		
 
 			<!-- Data Table -->
 			<table id="inventoryTable" class="table table-striped table-bordered"
