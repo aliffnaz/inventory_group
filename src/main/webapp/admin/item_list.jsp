@@ -626,6 +626,18 @@ ResultSet execute = list.executeQuery();
 							<label>Inventory Balance</label> <input type="text"
 								class="form-control" id="" name="invBalance">
 						</div>
+
+						<div class="form-group">
+							<label>Category</label> <select id="dropdown"
+								class="form-control" onchange="showInput(this.value)"
+								name="invCat">
+								<option value="">Select an option</option>
+								<option value="F">Food</option>
+								<option value="P">Personal Care</option>
+								<option value="S">Stationery</option>
+							</select>
+						</div>
+						
 						<div class="form-group">
 								<div id="inputP" style="display: none;">
 									
