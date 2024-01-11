@@ -215,15 +215,15 @@ ResultSet execute = list.executeQuery();
 		var inputP = document.getElementById("inputP");
 		var inputS = document.getElementById("inputS");
 
-		if (selectedValue === "F") {
+		if (selectedValue === "Food") {
 			inputF.style.display = "block";
 			inputP.style.display = "none";
 			inputS.style.display = "none";
-		} else if (selectedValue === "P") {
+		} else if (selectedValue === "Personal Care") {
 			inputF.style.display = "none";
 			inputP.style.display = "block";
 			inputS.style.display = "none";
-		} else if (selectedValue === "S") {
+		} else if (selectedValue === "Stationery") {
 			inputF.style.display = "none";
 			inputP.style.display = "none";
 			inputS.style.display = "block";
@@ -632,9 +632,9 @@ ResultSet execute = list.executeQuery();
 								class="form-control" onchange="showInput(this.value)"
 								name="invCat">
 								<option value="">Select an option</option>
-								<option value="F">Food</option>
-								<option value="P">Personal Care</option>
-								<option value="S">Stationery</option>
+								<option value="Food">Food</option>
+								<option value="Personal Care">Personal Care</option>
+								<option value="Stationery">Stationery</option>
 							</select>
 						</div>
 						
