@@ -95,7 +95,7 @@ if (request.getParameter("id") != null) {
 		//insert into purchase (create new purchase transaction)
 
 		PreparedStatement add = conn.prepareStatement(
-		"insert into purchase(purchasedate, purchasetime) values(TRUNC(SYSDATE), TO_CHAR(SYSTIMESTAMP, 'HH24:MI:SS'))");
+		"insert into purchase(purchasedate, purchasetime) values(TRUNC(SYSDATE), TO_CHAR(SYSTIMESTAMP, 'HH24:MI'))");
 		ResultSet addPurchase = add.executeQuery();
 
 		//get latest purchase id
