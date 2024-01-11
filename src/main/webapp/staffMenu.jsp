@@ -136,9 +136,9 @@ if (request.getParameter("id") != null) {
 
         <div class="menu-item">
             <p><i class="menu-icon fas fa-chart-line"></i></p>
-                <a href="">
-                    <button>Today's Report</button>
-                </a>
+                <a href="staff/dailysales.jsp">
+                    <button>Today's Sales</button>
+                </a>    
         </div>
      
 

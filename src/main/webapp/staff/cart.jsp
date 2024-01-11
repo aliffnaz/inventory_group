@@ -105,7 +105,7 @@ if (completeFlag) {
 		updateordertotal.setInt(2, purchaseIDLatest);
 		ResultSet updateOrderTotal = updateordertotal.executeQuery();
 
-		// response.sendRedirect("../staffMenu.jsp?transaction=success");
+		response.sendRedirect("../staffMenu.jsp?transaction=success");
 	}
 
 }
