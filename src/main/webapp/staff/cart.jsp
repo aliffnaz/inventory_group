@@ -53,12 +53,41 @@ if (request.getParameter("completeID") != null) {
 	int purchaseid = Integer.parseInt(request.getParameter("completeID"));
 	String complete = "complete";
 
-	PreparedStatement completeTransaction = conn.prepareStatement(
-	"update purchase_item set complete=? where purchaseid=? and  staffid=? and complete is null");
-	completeTransaction.setString(1, complete);
-	completeTransaction.setInt(2, purchaseIDLatest);
-	completeTransaction.setString(3, UserID);
-	ResultSet completeResult = completeTransaction.executeQuery();
+	//select inventory to update
+	PreparedStatement selectinventoryidAndquantity = conn.prepareStatement(
+	"select inventoryid, quantity from purchase_item where purchaseid=? and complete is null");
+	selectinventoryidAndquantity.setInt(1, purchaseid);
+	ResultSet invApurchid = selectinventoryidAndquantity.executeQuery();
+
+	while (invApurchid.next()) {
+		int purchaseQuantity = invApurchid.getInt("quantity");
+		String purchaseInvId = invApurchid.getString("inventoryid");
+
+		//select quantity to update
+		PreparedStatement selectInevntory = conn
+		.prepareStatement("select inventorybalance from inventory where inventoryid=?");
+		selectInevntory.setString(1, purchaseInvId);
+		ResultSet resultselect = selectInevntory.executeQuery();
+		resultselect.next();
+
+		int oldquantity = resultselect.getInt("inventorybalance");
+
+		int newQuantityInv = oldquantity - purchaseQuantity;
+
+		PreparedStatement updateQuantityInventory = conn
+		.prepareStatement("update inventory set inventorybalance=? where inventoryid=?");
+		updateQuantityInventory.setInt(1, newQuantityInv);
+		updateQuantityInventory.setString(2, purchaseInvId);
+		ResultSet executeupdateQuantityInventory = updateQuantityInventory.executeQuery();
+
+		PreparedStatement completeTransaction = conn.prepareStatement(
+		"update purchase_item set complete=? where purchaseid=? and  staffid=? and complete is null");
+		completeTransaction.setString(1, complete);
+		completeTransaction.setInt(2, purchaseIDLatest);
+		completeTransaction.setString(3, UserID);
+		ResultSet completeResult = completeTransaction.executeQuery();
+	}
+
 	completeFlag = true;
 
 }
