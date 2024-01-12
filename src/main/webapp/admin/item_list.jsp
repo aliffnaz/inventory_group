@@ -55,7 +55,7 @@ if (request.getParameter("invId") != null) {
 		inventoryAdd.setString(6, invcat);
 		ResultSet addInventory = inventoryAdd.executeQuery();
 
-		if (invcat != null && invcat.equalsIgnoreCase("F")) {
+		if (invcat != null && invcat.equalsIgnoreCase("Food")) {
 
 	String foodcat = request.getParameter("foodCat");
 	String store = request.getParameter("foodStore");
@@ -70,7 +70,7 @@ if (request.getParameter("invId") != null) {
 	ResultSet addTableInventoryCategory = tableAdd.executeQuery();
 	System.out.println("success id = " + id);
 
-		} else if (invcat != null && invcat.equalsIgnoreCase("S")) {
+		} else if (invcat != null && invcat.equalsIgnoreCase("Stationery")) {
 	String statcat = request.getParameter("stationeryCat");
 	String type = request.getParameter("stationeryType");
 	PreparedStatement tableAdd = conn
@@ -81,7 +81,7 @@ if (request.getParameter("invId") != null) {
 	ResultSet addTableInventoryCategory = tableAdd.executeQuery();
 	System.out.println("success id = " + id);
 
-		} else if (invcat != null && invcat.equalsIgnoreCase("P")) {
+		} else if (invcat != null && invcat.equalsIgnoreCase("Personal Care")) {
 	String personalcat = request.getParameter("personalCat");
 	String liquid = request.getParameter("personalLiquid");
 	String expdate = request.getParameter("personalExp");
@@ -95,9 +95,9 @@ if (request.getParameter("invId") != null) {
 	ResultSet addTableInventoryCategory = tableAdd.executeQuery();
 	System.out.println("success id = " + id);
 		}
-addSuccess = true;
+		addSuccess = true;
 	}
-	
+
 }
 
 //UPDATE INVENTORY
@@ -119,7 +119,7 @@ if (request.getParameter("updId") != null) {
 	upd.setString(5, updId);
 	ResultSet updInv = upd.executeQuery();
 
-	if (request.getParameter("updType") != null && request.getParameter("updType").equalsIgnoreCase("f")) {
+	if (request.getParameter("updType") != null && request.getParameter("updType").equalsIgnoreCase("food")) {
 
 		String updCat = request.getParameter("updfoodcategory");
 		String updCondition = request.getParameter("updcondition");
@@ -133,7 +133,8 @@ if (request.getParameter("updId") != null) {
 		updFood.setString(4, updId);
 		ResultSet updInvFood = updFood.executeQuery();
 
-	} else if (request.getParameter("updType") != null && request.getParameter("updType").equalsIgnoreCase("p")) {
+	} else if (request.getParameter("updType") != null
+	&& request.getParameter("updType").equalsIgnoreCase("personal care")) {
 
 		String updCat = request.getParameter("updPersonalcat");
 		String updLiquid = request.getParameter("updLiquid");
@@ -147,13 +148,14 @@ if (request.getParameter("updId") != null) {
 		updPersonalCare.setString(4, updId);
 		ResultSet updInvPersonalCare = updPersonalCare.executeQuery();
 
-	} else if (request.getParameter("updType") != null && request.getParameter("updType").equalsIgnoreCase("s")) {
+	} else if (request.getParameter("updType") != null
+	&& request.getParameter("updType").equalsIgnoreCase("stationery")) {
 
 		String updCat = request.getParameter("updstationeryCat");
 		String updType = request.getParameter("updStationeryType");
 
 		PreparedStatement updStationery = conn
-		.prepareStatement("update food set category=?, stationerytype=? where inventoryid=?");
+		.prepareStatement("update stationery set category=?, stationerytype=? where inventoryid=?");
 		updStationery.setString(1, updCat);
 		updStationery.setString(2, updType);
 		updStationery.setString(3, updId);
@@ -163,7 +165,7 @@ if (request.getParameter("updId") != null) {
 }
 
 //DELETE INEVNTORY
-if (request.getParameter("deleteInv") != null) {
+if (request.getParameter("DeleteId") != null) {
 
 	String deleteId = request.getParameter("DeleteId");
 
@@ -257,7 +259,7 @@ ResultSet execute = list.executeQuery();
 		</button>
 	</div>
 	<%
-	} 
+	}
 	%>
 
 	<%
@@ -273,7 +275,7 @@ ResultSet execute = list.executeQuery();
 		</button>
 	</div>
 	<%
-	} 
+	}
 	%>
 
 	<%
@@ -289,7 +291,7 @@ ResultSet execute = list.executeQuery();
 		</button>
 	</div>
 	<%
-	} 
+	}
 	%>
 
 	<!-- Page Content -->
@@ -395,7 +397,7 @@ ResultSet execute = list.executeQuery();
 															class="form-control" name="updBalance"
 															value="<%=execute.getString("inventorybalance")%>">
 													</div>
-													
+
 													<div class="form-group">
 														<label>Inventory Type</label> <input type="text"
 															class="form-control" name="updType"
@@ -411,30 +413,42 @@ ResultSet execute = list.executeQuery();
 														PreparedStatement food = conn.prepareStatement("select * from food where inventoryid=?");
 														food.setString(1, idcat);
 														ResultSet foodSelect = food.executeQuery();
-														while (foodSelect.next()) {
+														if (foodSelect.next()) {
 													%>
-													
+
 													<div class="form-group">
-								
-														<label>Food Category</label> 
-														<select name="updfoodcategory" class="form-control">
-														<option value="<%=foodSelect.getString("category")%>"></option>
-														<option value="Out Side Food">Outside Food</option>
-														<option value="Manufacture Food">Manufacture Food</option>
-														</select> <br>
-									
-														<label>Store Condition</label> 
-														<select name="updcondition" class="form-control">
-														<option value="<%=foodSelect.getString("storecondition")%>"></option>
-														<option value="Cold Temperature">Cold Temperature</option>
-														<option value="Room Temperature">Room Temperature</option>
-														</select> <br>
-								
-														<label>Expired Date</label> <input type="text"
+
+														<label>Food Category</label> <select
+															name="updfoodcategory" class="form-control">
+															<option value="">Select</option>
+															<option value="Outside Food"
+																<%if (foodSelect.getString("category").equalsIgnoreCase("Outside Food")) {
+	out.println("Selected");
+}%>>Outside
+																Food</option>
+															<option value="Manufacture Food"
+																<%if (foodSelect.getString("category").equalsIgnoreCase("Manufacture Food")) {
+	out.println("Selected");
+}%>>Manufacture
+																Food</option>
+														</select> <br> <label>Store Condition</label> <select
+															name="updcondition" class="form-control">
+															<option value="">Select</option>
+															<option value="Cold Temperature"
+																<%if (foodSelect.getString("storecondition").equalsIgnoreCase("Cold Temperature")) {
+	out.println("Selected");
+}%>>Cold
+																Temperature</option>
+															<option value="Room Temperature"
+																<%if (foodSelect.getString("storecondition").equalsIgnoreCase("Room Temperature")) {
+	out.println("Selected");
+}%>>Room
+																Temperature</option>
+														</select> <br> <label>Expired Date</label> <input type="date"
 															class="form-control" name="updexpdate"
 															value="<%=foodSelect.getString("expdate")%>">
 													</div>
-													
+
 													<%
 													}
 													}
@@ -445,30 +459,38 @@ ResultSet execute = list.executeQuery();
 														PreparedStatement personal = conn.prepareStatement("select * from personalcare where inventoryid=?");
 														personal.setString(1, idcat);
 														ResultSet personalSelect = personal.executeQuery();
-														while (personalSelect.next()) {
+														if (personalSelect.next()) {
 													%>
-													
+
 													<div class="form-group">
-									
-														<label>Personal Care Category</label> 
-														<select name="updPersonalcat" class="form-control">
-														<option value="<%=personalSelect.getString("category")%>"></option>
-														<option value="Toiletries">Toiletries</option>
-														<option value="Fragrance">Fragrance</option>
-														</select> <br>
-										
-									    				<label>Liquid Type</label> 
-														<select name="updLiquid" class="form-control">
-														<option value="<%=personalSelect.getString("liquid")%>"></option>
-														<option value="Yes">Yes</option>
-														<option value="No">No</option>
-														</select> <br>
-										
-									    				<label>Expired Date</label> <input type="text"
+
+														<label>Personal Care Category</label> <select
+															name="updPersonalcat" class="form-control">
+															<option value="">Select</option>
+															<option value="Toiletries"
+																<%if (personalSelect.getString("category").equalsIgnoreCase("Toiletries")) {
+	out.println("Selected");
+}%>>Toiletries</option>
+															<option value="Fragrance"
+																<%if (personalSelect.getString("category").equalsIgnoreCase("Fragrance")) {
+	out.println("Selected");
+}%>>Fragrance</option>
+														</select> <br> <label>Liquid Type</label> <select
+															name="updLiquid" class="form-control">
+															<option value="">Select</option>
+															<option value="Yes"
+																<%if (personalSelect.getString("liquid").equalsIgnoreCase("Yes")) {
+	out.println("Selected");
+}%>>Yes</option>
+															<option value="No"
+																<%if (personalSelect.getString("liquid").equalsIgnoreCase("No")) {
+	out.println("Selected");
+}%>>No</option>
+														</select> <br> <label>Expired Date</label> <input type="date"
 															class="form-control" name="updexpdate"
 															value="<%=personalSelect.getString("expdate")%>">
 													</div>
-													
+
 													<%
 													}
 													}
@@ -479,35 +501,26 @@ ResultSet execute = list.executeQuery();
 														PreparedStatement stationery = conn.prepareStatement("select * from stationery where inventoryid=?");
 														stationery.setString(1, idcat);
 														ResultSet stationerySelect = stationery.executeQuery();
-														while (stationerySelect.next()) {
+														if (stationerySelect.next()) {
 													%>
-													<div class="form-group">
-														<label>Stationery Category </label> <input type="text"
-															class="form-control" name="updstationeryCat"
-															value="<%=stationerySelect.getString("category")%>">
-													</div>
-
-													<div class="form-group">
-														<label>Stationery Type</label> <input type="text"
-															class="form-control" name="updStationeryType"
-															value="<%=stationerySelect.getString("stationerytype")%>">
-													</div>
 													
-													<div class="form-group">	
-														<label>Stationery Category</label> 
-														<select name="updstationeryCat" class="form-control">
-														<option value="<%=stationerySelect.getString("category")%>"></option>
-														<option value="Writing Instruments">Writing Instruments</option>
-														<option value="Paper Products">Paper Products</option>
-														</select> <br> 
-										
-														<label>Stationery Material</label> 
-														<select name="updstationeryCat" class="form-control">
-														<option value="<%=stationerySelect.getString("stationerytype")%>"></option>
-														<option value="Wood">Wood</option>
-														<option value="Plastic">Plastic</option>
-														<option value="Metal">Metal</option>
-														</select> <br> 
+													
+													<div class="form-group">
+														<label>Stationery Category</label> <select
+															name="updstationeryCat" class="form-control">
+															<option
+																value="<%=stationerySelect.getString("category")%>"></option>
+															<option value="Writing Instruments">Writing
+																Instruments</option>
+															<option value="Paper Products">Paper Products</option>
+														</select> <br> <label>Stationery Material</label> <select
+															name="updstationeryCat" class="form-control">
+															<option
+																value="<%=stationerySelect.getString("stationerytype")%>"></option>
+															<option value="Wood">Wood</option>
+															<option value="Plastic">Plastic</option>
+															<option value="Metal">Metal</option>
+														</select> <br>
 													</div>
 
 													<%
@@ -556,7 +569,7 @@ ResultSet execute = list.executeQuery();
 										<div class="modal-body">Are you sure you want to delete
 											this inventory?</div>
 										<div class="modal-footer">
-											<form action="" method="get">
+											<form action="" method="post">
 
 												<input type="hidden"
 													value="<%=execute.getString("inventoryid")%>"
@@ -594,7 +607,7 @@ ResultSet execute = list.executeQuery();
 				</tbody>
 			</table>
 
-				<div class="row">
+			<div class="row">
 				<div class="col"></div>
 				<div class="col text-center">
 					<a href="../managerMenu.jsp" class="btn btn-warning m-4">Back</a>
@@ -604,7 +617,7 @@ ResultSet execute = list.executeQuery();
 			</div>
 		</div>
 
-		</div>
+	</div>
 
 	</div>
 
@@ -626,7 +639,7 @@ ResultSet execute = list.executeQuery();
 
 				<div class="modal-body">
 
-					<form action="" method="post">
+					<form action="item_list.jsp" method="post">
 						<div class="form-group">
 							<label>Inventory ID</label> <input type="text"
 								class="form-control" id="" name="invId">
@@ -662,98 +675,87 @@ ResultSet execute = list.executeQuery();
 								<option value="Stationery">Stationery</option>
 							</select>
 						</div>
-						
+
 						<div class="form-group">
 							<div id="inputF" style="display: none;">
-								
-								<label>Food Category</label> 
-								<select name="foodCat" class="form-control">
-								<option value="">select food category</option>
-								<option value="Out Side Food">Outside Food</option>
-								<option value="Manufacture Food">Manufacture Food</option>
-								</select> <br>
-									
-								<label>Store Condition</label> 
-								<select name="foodStore" class="form-control">
-								<option value="">select store condition</option>
-								<option value="Cold Temperature">Cold Temperature</option>
-								<option value="Room Temperature">Room Temperature</option>
-								</select> <br>
-								
-								Expired Date<input type="date" class="form-control"
+
+								<label>Food Category</label> <select name="foodCat"
+									class="form-control">
+									<option value="">select food category</option>
+									<option value="Out Side Food">Outside Food</option>
+									<option value="Manufacture Food">Manufacture Food</option>
+								</select> <br> <label>Store Condition</label> <select
+									name="foodStore" class="form-control">
+									<option value="">select store condition</option>
+									<option value="Cold Temperature">Cold Temperature</option>
+									<option value="Room Temperature">Room Temperature</option>
+								</select> <br> Expired Date<input type="date" class="form-control"
 									name="foodExp"> <br>
 							</div>
 						</div>
 
-							<div class="form-group">
-								<div id="inputP" style="display: none;">
-									
-										<label>Personal Care Category</label> 
-										<select name="personalCat" class="form-control">
-										<option value="">select personal care category</option>
-										<option value="Toiletries">Toiletries</option>
-										<option value="Fragrance">Fragrance</option>
-										</select> <br>
-										
-									    <label>Liquid Type</label> 
-										<select name="personalLiquid" class="form-control">
-										<option value="">select liquid type</option>
-										<option value="Yes">Yes</option>
-										<option value="No">No</option>
-										</select> <br>
-										
-									    Expired Date <input type="date" class="form-control"
-										name="personalExp"> <br>
-								</div>
+						<div class="form-group">
+							<div id="inputP" style="display: none;">
+
+								<label>Personal Care Category</label> <select name="personalCat"
+									class="form-control">
+									<option value="">select personal care category</option>
+									<option value="Toiletries">Toiletries</option>
+									<option value="Fragrance">Fragrance</option>
+								</select> <br> <label>Liquid Type</label> <select
+									name="personalLiquid" class="form-control">
+									<option value="">select liquid type</option>
+									<option value="Yes">Yes</option>
+									<option value="No">No</option>
+								</select> <br> Expired Date <input type="date" class="form-control"
+									name="personalExp"> <br>
 							</div>
+						</div>
 
-								<div class="form-group">
-									<div id="inputS" style="display: none;">
-										
-										<label>Stationery Category</label> 
-										<select name="stationeryCat" class="form-control">
-										<option value="">select stationery category</option>
-										<option value="Writing Instruments">Writing Instruments</option>
-										<option value="Paper Products">Paper Products</option>
-										</select> <br> 
-										
-										<label>Stationery Material</label> 
-										<select name="stationeryMat" class="form-control">
-										<option value="">select stationery material</option>
-										<option value="Wood">Wood</option>
-										<option value="Plastic">Plastic</option>
-										<option value="Metal">Metal</option>
-										</select> <br> 
-										
-									</div>
-								</div>
+						<div class="form-group">
+							<div id="inputS" style="display: none;">
 
-									<!-- Other input fields -->
+								<label>Stationery Category</label> <select name="stationeryCat"
+									class="form-control">
+									<option value="">select stationery category</option>
+									<option value="Writing Instruments">Writing
+										Instruments</option>
+									<option value="Paper Products">Paper Products</option>
+								</select> <br> <label>Stationery Material</label> <select
+									name="stationeryType" class="form-control">
+									<option value="">select stationery material</option>
+									<option value="Wood">Wood</option>
+									<option value="Plastic">Plastic</option>
+									<option value="Metal">Metal</option>
+								</select> <br>
 
-									<button type="submit" class="btn btn-primary">Submit</button>
+							</div>
+						</div>
+
+						<!-- Other input fields -->
+
+						<button type="submit" class="btn btn-primary">Submit</button>
 					</form>
 				</div>
 			</div>
-			
-	</div>
-	<!-- Bootstrap JS and jQuery -->
-	<script
-		src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script
-		src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-	<script
-		src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
-	<script
-		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-	<!-- DataTables Initialization Script -->
-	<script>
-		$(document).ready(function() {
-			$('#inventoryTable').DataTable();
-		});
-	</script>
+		</div>
+		<!-- Bootstrap JS and jQuery -->
+		<script
+			src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script
+			src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+		<script
+			src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+		<script
+			src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-
+		<!-- DataTables Initialization Script -->
+		<script>
+			$(document).ready(function() {
+				$('#inventoryTable').DataTable();
+			});
+		</script>
 </body>
 
 </html>
