@@ -385,12 +385,6 @@ ResultSet execute = list.executeQuery();
 													</div>
 
 													<div class="form-group">
-														<label>Inventory Type</label> <input type="text"
-															class="form-control" name="updType"
-															value="<%=execute.getString("inventorytype")%>" readonly>
-													</div>
-
-													<div class="form-group">
 														<label>Inventory Brand</label> <input type="text"
 															class="form-control" name="updBrand"
 															value="<%=execute.getString("inventorybrand")%>">
@@ -401,73 +395,86 @@ ResultSet execute = list.executeQuery();
 															class="form-control" name="updBalance"
 															value="<%=execute.getString("inventorybalance")%>">
 													</div>
-
-
-
+													
+													<div class="form-group">
+														<label>Inventory Type</label> <input type="text"
+															class="form-control" name="updType"
+															value="<%=execute.getString("inventorytype")%>" readonly>
+													</div>
 
 													<%
 													String idcat = execute.getString("inventoryid");
 													String cat = execute.getString("inventorytype");
 
-													if (cat.equalsIgnoreCase("f")) {
+													if (cat.equalsIgnoreCase("Food")) {
 
 														PreparedStatement food = conn.prepareStatement("select * from food where inventoryid=?");
 														food.setString(1, idcat);
 														ResultSet foodSelect = food.executeQuery();
 														while (foodSelect.next()) {
 													%>
+													
 													<div class="form-group">
-														<label>Food Category </label> <input type="text"
-															class="form-control" name="updfoodcategory"
-															value="<%=foodSelect.getString("category")%>">
-													</div>
-
-													<div class="form-group">
-														<label>Store Condition</label> <input type="text"
-															class="form-control" name="updcondition"
-															value="<%=foodSelect.getString("storecondition")%>">
-													</div>
-
-													<div class="form-group">
+								
+														<label>Food Category</label> 
+														<select name="updfoodcategory" class="form-control">
+														<option value="<%=foodSelect.getString("category")%>"></option>
+														<option value="Out Side Food">Outside Food</option>
+														<option value="Manufacture Food">Manufacture Food</option>
+														</select> <br>
+									
+														<label>Store Condition</label> 
+														<select name="updcondition" class="form-control">
+														<option value="<%=foodSelect.getString("storecondition")%>"></option>
+														<option value="Cold Temperature">Cold Temperature</option>
+														<option value="Room Temperature">Room Temperature</option>
+														</select> <br>
+								
 														<label>Expired Date</label> <input type="text"
 															class="form-control" name="updexpdate"
 															value="<%=foodSelect.getString("expdate")%>">
 													</div>
+													
 													<%
 													}
 													}
 													%>
 													<%
-													if (cat.equalsIgnoreCase("p")) {
+													if (cat.equalsIgnoreCase("Personal Care")) {
 
 														PreparedStatement personal = conn.prepareStatement("select * from personalcare where inventoryid=?");
 														personal.setString(1, idcat);
 														ResultSet personalSelect = personal.executeQuery();
 														while (personalSelect.next()) {
 													%>
+													
 													<div class="form-group">
-														<label>Personal Care Category</label> <input type="text"
-															class="form-control" name="updPersonalcat"
-															value="<%=personalSelect.getString("category")%>">
-													</div>
-
-													<div class="form-group">
-														<label>Liquid</label> <input type="text"
-															class="form-control" name="updLiquid"
-															value="<%=personalSelect.getString("liquid")%>">
-													</div>
-
-													<div class="form-group">
-														<label>Expired Date</label> <input type="text"
+									
+														<label>Personal Care Category</label> 
+														<select name="updPersonalcat" class="form-control">
+														<option value="<%=personalSelect.getString("category")%>"></option>
+														<option value="Toiletries">Toiletries</option>
+														<option value="Fragrance">Fragrance</option>
+														</select> <br>
+										
+									    				<label>Liquid Type</label> 
+														<select name="updLiquid" class="form-control">
+														<option value="<%=personalSelect.getString("liquid")%>"></option>
+														<option value="Yes">Yes</option>
+														<option value="No">No</option>
+														</select> <br>
+										
+									    				<label>Expired Date</label> <input type="text"
 															class="form-control" name="updexpdate"
 															value="<%=personalSelect.getString("expdate")%>">
 													</div>
+													
 													<%
 													}
 													}
 													%>
 													<%
-													if (cat.equalsIgnoreCase("s")) {
+													if (cat.equalsIgnoreCase("Stationery")) {
 
 														PreparedStatement stationery = conn.prepareStatement("select * from stationery where inventoryid=?");
 														stationery.setString(1, idcat);
@@ -485,6 +492,24 @@ ResultSet execute = list.executeQuery();
 															class="form-control" name="updStationeryType"
 															value="<%=stationerySelect.getString("stationerytype")%>">
 													</div>
+													
+													<div class="form-group">	
+														<label>Stationery Category</label> 
+														<select name="updstationeryCat" class="form-control">
+														<option value="<%=stationerySelect.getString("category")%>"></option>
+														<option value="Writing Instruments">Writing Instruments</option>
+														<option value="Paper Products">Paper Products</option>
+														</select> <br> 
+										
+														<label>Stationery Material</label> 
+														<select name="updstationeryCat" class="form-control">
+														<option value="<%=stationerySelect.getString("stationerytype")%>"></option>
+														<option value="Wood">Wood</option>
+														<option value="Plastic">Plastic</option>
+														<option value="Metal">Metal</option>
+														</select> <br> 
+													</div>
+
 													<%
 													}
 													}
@@ -639,6 +664,28 @@ ResultSet execute = list.executeQuery();
 						</div>
 						
 						<div class="form-group">
+							<div id="inputF" style="display: none;">
+								
+								<label>Food Category</label> 
+								<select name="foodCat" class="form-control">
+								<option value="">select food category</option>
+								<option value="Out Side Food">Outside Food</option>
+								<option value="Manufacture Food">Manufacture Food</option>
+								</select> <br>
+									
+								<label>Store Condition</label> 
+								<select name="foodStore" class="form-control">
+								<option value="">select store condition</option>
+								<option value="Cold Temperature">Cold Temperature</option>
+								<option value="Room Temperature">Room Temperature</option>
+								</select> <br>
+								
+								Expired Date<input type="date" class="form-control"
+									name="foodExp"> <br>
+							</div>
+						</div>
+
+							<div class="form-group">
 								<div id="inputP" style="display: none;">
 									
 										<label>Personal Care Category</label> 
@@ -658,7 +705,7 @@ ResultSet execute = list.executeQuery();
 									    Expired Date <input type="date" class="form-control"
 										name="personalExp"> <br>
 								</div>
-
+							</div>
 
 								<div class="form-group">
 									<div id="inputS" style="display: none;">
@@ -679,7 +726,7 @@ ResultSet execute = list.executeQuery();
 										</select> <br> 
 										
 									</div>
-
+								</div>
 
 									<!-- Other input fields -->
 
@@ -710,4 +757,3 @@ ResultSet execute = list.executeQuery();
 </body>
 
 </html>
-
