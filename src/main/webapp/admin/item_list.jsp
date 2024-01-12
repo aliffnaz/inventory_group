@@ -371,37 +371,37 @@ ResultSet execute = list.executeQuery();
 													<div class="form-group">
 														<label>Inventory ID</label> <input type="text"
 															class="form-control" name="updId"
-															value="<%=execute.getString("inventoryid")%>" readonly>
+															value="<%=execute.getString("inventoryid")%>" disabled>
 													</div>
 
 													<div class="form-group">
 														<label>Inventory Name</label> <input type="text"
 															class="form-control" name="updName"
-															value="<%=execute.getString("inventoryname")%>">
+															value="<%=execute.getString("inventoryname")%>" required>
 													</div>
 
 													<div class="form-group">
 														<label>Inventory Price</label> <input type="text"
 															class="form-control" name="updPrice"
-															value="<%=execute.getString("inventoryprice")%>">
+															value="<%=execute.getString("inventoryprice")%>" required>
 													</div>
 
 													<div class="form-group">
 														<label>Inventory Brand</label> <input type="text"
 															class="form-control" name="updBrand"
-															value="<%=execute.getString("inventorybrand")%>">
+															value="<%=execute.getString("inventorybrand")%>" required>
 													</div>
 
 													<div class="form-group">
 														<label>Inventory Balance</label> <input type="text"
 															class="form-control" name="updBalance"
-															value="<%=execute.getString("inventorybalance")%>">
+															value="<%=execute.getString("inventorybalance")%>" required>
 													</div>
 
 													<div class="form-group">
 														<label>Inventory Type</label> <input type="text"
 															class="form-control" name="updType"
-															value="<%=execute.getString("inventorytype")%>" readonly>
+															value="<%=execute.getString("inventorytype")%>" disabled>
 													</div>
 
 													<%
@@ -419,33 +419,26 @@ ResultSet execute = list.executeQuery();
 													<div class="form-group">
 
 														<label>Food Category</label> <select
-															name="updfoodcategory" class="form-control">
+															name="updfoodcategory" class="form-control" required>
 															<option value="">Select</option>
 															<option value="Outside Food"
-																<%if (foodSelect.getString("category").equalsIgnoreCase("Outside Food")) {
-	out.println("Selected");
-}%>>Outside
+																<%if (foodSelect.getString("category").equalsIgnoreCase("Outside Food")) {out.println("Selected");}%>>Outside
 																Food</option>
 															<option value="Manufacture Food"
-																<%if (foodSelect.getString("category").equalsIgnoreCase("Manufacture Food")) {
-	out.println("Selected");
-}%>>Manufacture
+																<%if (foodSelect.getString("category").equalsIgnoreCase("Manufacture Food")) {out.println("Selected");}%>>Manufacture
 																Food</option>
 														</select> <br> <label>Store Condition</label> <select
-															name="updcondition" class="form-control">
+															name="updcondition" class="form-control" required>
 															<option value="">Select</option>
 															<option value="Cold Temperature"
-																<%if (foodSelect.getString("storecondition").equalsIgnoreCase("Cold Temperature")) {
-	out.println("Selected");
-}%>>Cold
+																<%if (foodSelect.getString("storecondition").equalsIgnoreCase("Cold Temperature")) {out.println("Selected");}%>>Cold
 																Temperature</option>
 															<option value="Room Temperature"
-																<%if (foodSelect.getString("storecondition").equalsIgnoreCase("Room Temperature")) {
-	out.println("Selected");
-}%>>Room
+																<%if (foodSelect.getString("storecondition").equalsIgnoreCase("Room Temperature")) {out.println("Selected");}%>>Room
 																Temperature</option>
-														</select> <br> <label>Expired Date</label> <input type="date"
-															class="form-control" name="updexpdate"
+														</select> <br> 
+														<label>Expired Date</label> <input type="date"
+															class="form-control" name="updexpdate" required
 															value="<%=foodSelect.getString("expdate")%>">
 													</div>
 
@@ -465,29 +458,23 @@ ResultSet execute = list.executeQuery();
 													<div class="form-group">
 
 														<label>Personal Care Category</label> <select
-															name="updPersonalcat" class="form-control">
+															name="updPersonalcat" class="form-control" required>
 															<option value="">Select</option>
 															<option value="Toiletries"
-																<%if (personalSelect.getString("category").equalsIgnoreCase("Toiletries")) {
-	out.println("Selected");
-}%>>Toiletries</option>
+																<%if (personalSelect.getString("category").equalsIgnoreCase("Toiletries")) {out.println("Selected");}%>>Toiletries</option>
 															<option value="Fragrance"
-																<%if (personalSelect.getString("category").equalsIgnoreCase("Fragrance")) {
-	out.println("Selected");
-}%>>Fragrance</option>
-														</select> <br> <label>Liquid Type</label> <select
-															name="updLiquid" class="form-control">
+																<%if (personalSelect.getString("category").equalsIgnoreCase("Fragrance")) {out.println("Selected");}%>>Fragrance</option>
+														</select> <br> 
+														<label>Liquid Type</label> <select
+															name="updLiquid" class="form-control" required>
 															<option value="">Select</option>
 															<option value="Yes"
-																<%if (personalSelect.getString("liquid").equalsIgnoreCase("Yes")) {
-	out.println("Selected");
-}%>>Yes</option>
+																<%if (personalSelect.getString("liquid").equalsIgnoreCase("Yes")) {out.println("Selected");}%>>Yes</option>
 															<option value="No"
-																<%if (personalSelect.getString("liquid").equalsIgnoreCase("No")) {
-	out.println("Selected");
-}%>>No</option>
-														</select> <br> <label>Expired Date</label> <input type="date"
-															class="form-control" name="updexpdate"
+																<%if (personalSelect.getString("liquid").equalsIgnoreCase("No")) {out.println("Selected");}%>>No</option>
+														</select> <br> 
+														<label>Expired Date</label> <input type="date"
+															class="form-control" name="updexpdate" required
 															value="<%=personalSelect.getString("expdate")%>">
 													</div>
 
@@ -507,20 +494,19 @@ ResultSet execute = list.executeQuery();
 													
 													<div class="form-group">
 														<label>Stationery Category</label> <select
-															name="updstationeryCat" class="form-control">
-															<option
-																value="<%=stationerySelect.getString("category")%>"></option>
-															<option value="Writing Instruments">Writing
-																Instruments</option>
-															<option value="Paper Products">Paper Products</option>
-														</select> <br> <label>Stationery Material</label> <select
-															name="updstationeryCat" class="form-control">
-															<option
-																value="<%=stationerySelect.getString("stationerytype")%>"></option>
-															<option value="Wood">Wood</option>
-															<option value="Plastic">Plastic</option>
-															<option value="Metal">Metal</option>
+															name="updstationeryCat" class="form-control" required>
+															<option value="">Select</option>
+															<option value="Writing Instruments" <%if (stationerySelect.getString("statcat").equalsIgnoreCase("Writing Instruments")) {out.println("Selected");}%>>Writing Instruments</option>
+															<option value="Paper Products" <%if (stationerySelect.getString("statcat").equalsIgnoreCase("Paper Products")) {out.println("Selected");}%>>Paper Products</option>
+														</select> <br> 
+														<label>Stationery Material</label> <select
+															name="updStationeryType" class="form-control" required>
+															<option value="">Select</option>
+															<option value="Wood" <%if (stationerySelect.getString("type").equalsIgnoreCase("Wood")) {out.println("Selected");}%> >Wood</option>
+															<option value="Plastic" <%if (stationerySelect.getString("type").equalsIgnoreCase("Plastic")) {out.println("Selected");}%>>Plastic</option>
+															<option value="Metal" <%if (stationerySelect.getString("type").equalsIgnoreCase("Metal")) {out.println("Selected");}%>>Metal</option>
 														</select> <br>
+														
 													</div>
 
 													<%
@@ -642,33 +628,33 @@ ResultSet execute = list.executeQuery();
 					<form action="item_list.jsp" method="post">
 						<div class="form-group">
 							<label>Inventory ID</label> <input type="text"
-								class="form-control" id="" name="invId">
+								class="form-control" id="" name="invId" required>
 						</div>
 
 						<div class="form-group">
 							<label>Inventory Name</label> <input type="text"
-								class="form-control" id="" name="invName">
+								class="form-control" id="" name="invName" required>
 						</div>
 
 						<div class="form-group">
 							<label>Inventory Price</label> <input type="text"
-								class="form-control" id="" name="invPrice">
+								class="form-control" id="" name="invPrice" required>
 						</div>
 
 						<div class="form-group">
 							<label>Inventory Brand</label> <input type="text"
-								class="form-control" id="" name="invBrand">
+								class="form-control" id="" name="invBrand" required>
 						</div>
 
 						<div class="form-group">
 							<label>Inventory Balance</label> <input type="text"
-								class="form-control" id="" name="invBalance">
+								class="form-control" id="" name="invBalance" required>
 						</div>
 
 						<div class="form-group">
 							<label>Category</label> <select id="dropdown"
 								class="form-control" onchange="showInput(this.value)"
-								name="invCat">
+								name="invCat" required>
 								<option value="">Select an option</option>
 								<option value="Food">Food</option>
 								<option value="Personal Care">Personal Care</option>
@@ -680,12 +666,13 @@ ResultSet execute = list.executeQuery();
 							<div id="inputF" style="display: none;">
 
 								<label>Food Category</label> <select name="foodCat"
-									class="form-control">
+									class="form-control" required>
 									<option value="">select food category</option>
 									<option value="Out Side Food">Outside Food</option>
 									<option value="Manufacture Food">Manufacture Food</option>
-								</select> <br> <label>Store Condition</label> <select
-									name="foodStore" class="form-control">
+								</select> <br> 
+								<label>Store Condition</label> <select
+									name="foodStore" class="form-control" required>
 									<option value="">select store condition</option>
 									<option value="Cold Temperature">Cold Temperature</option>
 									<option value="Room Temperature">Room Temperature</option>
@@ -698,12 +685,12 @@ ResultSet execute = list.executeQuery();
 							<div id="inputP" style="display: none;">
 
 								<label>Personal Care Category</label> <select name="personalCat"
-									class="form-control">
+									class="form-control" required>
 									<option value="">select personal care category</option>
 									<option value="Toiletries">Toiletries</option>
 									<option value="Fragrance">Fragrance</option>
 								</select> <br> <label>Liquid Type</label> <select
-									name="personalLiquid" class="form-control">
+									name="personalLiquid" class="form-control" required>
 									<option value="">select liquid type</option>
 									<option value="Yes">Yes</option>
 									<option value="No">No</option>
@@ -716,13 +703,13 @@ ResultSet execute = list.executeQuery();
 							<div id="inputS" style="display: none;">
 
 								<label>Stationery Category</label> <select name="stationeryCat"
-									class="form-control">
+									class="form-control" required>
 									<option value="">select stationery category</option>
 									<option value="Writing Instruments">Writing
 										Instruments</option>
 									<option value="Paper Products">Paper Products</option>
 								</select> <br> <label>Stationery Material</label> <select
-									name="stationeryType" class="form-control">
+									name="stationeryType" class="form-control" required>
 									<option value="">select stationery material</option>
 									<option value="Wood">Wood</option>
 									<option value="Plastic">Plastic</option>
