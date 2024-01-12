@@ -292,42 +292,42 @@ ResultSet execute = list.executeQuery();
 													<div class="form-group">
 														<label>Inventory ID</label> <input type="text"
 															class="form-control" name="updId"
-															value="<%=execute.getString("inventoryid")%>" readonly>
+															value="<%=execute.getString("inventoryid")%>" disabled>
 													</div>
 
 													<div class="form-group">
 														<label>Inventory Name</label> <input type="text"
 															class="form-control" name="updName"
-															value="<%=execute.getString("inventoryname")%>">
+															value="<%=execute.getString("inventoryname")%>" disabled>
 													</div>
 
 													<div class="form-group">
 														<label>Inventory Price</label> <input type="text"
 															class="form-control" name="updPrice"
-															value="<%=execute.getString("inventoryprice")%>">
+															value="<%=execute.getString("inventoryprice")%>" disabled>
 													</div>
 
 													<div class="form-group">
 														<label>Inventory Type</label> <input type="text"
 															class="form-control" name="updType"
-															value="<%=execute.getString("inventorytype")%>" readonly>
+															value="<%=execute.getString("inventorytype")%>" disabled>
 													</div>
 
 													<div class="form-group">
 														<label>Inventory Brand</label> <input type="text"
 															class="form-control" name="updBrand"
-															value="<%=execute.getString("inventorybrand")%>">
+															value="<%=execute.getString("inventorybrand")%>" disabled>
 													</div>
 
 													<div class="form-group">
 														<label>Inventory Balance</label> <input type="text"
 															class="form-control" name="updBalance"
-															value="<%=execute.getString("inventorybalance")%>">
+															value="<%=execute.getString("inventorybalance")%>" disabled>
 													</div>
 
 
 
-
+												<%--
 													<%
 													String idcat = execute.getString("inventoryid");
 													String cat = execute.getString("inventorytype");
@@ -412,7 +412,7 @@ ResultSet execute = list.executeQuery();
 													}
 													}
 													%>
-												
+												--%>
 											</div>
 											<!-- End of Item Information Display -->
 										</div>
