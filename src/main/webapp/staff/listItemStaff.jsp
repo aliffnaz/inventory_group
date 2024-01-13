@@ -15,7 +15,7 @@ conn = DriverManager.getConnection(url, username, password);
 String UserID = (String) session.getAttribute("sessionID");
 boolean itemUpdateSuccess = false, itemAddSuccess = false;;
 
-out.println(UserID);
+// out.println(UserID);
 
 if (UserID == null) {
 	response.sendRedirect("../login.jsp");
@@ -25,7 +25,7 @@ if (UserID == null) {
 	CurrentUser.setString(1, UserID);
 	ResultSet UserSession = CurrentUser.executeQuery();
 	UserSession.next();
-	out.println("welcome sir, " + UserSession.getString("staffname"));
+	// out.println("welcome sir, " + UserSession.getString("staffname"));
 }
 
 // select * from purchase where PURCHASEID  = (select max(PURCHASEID) from PURCHASE);
@@ -141,6 +141,9 @@ ResultSet execute = list.executeQuery();
 <link
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 	rel="stylesheet">
+
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 <style>
 /* Custom CSS */
 /* Add your custom styles here */
@@ -176,7 +179,7 @@ ResultSet execute = list.executeQuery();
 	<!-- Navbar -->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="container">
-			<a class="navbar-brand" href="#">Inventory Management</a>
+			<a class="navbar-brand" href="../staffMenu.jsp">Item List</a>
 		</div>
 	</nav>
 
@@ -216,7 +219,7 @@ ResultSet execute = list.executeQuery();
 
 
 	<!-- Page Content -->
-	<div class="container mt-4">
+	<div class="container mt-4 mb-4">
 
 		<div class="card card-body">
 
@@ -243,13 +246,17 @@ ResultSet execute = list.executeQuery();
 				<tbody>
 					<!-- Sample Table Data (Replace this with dynamic data) -->
 					<%
+					int count = 1;
 					while (execute.next()) {
-						int i = 1;
+						if(execute.getInt("inventorybalance") == 0){
+System.out.println(execute.getString("inventoryname"));
+						}else{
+						
 					%>
 					<tr>
 						<td>
 							<%
-							out.println(i);
+							out.println(count);
 							%>
 						</td>
 						<td><%=execute.getString("inventoryid")%></td>
@@ -438,9 +445,10 @@ ResultSet execute = list.executeQuery();
 						</td>
 					</tr>
 					<%
-					i = i + 1;
+					count = count + 1;
 					%>
 					<%
+						}
 					}
 					%>
 					<!-- End of Sample Table Data -->
@@ -449,8 +457,8 @@ ResultSet execute = list.executeQuery();
 			<div class="row">
 				<div class="col"></div>
 				<div class="col text-center">
-					<a href="../staffMenu.jsp" class="btn btn-warning m-4">Back</a>
-
+					<a href="../staffMenu.jsp" class="btn btn-warning m-4"><i class="bi bi-arrow-left-circle"></i> Back</a>
+					<a href="cart.jsp" class="btn btn-warning m-4"><i class="bi bi-bag"></i> Cart</a>
 				</div>
 				<div class="col"></div>
 			</div>

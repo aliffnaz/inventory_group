@@ -37,7 +37,7 @@ if (request.getParameter("id") != null) {
 	manager.setString(1, id);
 	ResultSet managerLog = manager.executeQuery();
 	managerLog.next();
-	out.println("hello manager, " + managerLog.getString("staffname"));
+	// out.println("hello manager, " + managerLog.getString("staffname"));
 }
 %>
 <!DOCTYPE html>
@@ -115,7 +115,7 @@ button {
 	<!-- Navbar -->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="container">
-			<a class="navbar-brand" href="#">Inventory Management</a> <a
+			<a class="navbar-brand" href="">Inventory Management</a> <a
 				href="managerMenu.html"> <button-scroll>Manager</button-scroll>
 			</a>
 		</div>
@@ -131,21 +131,14 @@ button {
 			</a>
 		</div>
 
-		<div class="menu-item">
-			<p>
-				<i class="menu-icon fas fa-chart-line"></i>
-			</p>
-			<a href="admin/report_admin.jsp">
-				<button>Today's Report</button>
-			</a>
-		</div>
+
 
 		<div class="menu-item">
 			<p>
 				<i class="menu-icon fas fa-chart-bar"></i>
 			</p>
-			<a href="admin/report_admin">
-				<button>Monthly Report</button>
+			<a href="admin/reportSales.jsp">
+				<button>Sales Summary</button>
 			</a>
 		</div>
 

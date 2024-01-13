@@ -11,10 +11,7 @@ String url = "jdbc:oracle:thin:@localhost:1521:xe";
 String username = "INVENTORY_502";
 String password = "system";
 conn = DriverManager.getConnection(url, username, password);
-
-
-
-
+  
 if (request.getParameter("staffid") != null) {
 	String id = request.getParameter("staffid");
 	PreparedStatement check = conn.prepareStatement("select * from staff where staffid=?");
@@ -30,7 +27,7 @@ if (request.getParameter("staffid") != null) {
 	} else {
 		out.println("The id is invalid, please try again");
 	}
-}else{
+} else {
 	session.invalidate();
 }
 %>
@@ -62,22 +59,32 @@ if (request.getParameter("staffid") != null) {
 	</nav>
 
 	<!-- Login Form -->
-	<div class="container mt-4">
-		<form action="" method="post">
-			<div class="card">
-				<div class="card-header">Staff Login</div>
-				<div class="card-body">
-					<form>
-						<div class="form-group">
-							<label for="staffID">Staff ID</label> <input type="text"
-								class="form-control" name="staffid" placeholder="Enter staff ID">
+	<div class="container mt-5 mt-5">
+		<div class="row">
+			<div class="col-3"></div>
+			<div class="col-6">
+				<form action="" method="post">
+					<div class="card">
+						<div class="card-header">Staff Login</div>
+						<div class="card-body">
+							<form>
+								<div class="form-group">
+									<label for="staffID">Staff ID</label> <input type="text"
+										class="form-control" name="staffid"
+										placeholder="Enter staff ID">
+								</div>
+								<button type="submit" class="btn btn-primary">Login</button>
+							</form>
 						</div>
-						<button type="submit" class="btn btn-primary">Login</button>
-					</form>
-				</div>
+					</div>
 			</div>
+			</form>
+
+
+		</div>
+		<div class="col-3"></div>
 	</div>
-	</form>
+
 
 	<!-- Bootstrap JS and jQuery -->
 	<script

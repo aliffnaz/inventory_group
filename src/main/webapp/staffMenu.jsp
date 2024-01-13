@@ -29,7 +29,7 @@ if (request.getParameter("id") != null) {
 	manager.setString(1, id);
 	ResultSet managerLog = manager.executeQuery();
 	managerLog.next();
-	out.println("hello staff, " + managerLog.getString("staffname"));
+	// out.println("hello staff, " + managerLog.getString("staffname"));
 }
 
 %>
@@ -137,7 +137,7 @@ if (request.getParameter("id") != null) {
         <div class="menu-item">
             <p><i class="menu-icon fas fa-chart-line"></i></p>
                 <a href="staff/dailysales.jsp">
-                    <button>Today's Sales</button>
+                    <button>Sales Summary</button>
                 </a>    
         </div>
      

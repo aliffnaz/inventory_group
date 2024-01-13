@@ -139,6 +139,10 @@ ResultSet itemList = list.executeQuery();
 <link
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 	rel="stylesheet">
+
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 <style>
 /* Custom CSS */
 /* Add your custom styles here */
@@ -150,7 +154,7 @@ ResultSet itemList = list.executeQuery();
 	<!-- Navbar -->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="container">
-			<a class="navbar-brand" href="#">Shopping Cart</a>
+			<a class="navbar-brand" href="../staffmenu.jsp">Shopping Cart</a>
 		</div>
 	</nav>
 
@@ -190,7 +194,7 @@ ResultSet itemList = list.executeQuery();
 		<div class="card card-body">
 
 			<!-- Page Content -->
-			<div class="container mt-4">
+			<div class="container mt-4 mb-4">
 				<!-- Cart Items Table -->
 				<table id="cartTable" class="table table-striped table-bordered"
 					style="width: 100%">
@@ -207,12 +211,13 @@ ResultSet itemList = list.executeQuery();
 						<!-- Sample Cart Items (Replace this with dynamic cart items) -->
 						<%
 						int count = 1;
-						String name, totalPriceDisplay, invid;
+						String name = null, totalPriceDisplay, invid;
 						double invPrice, total;
 						double totalPrice = 0.0;
 						int quant, piID, purchaseID;
 
 						while (itemList.next()) {
+
 							name = itemList.getString("inventoryname");
 							quant = itemList.getInt("quantity");
 							piID = itemList.getInt("purchaseitemid");
@@ -323,6 +328,17 @@ ResultSet itemList = list.executeQuery();
 						<%
 						count = count + 1;
 						}
+
+						if (name == null) {
+						%>
+						<tr>
+							<td colspan="6" class="text-center">
+								<p>There's no item in the cart :(</p>
+							</td>
+
+						</tr>
+						<%
+						}
 						%>
 						<tr>
 							<td colspan="4">Price</td>
@@ -340,7 +356,22 @@ ResultSet itemList = list.executeQuery();
 				<div class="row">
 					<div class="col"></div>
 					<div class="col text-center">
-						<a href="../staffMenu.jsp" class="btn btn-warning m-4">Back</a>
+						<a href="../staffMenu.jsp" class="btn btn-warning m-4"> <i
+							class="bi bi-arrow-left-circle"></i> Back
+						</a> <a href="listItemStaff.jsp" class="btn btn-warning m-4"> <i
+							class="bi bi-receipt"></i> Item
+						</a>
+
+						<%
+						if (name != null) {
+						%>
+						<a type="button" class="btn btn-warning" data-toggle="modal"
+							data-target="#exampleModalCenter"> <i
+							class="bi bi-check2-circle"></i> Checkout
+						</a>
+						<%
+						}
+						%>
 
 					</div>
 					<div class="col"></div>
@@ -348,8 +379,7 @@ ResultSet itemList = list.executeQuery();
 				<div class="row">
 					<div class="col"></div>
 					<div class="col text-center">
-						<button type="button" class="btn btn-primary" data-toggle="modal"
-							data-target="#exampleModalCenter">Checkout</button>
+
 
 
 
@@ -378,17 +408,17 @@ ResultSet itemList = list.executeQuery();
 												int LatestPurchaseid = getPurchaseid.getInt("purchaseid");
 											%>
 											<input type="hidden" value="<%=LatestPurchaseid%>"
-												name="completeID" />
-											<%
-											}
-											%>
-											<input type="hidden" value="<%=updateTotal%>"
-												name="totalPrice" /> <input type="hidden"
-												value="<%=totalString%>" name="totalPriceString" />
-											<button type="submit" class="btn btn-success">
+												name="completeID" /> <input type="hidden"
+												value="<%=updateTotal%>" name="totalPrice" /> <input
+												type="hidden" value="<%=totalString%>"
+												name="totalPriceString" />
+											<button type="submit" class="btn btn-warning">
 												Checkout</button>
 											<button type="button" class="btn btn-secondary"
 												data-dismiss="modal">Close</button>
+											<%
+											}
+											%>
 
 										</div>
 									</form>
@@ -421,7 +451,7 @@ ResultSet itemList = list.executeQuery();
 				});
 			</script>
 
-		</div>
+		</div> 
 </body>
 
 </html>

@@ -14,6 +14,7 @@ conn = DriverManager.getConnection(url, username, password);
 boolean addSuccess = false;
 boolean updateSuccess = false;
 boolean deleteSuccess = false;
+boolean deleteFail = false;
 
 String UserID = (String) session.getAttribute("sessionID");
 
@@ -25,7 +26,7 @@ if (UserID == null) {
 	CurrentUser.setString(1, UserID);
 	ResultSet UserSession = CurrentUser.executeQuery();
 	UserSession.next();
-	out.println("welcome sir, " + UserSession.getString("staffname"));
+	// out.println("welcome sir, " + UserSession.getString("staffname"));
 }
 
 //ADD INVENTORY
@@ -57,12 +58,18 @@ if (request.getParameter("invId") != null) {
 
 		if (invcat != null && invcat.equalsIgnoreCase("Food")) {
 
+	PreparedStatement newlyInsertFood = conn.prepareStatement(
+			"select * from INVENTORY  where INVENTORYID  = (select max(INVENTORYID) from INVENTORY WHERE INVENTORYID LIKE 'F%')");
+	ResultSet RecentIDfood = newlyInsertFood.executeQuery();
+	RecentIDfood.next();
+	id = RecentIDfood.getString("inventoryid");
+
 	String foodcat = request.getParameter("foodCat");
 	String store = request.getParameter("foodStore");
 	String expdate = request.getParameter("foodExp");
 
 	PreparedStatement tableAdd = conn.prepareStatement(
-			"insert into food(inventoryid, category, storecondition, expdate) values(?,?,?,?)");
+			"insert into food(inventoryid,category, storecondition, expdate) values(?,?,?,?)");
 	tableAdd.setString(1, id);
 	tableAdd.setString(2, foodcat);
 	tableAdd.setString(3, store);
@@ -71,6 +78,13 @@ if (request.getParameter("invId") != null) {
 	System.out.println("success id = " + id);
 
 		} else if (invcat != null && invcat.equalsIgnoreCase("Stationery")) {
+
+	PreparedStatement newlyInsertST = conn.prepareStatement(
+			"select * from INVENTORY  where INVENTORYID  = (select max(INVENTORYID) from INVENTORY WHERE INVENTORYID LIKE 'S%')");
+	ResultSet RecentIDST = newlyInsertST.executeQuery();
+	RecentIDST.next();
+	id = RecentIDST.getString("inventoryid");
+
 	String statcat = request.getParameter("stationeryCat");
 	String type = request.getParameter("stationeryType");
 	PreparedStatement tableAdd = conn
@@ -82,6 +96,12 @@ if (request.getParameter("invId") != null) {
 	System.out.println("success id = " + id);
 
 		} else if (invcat != null && invcat.equalsIgnoreCase("Personal Care")) {
+	PreparedStatement newlyInsertPC = conn.prepareStatement(
+			"select * from INVENTORY  where INVENTORYID  = (select max(INVENTORYID) from INVENTORY WHERE INVENTORYID LIKE 'P%')");
+	ResultSet RecentIDPC = newlyInsertPC.executeQuery();
+	RecentIDPC.next();
+	id = RecentIDPC.getString("inventoryid");
+
 	String personalcat = request.getParameter("personalCat");
 	String liquid = request.getParameter("personalLiquid");
 	String expdate = request.getParameter("personalExp");
@@ -183,9 +203,13 @@ if (request.getParameter("DeleteId") != null) {
 
 	PreparedStatement deleteQuery1 = conn.prepareStatement("delete from inventory where inventoryid=?");
 	deleteQuery1.setString(1, deleteId);
-	ResultSet deleteInv1 = deleteQuery1.executeQuery();
 
-	deleteSuccess = true;
+	try (ResultSet deleteInv1 = deleteQuery1.executeQuery()) {
+		deleteFail = true;
+	} catch (SQLException e) {
+		deleteFail = true;
+	}
+
 }
 
 //LIST INVENTORY
@@ -207,6 +231,9 @@ ResultSet execute = list.executeQuery();
 <link
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 	rel="stylesheet">
+
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <style>
 /* Custom CSS */
 /* Add your custom styles here */
@@ -242,9 +269,37 @@ ResultSet execute = list.executeQuery();
 	<!-- Navbar -->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="container">
-			<a class="navbar-brand" href="#">Inventory Management</a>
+			<a class="navbar-brand" href="">Item List</a>
 		</div>
 	</nav>
+
+	<%
+	if (deleteFail) {
+	%>
+	<script>
+		$(document).ready(function() {
+			$("#deleteFail").modal('show');
+		});
+	</script>
+
+	<div id="deleteFail" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Subscribe our Newsletter</h5>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<p>The item youre trying to delete is in the purchase
+						transaction</p>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<%
+	}
+	%>
 
 	<%
 	if (addSuccess) {
@@ -295,7 +350,7 @@ ResultSet execute = list.executeQuery();
 	%>
 
 	<!-- Page Content -->
-	<div class="container mt-4">
+	<div class="container mt-4 mb-4">
 
 		<div class="card card-body">
 
@@ -324,13 +379,17 @@ ResultSet execute = list.executeQuery();
 				<tbody>
 					<!-- Sample Table Data (Replace this with dynamic data) -->
 					<%
+					int count = 1;
 					while (execute.next()) {
-						int i = 1;
+						if (execute.getInt("inventorybalance") == 0) {
+							System.out.println(execute.getString("inventoryname"));
+						} else {
 					%>
 					<tr>
 						<td>
 							<%
-							out.println(i);
+							out.println(count);
+							count = count + 1;
 							%>
 						</td>
 						<td><%=execute.getString("inventoryid")%></td>
@@ -366,42 +425,43 @@ ResultSet execute = list.executeQuery();
 											<!-- Item Information Display (Replace this with your actual item information) -->
 											<div class="modal-body">
 
+
 												<form action="" method="post">
 
 													<div class="form-group">
 														<label>Inventory ID</label> <input type="text"
 															class="form-control" name="updId"
-															value="<%=execute.getString("inventoryid")%>" disabled>
+															value="<%=execute.getString("inventoryid")%>" readonly>
 													</div>
 
 													<div class="form-group">
 														<label>Inventory Name</label> <input type="text"
 															class="form-control" name="updName"
-															value="<%=execute.getString("inventoryname")%>" required>
+															value="<%=execute.getString("inventoryname")%>">
 													</div>
 
 													<div class="form-group">
 														<label>Inventory Price</label> <input type="text"
 															class="form-control" name="updPrice"
-															value="<%=execute.getString("inventoryprice")%>" required>
+															value="<%=execute.getString("inventoryprice")%>">
 													</div>
 
 													<div class="form-group">
 														<label>Inventory Brand</label> <input type="text"
 															class="form-control" name="updBrand"
-															value="<%=execute.getString("inventorybrand")%>" required>
+															value="<%=execute.getString("inventorybrand")%>">
 													</div>
 
 													<div class="form-group">
 														<label>Inventory Balance</label> <input type="text"
 															class="form-control" name="updBalance"
-															value="<%=execute.getString("inventorybalance")%>" required>
+															value="<%=execute.getString("inventorybalance")%>">
 													</div>
 
 													<div class="form-group">
 														<label>Inventory Type</label> <input type="text"
 															class="form-control" name="updType"
-															value="<%=execute.getString("inventorytype")%>" disabled>
+															value="<%=execute.getString("inventorytype")%>">
 													</div>
 
 													<%
@@ -419,26 +479,33 @@ ResultSet execute = list.executeQuery();
 													<div class="form-group">
 
 														<label>Food Category</label> <select
-															name="updfoodcategory" class="form-control" required>
+															name="updfoodcategory" class="form-control">
 															<option value="">Select</option>
 															<option value="Outside Food"
-																<%if (foodSelect.getString("category").equalsIgnoreCase("Outside Food")) {out.println("Selected");}%>>Outside
+																<%if (foodSelect.getString("category").equalsIgnoreCase("Outside Food")) {
+	out.println("Selected");
+}%>>Outside
 																Food</option>
 															<option value="Manufacture Food"
-																<%if (foodSelect.getString("category").equalsIgnoreCase("Manufacture Food")) {out.println("Selected");}%>>Manufacture
+																<%if (foodSelect.getString("category").equalsIgnoreCase("Manufacture Food")) {
+	out.println("Selected");
+}%>>Manufacture
 																Food</option>
 														</select> <br> <label>Store Condition</label> <select
-															name="updcondition" class="form-control" required>
+															name="updcondition" class="form-control">
 															<option value="">Select</option>
 															<option value="Cold Temperature"
-																<%if (foodSelect.getString("storecondition").equalsIgnoreCase("Cold Temperature")) {out.println("Selected");}%>>Cold
+																<%if (foodSelect.getString("storecondition").equalsIgnoreCase("Cold Temperature")) {
+	out.println("Selected");
+}%>>Cold
 																Temperature</option>
 															<option value="Room Temperature"
-																<%if (foodSelect.getString("storecondition").equalsIgnoreCase("Room Temperature")) {out.println("Selected");}%>>Room
+																<%if (foodSelect.getString("storecondition").equalsIgnoreCase("Room Temperature")) {
+	out.println("Selected");
+}%>>Room
 																Temperature</option>
-														</select> <br> 
-														<label>Expired Date</label> <input type="date"
-															class="form-control" name="updexpdate" required
+														</select> <br> <label>Expired Date</label> <input type="date"
+															class="form-control" name="updexpdate"
 															value="<%=foodSelect.getString("expdate")%>">
 													</div>
 
@@ -458,23 +525,29 @@ ResultSet execute = list.executeQuery();
 													<div class="form-group">
 
 														<label>Personal Care Category</label> <select
-															name="updPersonalcat" class="form-control" required>
+															name="updPersonalcat" class="form-control">
 															<option value="">Select</option>
 															<option value="Toiletries"
-																<%if (personalSelect.getString("category").equalsIgnoreCase("Toiletries")) {out.println("Selected");}%>>Toiletries</option>
+																<%if (personalSelect.getString("category").equalsIgnoreCase("Toiletries")) {
+	out.println("Selected");
+}%>>Toiletries</option>
 															<option value="Fragrance"
-																<%if (personalSelect.getString("category").equalsIgnoreCase("Fragrance")) {out.println("Selected");}%>>Fragrance</option>
-														</select> <br> 
-														<label>Liquid Type</label> <select
-															name="updLiquid" class="form-control" required>
+																<%if (personalSelect.getString("category").equalsIgnoreCase("Fragrance")) {
+	out.println("Selected");
+}%>>Fragrance</option>
+														</select> <br> <label>Liquid Type</label> <select
+															name="updLiquid" class="form-control">
 															<option value="">Select</option>
 															<option value="Yes"
-																<%if (personalSelect.getString("liquid").equalsIgnoreCase("Yes")) {out.println("Selected");}%>>Yes</option>
+																<%if (personalSelect.getString("liquid").equalsIgnoreCase("Yes")) {
+	out.println("Selected");
+}%>>Yes</option>
 															<option value="No"
-																<%if (personalSelect.getString("liquid").equalsIgnoreCase("No")) {out.println("Selected");}%>>No</option>
-														</select> <br> 
-														<label>Expired Date</label> <input type="date"
-															class="form-control" name="updexpdate" required
+																<%if (personalSelect.getString("liquid").equalsIgnoreCase("No")) {
+	out.println("Selected");
+}%>>No</option>
+														</select> <br> <label>Expired Date</label> <input type="date"
+															class="form-control" name="updexpdate"
 															value="<%=personalSelect.getString("expdate")%>">
 													</div>
 
@@ -490,23 +563,39 @@ ResultSet execute = list.executeQuery();
 														ResultSet stationerySelect = stationery.executeQuery();
 														if (stationerySelect.next()) {
 													%>
-													
-													
+
+
 													<div class="form-group">
 														<label>Stationery Category</label> <select
-															name="updstationeryCat" class="form-control" required>
+															name="updstationeryCat" class="form-control">
 															<option value="">Select</option>
-															<option value="Writing Instruments" <%if (stationerySelect.getString("statcat").equalsIgnoreCase("Writing Instruments")) {out.println("Selected");}%>>Writing Instruments</option>
-															<option value="Paper Products" <%if (stationerySelect.getString("statcat").equalsIgnoreCase("Paper Products")) {out.println("Selected");}%>>Paper Products</option>
-														</select> <br> 
-														<label>Stationery Material</label> <select
-															name="updStationeryType" class="form-control" required>
+															<option value="Writing Instruments"
+																<%if (stationerySelect.getString("category").equalsIgnoreCase("Writing Instruments")) {
+	out.println("Selected");
+}%>>Writing
+																Instruments</option>
+															<option value="Paper Products"
+																<%if (stationerySelect.getString("category").equalsIgnoreCase("Paper Products")) {
+	out.println("Selected");
+}%>>Paper
+																Products</option>
+														</select> <br> <label>Stationery Material</label> <select
+															name="updStationeryType" class="form-control">
 															<option value="">Select</option>
-															<option value="Wood" <%if (stationerySelect.getString("type").equalsIgnoreCase("Wood")) {out.println("Selected");}%> >Wood</option>
-															<option value="Plastic" <%if (stationerySelect.getString("type").equalsIgnoreCase("Plastic")) {out.println("Selected");}%>>Plastic</option>
-															<option value="Metal" <%if (stationerySelect.getString("type").equalsIgnoreCase("Metal")) {out.println("Selected");}%>>Metal</option>
+															<option value="Wood"
+																<%if (stationerySelect.getString("stationerytype").equalsIgnoreCase("Wood")) {
+	out.println("Selected");
+}%>>Wood</option>
+															<option value="Plastic"
+																<%if (stationerySelect.getString("stationerytype").equalsIgnoreCase("Plastic")) {
+	out.println("Selected");
+}%>>Plastic</option>
+															<option value="Metal"
+																<%if (stationerySelect.getString("stationerytype").equalsIgnoreCase("Metal")) {
+	out.println("Selected");
+}%>>Metal</option>
 														</select> <br>
-														
+
 													</div>
 
 													<%
@@ -534,9 +623,10 @@ ResultSet execute = list.executeQuery();
 
 
 							</div> <!-- DELETE SECTION -->
-							<button type="button" class="btn btn-danger btn-sm"
+							<%-- TAK BOLEH GUNA DELETE SEBAB NANTI ERROR KAT PARENT TABLE --%>
+							<%-- <button type="button" class="btn btn-danger btn-sm"
 								data-toggle="modal"
-								data-target="#deleteModal<%=execute.getString("inventoryid")%>">Delete</button>
+								data-target="#deleteModal<%=execute.getString("inventoryid")%>">Delete</button> --%>
 
 							<div class="modal fade"
 								id="deleteModal<%=execute.getString("inventoryid")%>"
@@ -583,10 +673,9 @@ ResultSet execute = list.executeQuery();
 							</script> <!-- END DELETE SECTION -->
 						</td>
 					</tr>
+
 					<%
-					i = i + 1;
-					%>
-					<%
+					}
 					}
 					%>
 					<!-- End of Sample Table Data -->
@@ -596,7 +685,9 @@ ResultSet execute = list.executeQuery();
 			<div class="row">
 				<div class="col"></div>
 				<div class="col text-center">
-					<a href="../managerMenu.jsp" class="btn btn-warning m-4">Back</a>
+					<a href="../managerMenu.jsp" class="btn btn-warning m-4"> <i
+						class="bi bi-arrow-left-circle"></i> Back
+					</a>
 
 				</div>
 				<div class="col"></div>
@@ -627,8 +718,8 @@ ResultSet execute = list.executeQuery();
 
 					<form action="item_list.jsp" method="post">
 						<div class="form-group">
-							<label>Inventory ID</label> <input type="text"
-								class="form-control" id="" name="invId" required>
+							<input type="hidden" class="form-control" id="" name="invId"
+								value="">
 						</div>
 
 						<div class="form-group">
@@ -666,13 +757,12 @@ ResultSet execute = list.executeQuery();
 							<div id="inputF" style="display: none;">
 
 								<label>Food Category</label> <select name="foodCat"
-									class="form-control" required>
+									class="form-control">
 									<option value="">select food category</option>
 									<option value="Out Side Food">Outside Food</option>
 									<option value="Manufacture Food">Manufacture Food</option>
-								</select> <br> 
-								<label>Store Condition</label> <select
-									name="foodStore" class="form-control" required>
+								</select> <br> <label>Store Condition</label> <select
+									name="foodStore" class="form-control">
 									<option value="">select store condition</option>
 									<option value="Cold Temperature">Cold Temperature</option>
 									<option value="Room Temperature">Room Temperature</option>
@@ -685,15 +775,15 @@ ResultSet execute = list.executeQuery();
 							<div id="inputP" style="display: none;">
 
 								<label>Personal Care Category</label> <select name="personalCat"
-									class="form-control" required>
+									class="form-control">
 									<option value="">select personal care category</option>
 									<option value="Toiletries">Toiletries</option>
 									<option value="Fragrance">Fragrance</option>
 								</select> <br> <label>Liquid Type</label> <select
-									name="personalLiquid" class="form-control" required>
+									name="personalLiquid" class="form-control">
 									<option value="">select liquid type</option>
 									<option value="Yes">Yes</option>
-									<option value="No">No</option>
+									<option value="No">No</option> 
 								</select> <br> Expired Date <input type="date" class="form-control"
 									name="personalExp"> <br>
 							</div>
@@ -703,13 +793,13 @@ ResultSet execute = list.executeQuery();
 							<div id="inputS" style="display: none;">
 
 								<label>Stationery Category</label> <select name="stationeryCat"
-									class="form-control" required>
+									class="form-control">
 									<option value="">select stationery category</option>
 									<option value="Writing Instruments">Writing
 										Instruments</option>
 									<option value="Paper Products">Paper Products</option>
 								</select> <br> <label>Stationery Material</label> <select
-									name="stationeryType" class="form-control" required>
+									name="stationeryType" class="form-control">
 									<option value="">select stationery material</option>
 									<option value="Wood">Wood</option>
 									<option value="Plastic">Plastic</option>
@@ -725,8 +815,8 @@ ResultSet execute = list.executeQuery();
 					</form>
 				</div>
 			</div>
-
-		</div>
+ 
+		</div>    
 		<!-- Bootstrap JS and jQuery -->
 		<script
 			src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

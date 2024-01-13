@@ -1,4 +1,4 @@
-`<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
 <%@ page
@@ -22,7 +22,7 @@ if (UserID == null) {
 	CurrentUser.setString(1, UserID);
 	ResultSet UserSession = CurrentUser.executeQuery();
 	UserSession.next();
-	out.println("welcome sir, " + UserSession.getString("staffname"));
+	// out.println("welcome sir, " + UserSession.getString("staffname"));
 }
 
 // call list item
@@ -47,6 +47,9 @@ ResultSet execute = ps.executeQuery();
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 	rel="stylesheet">
 
+	
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 </head>
 
 <body>
@@ -54,12 +57,12 @@ ResultSet execute = ps.executeQuery();
 	<!-- Navbar -->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<div class="container">
-			<a class="navbar-brand" href="#">Inventory Management</a>
+			<a class="navbar-brand" href="../staffMenu.jsp">Supplier List</a>
 		</div>
 	</nav>
 
 
-	<div class="container mt-4">
+	<div class="container mt-4 mb-4">
 		<div class="card card-body">
 
 			<!-- Data Table -->
@@ -121,7 +124,7 @@ ResultSet execute = ps.executeQuery();
 														type="text" class="form-control"
 														value="<%=execute.getString("SUPPLIERNAME")%>"
 														placeholder="<%=execute.getString("SUPPLIERNAME")%>"
-														name="updateName">
+														name="updateName" disabled readonly>
 												</div>
 
 												<div class="form-group">
@@ -129,7 +132,7 @@ ResultSet execute = ps.executeQuery();
 														type="text" class="form-control"
 														value="<%=execute.getString("SUPPLIERPHONE")%>"
 														placeholder="<%=execute.getString("SUPPLIERPHONE")%>"
-														name="updatePhone">
+														name="updatePhone" disabled readonly>
 												</div>
 
 												<div class="form-group">
@@ -137,30 +140,16 @@ ResultSet execute = ps.executeQuery();
 														type="text" class="form-control"
 														value="<%=execute.getString("SUPPLIERADDRESS")%>"
 														placeholder="<%=execute.getString("SUPPLIERADDRESS")%>"
-														name="updateAddress">
+														name="updateAddress" disabled readonly>
 												</div>
-
-
-
-
-
 												<!-- End of Item Information Display -->
 										</div>
-
 										</form>
 									</div>
-
-
 								</div>
 							</div>
-
-
-
-
 						</td>
 					</tr>
-
-
 					<%
 					}
 					%>
@@ -172,7 +161,9 @@ ResultSet execute = ps.executeQuery();
 			<div class="row">
 				<div class="col"></div>
 				<div class="col text-center">
-					<a href="../staffMenu.jsp" class="btn btn-warning m-4">Back</a>
+					<a href="../staffMenu.jsp" class="btn btn-warning m-4"> <i
+						class="bi bi-arrow-left-circle"></i> Back
+					</a>
 
 				</div>
 				<div class="col"></div>
