@@ -15,18 +15,18 @@ boolean addSuccess = false;
 boolean updateSuccess = false;
 boolean deleteSuccess = false;
 
-String UserID = (String) session.getAttribute("sessionID");
+//String UserID = (String) session.getAttribute("sessionID");
 
-if (UserID == null) {
-	response.sendRedirect("../login.jsp");
-} else {
+//if (UserID == null) {
+	//response.sendRedirect("../login.jsp");
+	//} else {
 
-	PreparedStatement CurrentUser = conn.prepareStatement("select * from staff where staffid=?");
-	CurrentUser.setString(1, UserID);
-	ResultSet UserSession = CurrentUser.executeQuery();
-	UserSession.next();
+	//PreparedStatement CurrentUser = conn.prepareStatement("select * from staff where staffid=?");
+	//CurrentUser.setString(1, UserID);
+	//ResultSet UserSession = CurrentUser.executeQuery();
+	//UserSession.next();
 	//out.println("welcome sir, " + UserSession.getString("staffname"));
-}
+//}
 
 //ADD STAFF
 if (request.getParameter("staffID") != null) {
@@ -232,10 +232,14 @@ ResultSet execute = list.executeQuery();
 									<label>Staff Phone</label> <input type="text"
 										class="form-control" name="staffPhone">
 								</div>
-
+								
 								<div class="form-group">
-									<label>Staff Role</label> <input type="text"
-										class="form-control" name="staffRole">
+								<label >Staff Role</label>
+                        			<select name="staffRole" class="form-control">
+                            			<option value="">None</option>
+                            			<option value="Manager">Manager</option>
+                            			<option value="Staff">Staff</option>
+                        			</select>
 								</div>
 
 								<div class="form-group">
@@ -336,10 +340,13 @@ ResultSet execute = list.executeQuery();
 												</div>
 
 												<div class="form-group">
-													<label>Staff Role</label> <input type="text"
-														class="form-control" name="Ustaffrole"
-														value="<%=execute.getString("staffrole")%>"
-														placeholder="<%=execute.getString("staffrole")%>">
+													<label>Staff Role</label> <select name="Ustaffrole"
+														class="form-control">
+														<option value="<%=execute.getString("staffrole")%>"
+														placeholder="<%=execute.getString("staffrole")%>"></option>
+														<option value="Manager">Manager</option>
+														<option value="Staff">Staff</option>
+													</select>
 												</div>
 
 												<div class="form-group">
