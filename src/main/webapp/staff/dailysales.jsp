@@ -91,6 +91,12 @@ ResultSet execute = list.executeQuery();
 					<%
 					int count = 1;
 					while (execute.next()) {
+						
+						String complete = execute.getString("complete");
+						
+						if(complete == null){
+						complete = "NOT COMPLETE";
+						}
 
 						String tPOrder = String.format("%.2f", execute.getDouble("ordertotal"));
 					%>
@@ -101,7 +107,7 @@ ResultSet execute = list.executeQuery();
 						<td><%=execute.getString("purchasetime")%></td>
 						<td>RM<%=tPOrder%></td>
 						<td><%=execute.getString("staffid")%></td>
-						<td><%=execute.getString("complete")%></td>
+						<td><%=complete%></td>
 						<td>
 							<!-- VIEW SECTION -->
 							<button type="button" class="btn btn-primary btn-sm"
