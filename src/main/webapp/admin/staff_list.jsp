@@ -341,16 +341,17 @@ ResultSet execute = list.executeQuery();
 														value="<%=execute.getString("staffphone")%>"
 														placeholder="<%=execute.getString("staffphone")%>">
 												</div>
-
-												<div class="form-group">
-													<label>Staff Role</label> <select name="Ustaffrole"
-														class="form-control">
-														<option value="<%=execute.getString("staffrole")%>"
-															placeholder="<%=execute.getString("staffrole")%>"></option>
-														<option value="MANAGER">Manager</option>
-														<option value="STAFF">Staff</option>
-													</select>
-												</div>
+												
+												<label>Staff Role</label> <select
+															name="Ustaffrole" class="form-control" required>
+															<option value="">Select</option>
+															<option value="MANAGER"
+																<%if (execute.getString("staffRole").equalsIgnoreCase("MANAGER")) {out.println("Selected");}%>>MANAGER
+															</option>
+															<option value="STAFF"
+																<%if (execute.getString("staffRole").equalsIgnoreCase("STAFF")) {out.println("Selected");}%>>STAFF
+															</option>
+														</select> <br> 
 
 												<div class="form-group">
 													<label>Staff Age</label> <input type="text"
