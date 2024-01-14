@@ -25,7 +25,7 @@ if (UserID == null) {
 	CurrentUser.setString(1, UserID);
 	ResultSet UserSession = CurrentUser.executeQuery();
 	UserSession.next();
-	out.println("welcome sir, " + UserSession.getString("staffname"));
+	//out.println("welcome sir, " + UserSession.getString("staffname"));
 }
 
 //delete supplier

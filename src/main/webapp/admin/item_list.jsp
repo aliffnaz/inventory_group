@@ -205,7 +205,7 @@ if (request.getParameter("DeleteId") != null) {
 	deleteQuery1.setString(1, deleteId);
 
 	try (ResultSet deleteInv1 = deleteQuery1.executeQuery()) {
-		deleteFail = true;
+		deleteFail = false;
 	} catch (SQLException e) {
 		deleteFail = true;
 	}
@@ -340,6 +340,22 @@ ResultSet execute = list.executeQuery();
 	<div class="alert alert-success alert-dismissible fade show"
 		role="alert">
 		<strong>Item Deleted !</strong> The item list below was deleted
+		<button type="button" class="close" data-dismiss="alert"
+			aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<%
+	}
+	%>
+	
+	<%
+	if (deleteFail) {
+		// if color red : alert-success tukar jadi alert-danger
+	%>
+	<div class="alert alert-danger alert-dismissible fade show"
+		role="alert">
+		<strong>Item Not Deleted !</strong> The item list below has not been deleted
 		<button type="button" class="close" data-dismiss="alert"
 			aria-label="Close">
 			<span aria-hidden="true">&times;</span>
@@ -624,9 +640,11 @@ ResultSet execute = list.executeQuery();
 
 							</div> <!-- DELETE SECTION -->
 							<%-- TAK BOLEH GUNA DELETE SEBAB NANTI ERROR KAT PARENT TABLE --%>
-							<%-- <button type="button" class="btn btn-danger btn-sm"
+							
+							
+							 <button type="button" class="btn btn-danger btn-sm"
 								data-toggle="modal"
-								data-target="#deleteModal<%=execute.getString("inventoryid")%>">Delete</button> --%>
+								data-target="#deleteModal<%=execute.getString("inventoryid")%>">Delete</button> 
 
 							<div class="modal fade"
 								id="deleteModal<%=execute.getString("inventoryid")%>"
