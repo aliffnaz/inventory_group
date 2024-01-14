@@ -17,7 +17,7 @@ String UserID = (String) session.getAttribute("sessionID");
 if (UserID == null) {
 	response.sendRedirect("../login.jsp");
 } else {
- 
+
 	PreparedStatement CurrentUser = conn.prepareStatement("select * from staff where staffid=?");
 	CurrentUser.setString(1, UserID);
 	ResultSet UserSession = CurrentUser.executeQuery();
@@ -45,8 +45,9 @@ ResultSet execute = list.executeQuery();
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 	rel="stylesheet">
 
-	
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 </head>
 
@@ -90,13 +91,15 @@ ResultSet execute = list.executeQuery();
 					<%
 					int count = 1;
 					while (execute.next()) {
+
+						String tPOrder = String.format("%.2f", execute.getDouble("ordertotal"));
 					%>
 					<tr>
 						<td><%=count%></td>
 						<td><%=execute.getInt("purchaseid")%></td>
 						<td><%=execute.getString("purchasedate")%></td>
 						<td><%=execute.getString("purchasetime")%></td>
-						<td><%=execute.getDouble("ordertotal")%></td>
+						<td>RM<%=tPOrder%></td>
 						<td><%=execute.getString("staffid")%></td>
 						<td><%=execute.getString("complete")%></td>
 						<td>
@@ -146,15 +149,17 @@ ResultSet execute = list.executeQuery();
 												<tbody>
 													<!-- Sample Table Data (Replace this with dynamic data) -->
 													<%
+													double grandTotal=0.0;
 													int counts = 1;
 													while (executeGrabItem.next()) {
+														
 														double price = executeGrabItem.getDouble("inventoryprice");
 														int quant = executeGrabItem.getInt("quantity");
 														Double totalEachItem = price * quant;
 														String displayPrice = String.format("%.2f", totalEachItem);
 													%>
 													<tr>
-														<td><%=count%></td>
+														<td><%=counts%></td>
 														<td><%=executeGrabItem.getString("inventoryname")%></td>
 														<td><%=executeGrabItem.getString("inventorytype")%></td>
 														<td><%=executeGrabItem.getString("inventorybrand")%></td>
@@ -164,8 +169,15 @@ ResultSet execute = list.executeQuery();
 													</tr>
 													<%
 													counts = counts + 1;
+													grandTotal = grandTotal + totalEachItem;
 													}
+													String tPaymentDisplay = String.format("%.2f", grandTotal);
 													%>
+													<tr>
+														<td colspan="5" class="text-center"><b>Total Payment</b></td>
+														<td><%=tPaymentDisplay %></td>
+													</tr>
+													
 
 													<!-- End of Sample Table Data -->
 												</tbody>

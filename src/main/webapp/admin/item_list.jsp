@@ -406,11 +406,13 @@ ResultSet execute = list.executeQuery();
 							<%
 							out.println(count);
 							count = count + 1;
+							
+							String priceDisplay = String.format("%.2f",execute.getFloat("inventoryprice"));
 							%>
 						</td>
 						<td><%=execute.getString("inventoryid")%></td>
 						<td><%=execute.getString("inventoryname")%></td>
-						<td><%=execute.getString("inventoryprice")%></td>
+						<td>RM<%= priceDisplay%></td>
 						<td><%=execute.getString("inventorytype")%></td>
 						<td><%=execute.getString("inventorybrand")%></td>
 						<td><%=execute.getString("inventorybalance")%></td>
@@ -642,9 +644,9 @@ ResultSet execute = list.executeQuery();
 							<%-- TAK BOLEH GUNA DELETE SEBAB NANTI ERROR KAT PARENT TABLE --%>
 							
 							
-							 <button type="button" class="btn btn-danger btn-sm"
+							<%-- <button type="button" class="btn btn-danger btn-sm"
 								data-toggle="modal"
-								data-target="#deleteModal<%=execute.getString("inventoryid")%>">Delete</button> 
+								data-target="#deleteModal<%=execute.getString("inventoryid")%>">Delete</button> --%>
 
 							<div class="modal fade"
 								id="deleteModal<%=execute.getString("inventoryid")%>"

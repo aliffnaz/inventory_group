@@ -51,7 +51,7 @@ if (request.getParameter("completeID") != null) {
 
 	// String purchaseid = request.getParameter("completeID");
 	int purchaseid = Integer.parseInt(request.getParameter("completeID"));
-	String complete = "complete";
+	String complete = "COMPLETE";
 
 	//select inventory to update
 	PreparedStatement selectinventoryidAndquantity = conn.prepareStatement(
