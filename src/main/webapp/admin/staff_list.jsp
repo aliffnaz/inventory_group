@@ -18,14 +18,14 @@ boolean deleteSuccess = false;
 //String UserID = (String) session.getAttribute("sessionID");
 
 //if (UserID == null) {
-	//response.sendRedirect("../login.jsp");
-	//} else {
+//response.sendRedirect("../login.jsp");
+//} else {
 
-	//PreparedStatement CurrentUser = conn.prepareStatement("select * from staff where staffid=?");
-	//CurrentUser.setString(1, UserID);
-	//ResultSet UserSession = CurrentUser.executeQuery();
-	//UserSession.next();
-	//out.println("welcome sir, " + UserSession.getString("staffname"));
+//PreparedStatement CurrentUser = conn.prepareStatement("select * from staff where staffid=?");
+//CurrentUser.setString(1, UserID);
+//ResultSet UserSession = CurrentUser.executeQuery();
+//UserSession.next();
+//out.println("welcome sir, " + UserSession.getString("staffname"));
 //}
 
 //ADD STAFF
@@ -118,8 +118,9 @@ ResultSet execute = list.executeQuery();
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 	rel="stylesheet">
 
-	
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 </head>
 
@@ -147,7 +148,7 @@ ResultSet execute = list.executeQuery();
 		</button>
 	</div>
 	<%
-	} 
+	}
 	%>
 
 	<%
@@ -156,7 +157,8 @@ ResultSet execute = list.executeQuery();
 	%>
 	<div class="alert alert-success alert-dismissible fade show"
 		role="alert">
-		<strong>Supplier Updated !</strong> The supplier list below was updated
+		<strong>Supplier Updated !</strong> The supplier list below was
+		updated
 		<button type="button" class="close" data-dismiss="alert"
 			aria-label="Close">
 			<span aria-hidden="true">&times;</span>
@@ -164,7 +166,7 @@ ResultSet execute = list.executeQuery();
 	</div>
 
 	<%
-	} 
+	}
 	%>
 
 	<%
@@ -173,7 +175,8 @@ ResultSet execute = list.executeQuery();
 	%>
 	<div class="alert alert-success alert-dismissible fade show"
 		role="alert">
-		<strong>Supplier Deleted !</strong> The supplier list below was deleted
+		<strong>Supplier Deleted !</strong> The supplier list below was
+		deleted
 		<button type="button" class="close" data-dismiss="alert"
 			aria-label="Close">
 			<span aria-hidden="true">&times;</span>
@@ -232,14 +235,14 @@ ResultSet execute = list.executeQuery();
 									<label>Staff Phone</label> <input type="text"
 										class="form-control" name="staffPhone">
 								</div>
-								
+
 								<div class="form-group">
-								<label >Staff Role</label>
-                        			<select name="staffRole" class="form-control">
-                            			<option value="">None</option>
-                            			<option value="Manager">Manager</option>
-                            			<option value="Staff">Staff</option>
-                        			</select>
+									<label>Staff Role</label> <select name="staffRole"
+										class="form-control">
+										<option value="">Select</option>
+										<option value="MANAGER">Manager</option>
+										<option value="STAFF">Staff</option>
+									</select>
 								</div>
 
 								<div class="form-group">
@@ -343,9 +346,9 @@ ResultSet execute = list.executeQuery();
 													<label>Staff Role</label> <select name="Ustaffrole"
 														class="form-control">
 														<option value="<%=execute.getString("staffrole")%>"
-														placeholder="<%=execute.getString("staffrole")%>"></option>
-														<option value="Manager">Manager</option>
-														<option value="Staff">Staff</option>
+															placeholder="<%=execute.getString("staffrole")%>"></option>
+														<option value="MANAGER">Manager</option>
+														<option value="STAFF">Staff</option>
 													</select>
 												</div>
 
