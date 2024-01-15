@@ -459,7 +459,7 @@ ResultSet execute = list.executeQuery();
 													</div>
 
 													<div class="form-group">
-														<label>Inventory Price</label> <input type="text"
+														<label>Inventory Price</label> <input type="number" min="0"
 															class="form-control" name="updPrice"
 															value="<%=execute.getString("inventoryprice")%>">
 													</div>
@@ -471,7 +471,7 @@ ResultSet execute = list.executeQuery();
 													</div>
 
 													<div class="form-group">
-														<label>Inventory Balance</label> <input type="text"
+														<label>Inventory Balance</label> <input type="number" min="0"
 															class="form-control" name="updBalance"
 															value="<%=execute.getString("inventorybalance")%>">
 													</div>
@@ -748,7 +748,7 @@ ResultSet execute = list.executeQuery();
 						</div>
 
 						<div class="form-group">
-							<label>Inventory Price</label> <input type="text"
+							<label>Inventory Price</label> <input type="number" min="0"
 								class="form-control" id="" name="invPrice" required>
 						</div>
 
@@ -758,7 +758,7 @@ ResultSet execute = list.executeQuery();
 						</div>
 
 						<div class="form-group">
-							<label>Inventory Balance</label> <input type="text"
+							<label>Inventory Balance</label> <input type="number" min="0"
 								class="form-control" id="" name="invBalance" required>
 						</div>
 
