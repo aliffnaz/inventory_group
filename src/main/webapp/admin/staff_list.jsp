@@ -227,12 +227,12 @@ ResultSet execute = list.executeQuery();
 								</div>
 
 								<div class="form-group">
-									<label>Staff IC</label> <input type="text" class="form-control"
+									<label>Staff IC</label> <input type="number" min="0" class="form-control"
 										name="staffIC">
 								</div>
 
 								<div class="form-group">
-									<label>Staff Phone</label> <input type="text"
+									<label>Staff Phone</label> <input type="number" min="0"
 										class="form-control" name="staffPhone">
 								</div>
 
@@ -246,7 +246,7 @@ ResultSet execute = list.executeQuery();
 								</div>
 
 								<div class="form-group">
-									<label>Staff Age</label> <input type="text"
+									<label>Staff Age</label> <input type="number" min="0"
 										class="form-control" name="staffAge">
 								</div>
 
@@ -329,14 +329,14 @@ ResultSet execute = list.executeQuery();
 												</div>
 
 												<div class="form-group">
-													<label>Staff IC</label> <input type="text"
+													<label>Staff IC</label> <input type="number" min="0"
 														class="form-control" name="Ustaffic"
 														value="<%=execute.getString("staffic")%>"
 														placeholder="<%=execute.getString("staffic")%>">
 												</div>
 
 												<div class="form-group">
-													<label>Staff Phone</label> <input type="text"
+													<label>Staff Phone</label> <input type="number" min="0"
 														class="form-control" name="Ustaffphone"
 														value="<%=execute.getString("staffphone")%>"
 														placeholder="<%=execute.getString("staffphone")%>">
@@ -354,7 +354,7 @@ ResultSet execute = list.executeQuery();
 														</select> <br> 
 
 												<div class="form-group">
-													<label>Staff Age</label> <input type="text"
+													<label>Staff Age</label> <input type="number" min="0"
 														class="form-control" name="Ustaffage"
 														value="<%=execute.getString("staffage")%>"
 														placeholder="<%=execute.getString("staffage")%>">
