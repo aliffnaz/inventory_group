@@ -226,7 +226,7 @@ ResultSet execute = ps.executeQuery();
 
 								<div class="form-group">
 									<label for="supplierPhone">Supplier Phone</label> <input
-										type="text" class="form-control" name="supplierPhone" required>
+										type="number" min="0" class="form-control" name="supplierPhone" required>
 								</div>
 
 								<div class="form-group">
@@ -308,7 +308,7 @@ ResultSet execute = ps.executeQuery();
 
 												<div class="form-group">
 													<label for="supplierID">Supplier Phone:</label> <input
-														type="text" class="form-control"
+														type="number" min="0" class="form-control"
 														value="<%=execute.getString("SUPPLIERPHONE")%>"
 														placeholder="<%=execute.getString("SUPPLIERPHONE")%>"
 														name="updatePhone">
