@@ -227,12 +227,12 @@ ResultSet execute = list.executeQuery();
 								</div>
 
 								<div class="form-group">
-									<label>Staff IC</label> <input type="number" min="0" class="form-control"
+									<label>Staff IC</label> <input type="number" class="form-control"
 										name="staffIC">
 								</div>
 
 								<div class="form-group">
-									<label>Staff Phone</label> <input type="number" min="0"
+									<label>Staff Phone</label> <input type="number"
 										class="form-control" name="staffPhone">
 								</div>
 
@@ -329,14 +329,14 @@ ResultSet execute = list.executeQuery();
 												</div>
 
 												<div class="form-group">
-													<label>Staff IC</label> <input type="number" min="0"
+													<label>Staff IC</label> <input type="number"
 														class="form-control" name="Ustaffic"
 														value="<%=execute.getString("staffic")%>"
 														placeholder="<%=execute.getString("staffic")%>">
 												</div>
 
 												<div class="form-group">
-													<label>Staff Phone</label> <input type="number" min="0"
+													<label>Staff Phone</label> <input type="number"
 														class="form-control" name="Ustaffphone"
 														value="<%=execute.getString("staffphone")%>"
 														placeholder="<%=execute.getString("staffphone")%>">
